@@ -1,2 +1,4 @@
 allowBuilds:
+  bcrypt: true
+  sqlite3: true
   unrs-resolver: false

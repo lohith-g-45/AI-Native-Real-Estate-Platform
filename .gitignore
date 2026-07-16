@@ -4,6 +4,8 @@ coverage/
 .env
 .env.*
 *.log
+*.db
+real_estate
 .DS_Store
 .vscode/
 extract_pdf.py
