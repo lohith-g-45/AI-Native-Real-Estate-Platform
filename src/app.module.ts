@@ -9,6 +9,7 @@ import { AuthIdentityModule } from './auth-identity/auth-identity.module';
 import { AuditObservabilityModule } from './audit-observability/audit-observability.module';
 import { CommonModule } from './common/common.module';
 import { User } from './auth-identity/entities/user.entity';
+import { RevokedToken } from './auth-identity/entities/revoked-token.entity';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { User } from './auth-identity/entities/user.entity';
           ? {
               type: 'sqlite',
               database: config.get<string>('DB_NAME', ':memory:'),
-              entities: [User],
+              entities: [User, RevokedToken],
               synchronize: true,
             }
           : {
@@ -32,7 +33,7 @@ import { User } from './auth-identity/entities/user.entity';
               username: config.get<string>('DB_USERNAME', 'postgres'),
               password: config.get<string>('DB_PASSWORD', 'postgres'),
               database: config.get<string>('DB_NAME', 'real_estate'),
-              entities: [User],
+              entities: [User, RevokedToken],
               synchronize: true,
             };
       },

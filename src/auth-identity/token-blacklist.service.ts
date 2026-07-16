@@ -1,16 +1,35 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { RevokedToken } from './entities/revoked-token.entity';
 
 @Injectable()
 export class TokenBlacklistService {
-  private blacklist = new Set<string>();
+  constructor(
+    @InjectRepository(RevokedToken)
+    private readonly revokedTokenRepository: Repository<RevokedToken>,
+  ) {}
 
-  revokeToken(token: string) {
-    if (token) {
-      this.blacklist.add(token);
+  async revokeToken(token: string) {
+    if (!token) {
+      return;
     }
+
+    const exists = await this.revokedTokenRepository.findOne({ where: { token } });
+    if (exists) {
+      return;
+    }
+
+    const revokedToken = this.revokedTokenRepository.create({ token });
+    await this.revokedTokenRepository.save(revokedToken);
   }
 
-  isTokenRevoked(token: string): boolean {
-    return this.blacklist.has(token);
+  async isTokenRevoked(token: string): Promise<boolean> {
+    if (!token) {
+      return false;
+    }
+
+    const record = await this.revokedTokenRepository.findOne({ where: { token } });
+    return !!record;
   }
 }

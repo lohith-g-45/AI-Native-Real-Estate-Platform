@@ -18,7 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(req: Request, payload: any) {
     const authHeader = req.headers?.authorization as string;
     const token = authHeader?.split(' ')[1];
-    if (token && this.tokenBlacklistService.isTokenRevoked(token)) {
+    if (token && (await this.tokenBlacklistService.isTokenRevoked(token))) {
       throw new UnauthorizedException('Token has been revoked');
     }
     return {

@@ -8,6 +8,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -17,6 +18,8 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { VerifyPhoneDto } from './dto/verify-phone.dto';
 import { TokenBlacklistService } from './token-blacklist.service';
+import { MailService } from './mail.service';
+import { SmsService } from './sms.service';
 
 @Injectable()
 export class AuthIdentityService {
@@ -25,10 +28,21 @@ export class AuthIdentityService {
     private readonly usersRepository: Repository<User>,
     private readonly jwtService: JwtService,
     private readonly tokenBlacklistService: TokenBlacklistService,
+    private readonly mailService: MailService,
+    private readonly smsService: SmsService,
+    private readonly configService: ConfigService,
   ) {}
 
   private getSecret(name: string, fallback: string) {
-    return process.env[name] ?? process.env.JWT_SECRET ?? fallback;
+    return (
+      this.configService.get<string>(name) ??
+      this.configService.get<string>('JWT_SECRET') ??
+      fallback
+    );
+  }
+
+  private getAppUrl() {
+    return this.configService.get<string>('APP_URL', 'http://localhost:3000');
   }
 
   private issueAccessToken(user: User) {
@@ -83,7 +97,7 @@ export class AuthIdentityService {
     if (!token) {
       throw new BadRequestException('Authorization token is required');
     }
-    this.tokenBlacklistService.revokeToken(token);
+    await this.tokenBlacklistService.revokeToken(token);
     return { success: true, message: 'Logged out successfully' };
   }
 
@@ -101,10 +115,16 @@ export class AuthIdentityService {
       },
     );
 
+    const resetUrl = `${this.getAppUrl()}/v1/auth/password-reset?token=${encodeURIComponent(token)}`;
+    await this.mailService.sendMail({
+      to: user.email,
+      subject: 'Password Reset Request',
+      text: `Reset your password by visiting the link below:\n${resetUrl}\n\nIf you are using a client app, submit this token to POST /v1/auth/password-reset:\n${token}`,
+    });
+
     return {
-      resetToken: token,
-      message:
-        'Password reset token created. In production, send this token by email and do not expose it in the response.',
+      success: true,
+      message: 'Password reset instructions have been sent to your email.',
     };
   }
 
@@ -122,10 +142,16 @@ export class AuthIdentityService {
       },
     );
 
+    const verifyUrl = `${this.getAppUrl()}/v1/auth/verify-email?token=${encodeURIComponent(token)}`;
+    await this.mailService.sendMail({
+      to: user.email,
+      subject: 'Verify Your Email',
+      text: `Verify your email by clicking the link below:\n${verifyUrl}\n\nIf you are using a client app, submit this token to POST /v1/auth/verify-email.`,
+    });
+
     return {
-      verificationToken: token,
-      message:
-        'Email verification token created. In production, send this token by email and do not expose it in the response.',
+      success: true,
+      message: 'Verification email has been sent to your inbox.',
     };
   }
 
@@ -133,6 +159,9 @@ export class AuthIdentityService {
     const user = await this.usersRepository.findOne({ where: { email: dto.email } });
     if (!user) {
       throw new NotFoundException('User not found');
+    }
+    if (!user.phoneNumber) {
+      throw new BadRequestException('User has no phone number to verify');
     }
 
     const token = this.jwtService.sign(
@@ -143,10 +172,15 @@ export class AuthIdentityService {
       },
     );
 
+    const verifyUrl = `${this.getAppUrl()}/v1/auth/verify-phone?token=${encodeURIComponent(token)}`;
+    await this.smsService.sendSms(
+      user.phoneNumber,
+      `Verify your phone by visiting ${verifyUrl} or submit this token to POST /v1/auth/verify-phone.`,
+    );
+
     return {
-      verificationToken: token,
-      message:
-        'Phone verification token created. In production, send this token via SMS and do not expose it in the response.',
+      success: true,
+      message: 'Phone verification SMS has been sent.',
     };
   }
 
