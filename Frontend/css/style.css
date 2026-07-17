@@ -101,23 +101,20 @@ body{
 }
 
 .hero-btn{
-
+    display:block;          /* Important */
     width:280px;
-
     height:60px;
+    line-height:60px;       /* Vertically center the text */
+    margin:30px auto;       /* Centers the button */
+    text-align:center;
+    text-decoration:none;
 
     border:none;
-
     border-radius:14px;
-
-    background:#2D5BFF;
-
-    color:white;
-
+    background:hwb(227 38% 5%);
+    color:#fff;
     font-size:20px;
-
     cursor:pointer;
-
 }
 
 .hero-btn:hover{
