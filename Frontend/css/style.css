@@ -1,107 +1,477 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: url('lohith-g-45/AI-Native-Real-Estate-Platform/Frontend/images/background image.png') no-repeat center top;
-  background-size: cover;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-/* Hero section */
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#ffffff;
+    color:#222;
+    overflow-x:hidden;
+}
+
+/* ================= HERO ================= */
+
 .hero {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.7); /* overlay for readability */
+    position: relative;
+    top:0;
+    width: 100%;
+    min-height: 100vh;
+    background: url("../images/background_image.png") center/cover no-repeat;
+    overflow: visible;
+    padding-bottom: 0; /* remove the huge gap */
 }
 
-/* Cinematic fade-in for entire hero */
-.fade-in-section {
-  opacity: 0;
-  animation: sectionFadeIn 1.5s forwards;
+.dark-overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.20);
 }
 
-@keyframes sectionFadeIn {
-  to { opacity: 1; }
+.gradient-overlay{
+
+    position:absolute;
+
+    bottom:0;
+
+    left:0;
+
+    width:100%;
+
+    height:35%;
+
+    background:linear-gradient(
+        to top,
+        rgba(255,255,255,1),
+        rgba(255,255,255,.9),
+        rgba(255,255,255,.4),
+        transparent
+    );
+
+}
+.hero-content{
+
+    position:absolute;
+
+    top:14%;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:90%;
+
+    max-width:900px;
+
+    text-align:center;
+
+    z-index:20;
+
 }
 
-/* Headline animation */
-.fade-in {
-  opacity: 0;
-  animation: fadeIn 2s forwards;
+.hero-content h1{
+
+    font-size:40px;
+
+    font-weight:700;
+
+    line-height:1.2;
+
+    color:#1d1d1d;
+
+    margin-bottom:20px;
+
 }
 
-@keyframes fadeIn {
-  to { opacity: 1; }
+.hero-content p{
+
+    margin-top:18px;
+
+    font-size:18px;
+
+    color:#555;
+
 }
 
-/* Explainer text with delay */
-.fade-in-delay {
-  opacity: 0;
-  animation: fadeIn 2s forwards;
-  animation-delay: 1s;
+.hero-btn{
+
+    width:280px;
+
+    height:60px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#2D5BFF;
+
+    color:white;
+
+    font-size:20px;
+
+    cursor:pointer;
+
 }
 
-/* Button animation */
-.slide-up {
-  opacity: 0;
-  transform: translateY(30px);
-  animation: slideUp 1.5s forwards;
-  animation-delay: 0.5s;
+.hero-btn:hover{
+    transform:translateY(-6px);
+    box-shadow:0 15px 35px rgba(45,91,255,.35);
 }
 
-@keyframes slideUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ================= FEATURED ================= */
+
+.featured-properties{
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    z-index: 10;
+    padding-bottom:50px;
 }
 
-/* Button styling + hover effect */
-.hero button {
-  background-color: #007BFF;
-  color: #fff;
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 1rem 0;
-  transition: all 0.3s ease;
+.section-heading{
+
+    text-align:center;
+
+    margin-bottom:18px;
+
 }
 
-.hero button:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
+.section-heading h2{
+
+    font-size:30px;
+
+    color:#222;
+
 }
 
-/* Explainer text */
-.hero p {
-  font-size: 1rem;
-  color: #444;
+.section-heading p{
+
+    font-size:15px;
+
+    color:#666;
+
 }
 
-/* Footer */
+.property-slider{
+    height: 430px;
+    overflow: visible;
+}
+
+.property-track{
+
+    display:flex;
+
+    gap:20px;
+    overflow:visible;
+
+    animation:scroll 35s linear infinite;
+
+
+}
+
+.property-slider:hover .property-track{
+    animation-play-state:paused;
+}
+
+.property-card{
+
+    position:relative;
+
+    min-width:300px;
+
+    height:350px;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+
+    transition:.3s;
+
+}
+
+.property-card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 22px 50px rgba(0,0,0,.16);
+}
+
+.property-card img{
+
+    width:100%;
+
+    height:180px;
+
+    object-fit:cover;
+
+}
+.property-card:hover img{
+    transform:scale(1.08);
+}
+
+.badge{
+    position:absolute;
+    top:18px;
+    left:18px;
+    background:#22b573;
+    color:#fff;
+    padding:8px 16px;
+    border-radius:30px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.property-info{
+    padding:14px;
+}
+
+.property-info h3{
+    font-size:18px;
+}
+
+.property-info p{
+    color:#777;
+    font-size:16px;
+}
+
+.property-info h4{
+
+    font-size:22px;
+
+    color:#2D5BFF;
+
+    margin:10px 0;
+
+}
+
+.property-details{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    font-size:12px;
+
+}
+
+/* ================= FOOTER ================= */
+
 footer {
-  text-align: center;
-  padding: 1rem;
-  background: #f9f9f9;
-  font-size: 0.9rem;
+    height: 10vh; /* fixed bottom portion */
+    margin-top: 0; /* remove extra gap */
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    padding: 12px;
 }
 
-footer a {
-  color: #007BFF;
-  text-decoration: none;
-  margin: 0 0.5rem;
+
+footer a{
+    color:#666;
+    text-decoration:none;
 }
 
-footer a:hover {
-  text-decoration: underline;
+footer a:hover{
+    color:#2D5BFF;
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes scroll{
+    from{
+        transform:translateX(0);
+    }
+    to{
+        transform:translateX(-50%);
+    }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1200px){
+
+.hero-content h1{
+    font-size:54px;
+}
+
+.property-card{
+    width:320px;
+    min-width:320px;
+}
+
+}
+
+@media(max-width:992px){
+
+.hero-content h1{
+    font-size:44px;
+}
+
+.hero-content p{
+    font-size:18px;
+}
+
+.featured-properties{
+    padding:70px 30px;
+}
+
+.property-card{
+    width:300px;
+    min-width:300px;
+}
+
+}
+
+@media(max-width:768px){
+
+.hero{
+    min-height:90vh;
+}
+
+.hero-content h1{
+    font-size:36px;
+}
+
+.hero-btn{
+    width:240px;
+    height:56px;
+}
+
+.property-card{
+    width:260px;
+    min-width:260px;
+}
+
+.property-card img{
+    height:190px;
+}
+
+.section-heading h2{
+    font-size:34px;
+}
+
+}
+
+@media(max-width:480px){
+
+.hero-content h1{
+    font-size:28px;
+}
+
+.hero-content p{
+    font-size:15px;
+}
+
+.featured-properties{
+    padding:60px 18px;
+}
+
+.property-card{
+    width:230px;
+    min-width:230px;
+}
+
+.property-card img{
+    height:170px;
+}
+
+.section-heading h2{
+    font-size:28px;
+}
+
+}
+/* ================= MOBILE VERSION ================= */
+@media(max-width:480px) {
+
+  /* Body + Footer fix */
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* always full screen */
+  }
+
+  footer {
+    margin-top: auto; /* pushes footer down */
+    height: 8vh; /* slim footer */
+    font-size: 12px;
+    padding: 8px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Hero section smaller */
+  .hero {
+    height: 30vh; /* shrink hero */
+    min-height: auto;
+  }
+
+  .hero-content h1 {
+    font-size: 22px;
+  }
+
+  .hero-content p {
+    font-size: 13px;
+  }
+
+  .hero-btn {
+    width: 160px;
+    height: 44px;
+    font-size: 16px;
+  }
+
+  /* Featured Properties block */
+  .featured-properties {
+    height: 62vh; /* fill middle portion */
+    overflow-x: auto; /* horizontal scroll only */
+    overflow-y: hidden;
+    padding: 10px 0;
+  }
+
+  .property-slider {
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .property-track {
+    gap: 12px;
+    width: max-content; /* ensures horizontal scroll */
+  }
+
+  .property-card {
+    min-width: 180px;
+    height: 220px; /* smaller cards */
+  }
+
+  .property-card img {
+    height: 100px; /* shrink image */
+  }
+
+  .property-info h3 {
+    font-size: 14px;
+  }
+
+  .property-info p {
+    font-size: 12px;
+  }
+
+  .property-info h4 {
+    font-size: 16px;
+  }
 }
