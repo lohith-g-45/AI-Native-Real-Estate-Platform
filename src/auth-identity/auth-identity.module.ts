@@ -5,17 +5,20 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthIdentityController } from './auth-identity.controller';
 import { AuthIdentityService } from './auth-identity.service';
+import { ConsentService } from './consent.service';
 import { TokenBlacklistService } from './token-blacklist.service';
 import { User } from './entities/user.entity';
+import { Consent } from './entities/consent.entity';
 import { RevokedToken } from './entities/revoked-token.entity';
 import { MailService } from './mail.service';
 import { SmsService } from './sms.service';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { AuditObservabilityModule } from '../audit-observability/audit-observability.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, RevokedToken]),
+    TypeOrmModule.forFeature([User, Consent, RevokedToken]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -26,10 +29,12 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       }),
     }),
     ConfigModule,
+    AuditObservabilityModule,
   ],
   controllers: [AuthIdentityController],
   providers: [
     AuthIdentityService,
+    ConsentService,
     JwtStrategy,
     TokenBlacklistService,
     MailService,
@@ -43,7 +48,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
           'GOOGLE_CALLBACK_URL',
           'http://localhost:3000/v1/auth/google/redirect',
         );
-        if (!clientID || !clientSecret) {
+        if (!clientID || !clientSecret || clientID.startsWith('your-')) {
           return null;
         }
         return new GoogleStrategy(clientID, clientSecret, callbackURL);

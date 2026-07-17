@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
@@ -29,3 +29,50 @@ jobs:
 
       - name: Test
         run: pnpm run test --runInBand
+
+  # ─── Deploy to staging (runs only on push to main, after tests pass) ───
+  deploy-staging:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install pnpm
+        run: corepack enable && corepack prepare pnpm@latest --activate
+
+      - name: Install dependencies
+        run: pnpm install --strict-peer-dependencies=false -y
+
+      - name: Build production bundle
+        run: pnpm build
+
+      # ── OPTION A: Deploy to Railway ──
+      # Uncomment and set RAILWAY_TOKEN in GitHub Secrets
+      # - name: Deploy to Railway
+      #   uses: bervProject/railway-deploy@main
+      #   with:
+      #     railway_token: ${{ secrets.RAILWAY_TOKEN }}
+      #     service: ai-real-estate-api
+
+      # ── OPTION B: Deploy to Render ──
+      # Uncomment and set RENDER_DEPLOY_HOOK_URL in GitHub Secrets
+      # - name: Deploy to Render
+      #   run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+
+      # ── OPTION C: Deploy Docker to cloud ──
+      # Uncomment and configure for your cloud provider
+      # - name: Build and push Docker image
+      #   run: |
+      #     docker build -t ai-real-estate-api:${{ github.sha }} .
+      #     docker tag ai-real-estate-api:${{ github.sha }} ${{ secrets.DOCKER_REGISTRY }}/ai-real-estate-api:latest
+      #     docker push ${{ secrets.DOCKER_REGISTRY }}/ai-real-estate-api:latest
+
+      - name: Staging deploy placeholder
+        run: echo "⚠️  Configure one of the deploy options above (Railway, Render, or Docker) and set the required secrets in GitHub repository settings."

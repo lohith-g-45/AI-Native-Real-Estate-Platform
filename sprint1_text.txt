@@ -1,0 +1,416 @@
+Sprint 1 Requirements — Live Product Foundation
+Page 1
+Sprint 1 Requirements Specification
+Live Product Foundation
+AI-Native Real Estate Platform — Agile MVP
+Sub-document of: AI-Native Real Estate Master PRD v2.0 (Agile MVP)
+What this document is
+This is a sprint-level breakdown built from Section 15.5 (Initial Sprint Plan) and Section 16 (Requirements-to-
+Sprint Traceability) of the Master PRD. It takes the Sprint 1 increment — a responsive web shell, a versioned API,
+CI/CD, staging, authentication with roles and consent, buyer/seller dashboards, and an audit skeleton — and
+turns it into requirements the team can actually plan, build, and demo against. It doesn't replace the Master
+PRD; wherever this document doesn't say something explicitly, the Master PRD is still the final word.
+Document Control
+Field
+Value
+Parent document
+AI-Native Real Estate Master PRD v2.0 (Agile MVP)
+Sprint
+Sprint 1 of 10 — "Live product foundation"
+Sprint length
+Two weeks (per Master PRD Section 15.1)
+Primary requirements covered REQ-01 (Authentication, Roles and Consent); REQ-16 (Mobile Portability
+— introduced this sprint)
+Cross-cutting NFRs introduced Security/RBAC, Auditability, Mobile Portability & Accessibility,
+Observability (started here, continuing into Sprint 2),
+Performance/Reliability/Idempotency, Legal/Compliance Configuration
+(also spanning Sprint 1-2)
+Status
+Draft — for sprint planning
+1. Purpose and Scope
+This document takes the Sprint 1 row of the Master PRD's Initial Sprint Plan (Section 15.5) and turns it into
+requirements the team can build against. Sprint 1 is the foundation sprint — it's where we stand up the live,
+deployable shell of the product that every sprint after this one (2 through 10) builds on top of.
+Under the Master PRD's Iterative Scope Rule (Section 15), this plan should be read as an initial forecast rather
+than a locked waterfall schedule. Stories can be split or reshaped after the sprint demo based on what we learn.
+The one hard rule: if a P0 requirement needs to change, that change has to be reflected in a newly approved
+PRD version before we drop anything.
+1.1 Sprint 1 Goal (from Master PRD Section 15.5)
+Field
+Master PRD content
+Sprint / goal
+Sprint 1 — Live product foundation
+Increment scope
+Responsive web shell; versioned API; CI/CD; staging; auth, roles, consent;
+buyer/seller dashboards; audit skeleton.
+Mandatory usable demo
+Register as a buyer and as a seller on both desktop and mobile, verify
+email, log in and out, and reach the correct role dashboard — all on live
+
+---PAGE BREAK---
+Sprint 1 Requirements — Live Product Foundation
+Page 2
+staging.
+Primary feedback sought
+How usable the onboarding feels, and whether the API/mobile foundation
+holds up.
+2. Governance Carried Over from the Master PRD
+Every story pulled into Sprint 1 has to follow the same rules laid out in Master PRD Sections 15.2 through 15.4.
+Nothing changes here — this is just a reminder of what "ready" and "done" mean going into this sprint.
+2.1 Definition of Ready
+●
+The user, the outcome, and the business reason behind the story are all clear.
+●
+Acceptance criteria and the mandatory demo path are written down.
+●
+Data, legal/policy, and dependency assumptions have been identified.
+●
+AI autonomy level, confidence policy, fallback behaviour, and audit requirements are defined.
+●
+Mobile-browser behaviour and API impact are understood before work starts.
+●
+The story is small enough to complete, integrate, and demo within the sprint.
+2.2 Definition of Done
+●
+Built end to end in the shared codebase — no "we'll wire this up later" work left on the demonstrated
+path.
+●
+Automated unit, integration, API contract, security, and relevant AI evaluation tests all pass.
+●
+Architecture boundaries, audit events, observability, and feature flags are in place.
+●
+The responsive desktop and mobile-browser flow has been tested.
+●
+Acceptance criteria are demonstrated live, using a real role and real persisted data — not a mock.
+●
+Demo feedback and defects are captured, and documentation/backlog are updated accordingly.
+●
+No unresolved critical security, privacy, data-integrity, or confidentiality defect remains.
+2.3 Mandatory Sprint Demo Standard
+Every sprint demo, including this one, has to follow the same script:
+●
+Start from the current deployed staging product — not a local prototype.
+●
+Use an end-user role and complete a task that actually means something; if the work is operations-only,
+show an observable operational capability instead.
+●
+Show persisted state, and show how it affects the next stage of the workflow.
+●
+Show at least one happy path and one exception/failure path for whatever new capability is being
+demoed.
+●
+Show the new flow on desktop and on at least one mobile-browser viewport.
+●
+Show the relevant audit/AI-decision evidence for anything autonomous.
+●
+Capture stakeholder observations as backlog items before the review closes.
+●
+If the integrated demo can't actually run, the increment isn't accepted as Done — no exceptions.
+3. Functional Requirements — Sprint 1
+
+---PAGE BREAK---
+Sprint 1 Requirements — Live Product Foundation
+Page 3
+Each requirement below traces back to a Sprint 1 increment item in Section 15.5, filled out using the matching
+detailed requirement, architecture module, and ADR from the Master PRD (Sections 6, 8, and 14).
+FR-S1-01 — Account Registration, Login and Verification (from REQ-01)
+Source: Master PRD Section 6, REQ-01 — Authentication, Roles and Consent.
+What it covers: users need to be able to register and log in using either email or Google, verify their email,
+optionally verify a phone number, reset a forgotten password, and log out cleanly.
+AI-native behaviour: the AI greets users and routes them by role, explains consent in plain language rather than
+legal boilerplate, notices when onboarding has been left half-finished and nudges the user toward the next step.
+If something looks risky, the system can quietly ask for step-up verification without exposing its internal
+reasoning.
+User control and boundaries: users are in control of their own consent and can withdraw anything non-essential.
+Admin actions should never surface to a regular user, under any circumstance.
+Acceptance criteria: a new buyer or seller should be able to create an account, verify their identity channels,
+give consent, log in and out, and land on the correct responsive dashboard — all within five minutes, all through
+versioned APIs, and all passing mobile-browser tests.
+FR-S1-02 — Role Selection and Buyer/Seller Dashboards (from REQ-01)
+Source: Master PRD Section 6 (REQ-01) and the "buyer/seller dashboards" line item in Section 15.5.
+What it covers: at onboarding, users choose whether they're a Buyer or a Seller and get routed to the dashboard
+built for that role. Admin and exception-handling users are never created through self-service — only through
+controlled internal provisioning.
+User control and boundaries: admin actions and admin-only screens must stay completely invisible to normal
+Buyer/Seller users.
+Acceptance criteria: a registered user reaches their correct role dashboard, on both desktop and mobile-browser
+viewports, on live staging.
+FR-S1-03 — Consent Capture and Management (from REQ-01)
+Source: Master PRD Section 6, REQ-01.
+What it covers: at onboarding, we capture consent records for AI use, verification processing, communications,
+and document sharing.
+AI-native behaviour: before capturing consent, the AI explains each item in plain language so the user actually
+understands what they're agreeing to.
+User control and boundaries: users can withdraw consent for anything non-essential after their account is
+created.
+Acceptance criteria: consent is recorded per category, visible to the user, and withdrawable where non-essential
+— and all of that needs to check out against the persisted state, not just the UI.
+
+---PAGE BREAK---
+Sprint 1 Requirements — Live Product Foundation
+Page 4
+FR-S1-04 — Responsive Web Shell and Mobile-Browser Support (from REQ-16)
+Source: Master PRD Section 6, REQ-16 — Mobile-Portability and Client-Neutral Product Design (introduced this
+sprint); Section 14 (Mobile Portability and Architecture Evolution).
+What it covers: the MVP ships as a responsive website, but every Sprint 1 capability — registration, login, role
+dashboards — needs to be reachable through versioned, role-secured, task-specific APIs. Nothing should depend
+on web-session-only logic.
+AI-native behaviour: onboarding and AI guidance run as task APIs with resumable state, not as a chat session
+tied to one browser tab.
+User control and boundaries: the web presentation can vary however it needs to, but no business rule or source-
+of-truth state is allowed to live only in the browser.
+Acceptance criteria: all Sprint 1 flows pass both desktop and mobile-browser tests, and registration, login, and
+dashboard retrieval are demonstrably callable through the same versioned APIs the web client itself uses.
+FR-S1-05 — Versioned, API-First Foundation
+Source: the "versioned API" line in Master PRD Section 15.5; ADR-016 (API-first, client-neutral business logic);
+Section 10.3 (API and client-contract principles).
+What it covers: every Sprint 1 capability sits behind a versioned API contract owned by the Auth & Identity
+module, independent of whatever the web presentation layer looks like.
+Why it matters: this is what lets us pull out a native client later (Section 14) without having to rework the
+backend.
+Acceptance criteria: every Sprint 1 endpoint carries an API version, and a client-neutral request can complete
+authentication without ever touching the web UI.
+FR-S1-06 — CI/CD Pipeline and Shared Staging Environment
+Source: the "CI/CD; staging" line in Master PRD Section 15.5; Section 15.3 Definition of Done; Section 15.4 demo
+standard.
+What it covers: an automated CI/CD pipeline builds, tests, and deploys the product to a shared staging
+environment, and that's the environment every sprint demo runs from — per Section 15.4's rule to "start from
+the current deployed staging product, not a local prototype."
+Acceptance criteria: a change merged to mainline gets automatically built, tested, and deployed to staging, and
+the Sprint 1 demo runs from that deployed environment.
+FR-S1-07 — Audit Skeleton (foundational)
+Source: the "audit skeleton" line in Master PRD Section 15.5; Section 8.1's "Audit & Observability" bounded
+context (owns append-only audit records, traces, metrics, and quality samples); Section 16.1's cross-cutting NFR
+"Auditability and immutable events," introduced this sprint.
+
+---PAGE BREAK---
+Sprint 1 Requirements — Live Product Foundation
+Page 5
+What it covers: we stand up a minimal, append-only audit capability so that Auth & Identity events —
+registration, login, logout, consent capture/withdrawal, role selection — are recorded starting in Sprint 1, ahead
+of the heavier transactional and AI-decision audit needs that show up in later sprints.
+Acceptance criteria: for a demo user, the registration, login/logout, consent, and role-selection events all show
+up in an append-only audit log tied to that user's account.
+4. Non-Functional Requirements — Sprint 1
+Master PRD Section 16.1 (Cross-cutting NFR Traceability) lays out which NFR areas need to show up starting in
+Sprint 1 versus which ones get demonstrated continuously afterward. The table below pulls in the full NFR
+definitions from Section 7, filtered down to whatever's flagged as "Sprint 1" or "Sprint 1-2."
+NFR area
+Introduced
+Sprint 1 requirement (from Master PRD Section 7)
+Security
+Sprint 1
+RBAC/ABAC enforced on every endpoint, least-privilege access,
+secure file validation, encrypted transport and storage, proper
+secret management, rate limiting, and vulnerability scanning.
+Privacy
+Sprint 1
+Data minimisation, purpose limitation, a clear public/private
+separation, consent records, role-scoped document access, and
+configurable retention/deletion.
+Auditability
+Sprint 1
+Auth & Identity events (registration, login, consent, role
+selection) are immutable or versioned from Sprint 1 onward;
+full transactional/AI-decision auditability grows with each
+sprint after this.
+Performance
+Sprint 1
+Common page and API responses should hit a p95 under two
+seconds.
+Reliability
+Sprint 1
+Critical status transitions — registration, role assignment — are
+transactional, idempotent, and exactly-once in effect.
+Availability
+Sprint 1
+Pilot target of 99.5% monthly availability for core flows; login
+and dashboard access need to stay up even if other, non-
+Sprint-1 features degrade.
+Observability
+Sprint 1-2
+Central logs, metrics, traces, and alerts get stood up for the
+Sprint 1 shell; AI cost and decision-quality observability
+expands starting Sprint 2.
+Mobile portability
+Sprint 1
+Responsive layouts, touch-safe controls, API contract tests,
+resumable workflows, and no business logic that only lives on
+the web.
+Accessibility
+Sprint 1
+Core flows — registration, login, dashboards — meet WCAG-
+oriented requirements for labels, keyboard navigation, focus,
+contrast, error handling, and screen-reader semantics.
+Maintainability
+Sprint 1
+Bounded modules, typed API contracts, automated tests,
+architecture checks, code review, and ADRs — applied to AI-
+generated code just as much as anything else, starting from this
+first increment.
+Legal / compliance
+configuration
+Sprint 1-2
+No legal advice, escrow, title transfer, payment custody,
+mortgage execution, or binding agreement generation. For
+Sprint 1 specifically, this mostly means onboarding and consent
+language must not imply any of these.
+4.1 Architecture Constraints Applicable to Sprint 1
+
+---PAGE BREAK---
+Sprint 1 Requirements — Live Product Foundation
+Page 6
+●
+The Auth & Identity module owns accounts, roles, sessions, consent, and authentication state — it must
+not own listings, pricing, offers, or verification-evidence decisions (Section 8.1).
+●
+The Audit & Observability module owns append-only audit records, traces, metrics, and quality samples
+— it must not own operational business decisions (Section 8.1).
+●
+ADR-001/002: build on a microservice-ready modular monolith; don't start with full microservices.
+●
+ADR-008: use internal domain events inside the monolith to support audit, notifications, debugging, and
+later extraction.
+●
+ADR-016: keep business logic API-first and client-neutral, so mobile portability doesn't require backend
+rework down the line.
+●
+ADR-018: Sprint 1 needs to produce a live, usable, integrated increment — not slides, wireframes, or a
+set of APIs sitting in isolation.
+5. Sprint 1 Acceptance Criteria and Demo Script Outline
+Pulled together from the Sprint 1 row of Section 15.5 and the acceptance criteria under REQ-01 and REQ-16
+(Section 6).
+●
+Register as a new Buyer on desktop, verify email, log in, and reach the Buyer dashboard.
+●
+Register as a new Seller on a mobile-browser viewport, verify email, log in, and reach the Seller
+dashboard.
+●
+Demonstrate password reset and logout for at least one role.
+●
+Demonstrate a consent capture and a consent withdrawal for a non-essential processing category.
+●
+Show the same registration, login, and dashboard-retrieval actions succeeding through the versioned
+API, independent of the web UI — the client-neutral proof required by REQ-16.
+●
+Show the audit log entries created by the demoed registration, login, and consent events.
+●
+Show one exception/failure path — an invalid verification code, or a failed login attempt — alongside
+the happy path, per the mandatory demo standard.
+●
+Confirm the whole demo runs from the shared staging environment deployed via CI/CD, not from a local
+build.
+6. Sprint 1 Requirements Traceability
+Pulled from Master PRD Section 16 (Requirements-to-Sprint Traceability) and Section 16.1 (Cross-cutting NFR
+Traceability), filtered down to whatever's primarily introduced in Sprint 1.
+Requirement / concern
+Primary /
+introduced
+sprint
+Continuous integration
+Sprint 1 traceability evidence
+REQ-01 — Authentication, Roles
+and Consent
+1
+2–10
+Registration, consent, and role
+dashboards demonstrated on live
+staging.
+REQ-16 — Mobile Portability
+1
+All
+Mobile-browser demo, plus
+independent-client proof for auth
+and dashboard retrieval.
+Security, privacy and RBAC
+1
+Every sprint; full review at
+Sprint 10
+RBAC/ABAC enforced on Sprint 1
+auth/dashboard endpoints.
+Auditability and immutable
+events
+1
+Every
+autonomous/transactional
+Audit skeleton capturing Sprint 1
+identity events.
+
+---PAGE BREAK---
+Sprint 1 Requirements — Live Product Foundation
+Page 7
+Requirement / concern
+Primary /
+introduced
+sprint
+Continuous integration
+Sprint 1 traceability evidence
+demo
+Mobile portability and
+accessibility
+1
+Mobile-browser demo
+each sprint; full gate at
+Sprint 10
+Responsive shell tested on desktop
+and mobile-browser.
+Observability and cost/quality
+metrics
+1-2
+Expanded with each new
+capability
+Logs, metrics, and traces stood up
+for the Sprint 1 shell.
+Performance, reliability and
+idempotency
+1
+Story acceptance and
+hardening through Sprint
+10
+p95 response targets and
+idempotent registration/login.
+Legal/compliance configuration 1-2
+Feature-specific gates;
+final approval at Sprint 10
+Onboarding/consent copy avoids
+implying legal advice, escrow, or
+binding agreements.
+7. Explicitly Out of Scope for Sprint 1
+The following requirements from Master PRD Section 6 aren't part of Sprint 1. Each picks up at its own
+designated sprint per Master PRD Section 16:
+●
+REQ-02 Autonomous Seller and Property Verification — Sprint 2
+●
+REQ-03 AI-Guided Listing Creation — Sprint 3
+●
+REQ-04 Media and Document Intelligence — Sprints 2-3
+●
+REQ-05 Autonomous Listing Approval — Sprint 3
+●
+REQ-06 Buyer Search and Recommendations — Sprint 5
+●
+REQ-07 Property Details and AI Explainer — Sprint 5
+●
+REQ-08 Enquiries, Messaging and Moderation — Sprint 6
+●
+REQ-09 Visit Scheduling — Sprint 6
+●
+REQ-10 Preliminary Offer and Negotiation — Sprint 7
+●
+REQ-11 Checklist and Lawyer Handoff — Sprint 9
+●
+REQ-12 Autonomous Operations / Exceptions — Sprint 2
+●
+REQ-13 Notifications — Sprint 2
+●
+REQ-14 Pricing Recommendation — Sprint 4
+●
+REQ-15 Proxy Bidding — Sprint 8
+●
+REQ-17 AI Governance and Evaluation (as a full capability) — Sprint 2
+Note on scope changes
+Under the Master PRD's Iterative Scope Rule (Section 15), this Sprint 1 breakdown may still be split or
+reprioritised after the sprint demo. That said, any proposed removal or material change to a P0 requirement
+(REQ-01 or REQ-16) has to be reflected in a newly approved Master PRD version first.
+
+---PAGE BREAK---
