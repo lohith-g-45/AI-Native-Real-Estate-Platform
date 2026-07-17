@@ -635,3 +635,79 @@ body{
     }
 
 }
+/* ===========================
+   TIMER BOX
+=========================== */
+
+.timer-box{
+
+    width:100%;
+
+    padding:18px;
+
+    border-radius:18px;
+
+    background:#EEF5FF;
+
+    border:1px solid #C8DAFF;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin:22px 0 10px;
+
+}
+
+.timer-box i{
+
+    color:#3366FF;
+
+    font-size:20px;
+
+}
+
+.timer-box span{
+
+    color:#3366FF;
+
+    font-size:24px;
+
+    font-weight:700;
+
+}
+
+.timer-text{
+
+    text-align:center;
+
+    color:#666;
+
+    font-size:15px;
+
+    margin-bottom:25px;
+
+}
+
+
+/* ===========================
+   DISABLED BUTTON
+=========================== */
+
+.disabled-btn{
+
+    background:#E5E7EB;
+
+    color:#9CA3AF;
+
+    border:none;
+
+    cursor:not-allowed;
+
+    pointer-events:none;
+
+}
