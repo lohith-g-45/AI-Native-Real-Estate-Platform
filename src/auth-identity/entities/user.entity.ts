@@ -41,6 +41,12 @@ export class User {
   @Column({ default: false })
   isActive: boolean;
 
+  @Column({ nullable: true })
+  passwordResetCode?: string;
+
+  @Column({ nullable: true, type: 'timestamp' })
+  passwordResetExpires?: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 

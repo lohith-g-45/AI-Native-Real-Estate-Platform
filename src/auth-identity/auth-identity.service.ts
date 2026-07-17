@@ -185,20 +185,17 @@ export class AuthIdentityService {
       throw new NotFoundException('User not found');
     }
 
-    const token = this.jwtService.sign(
-      { sub: user.id, type: 'password_reset' },
-      {
-        secret: this.getSecret('PASSWORD_RESET_SECRET', 'password_reset_secret'),
-        expiresIn: '15m',
-      },
-    );
+    const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const resetExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
 
-    const frontendUrl = this.configService.get<string>('FRONTEND_URL', 'http://localhost:8080');
-    const resetUrl = `${frontendUrl}/reset_password.html?token=${encodeURIComponent(token)}`;
+    user.passwordResetCode = resetCode;
+    user.passwordResetExpires = resetExpires;
+    await this.usersRepository.save(user);
+
     await this.mailService.sendMail({
       to: user.email,
       subject: 'Password Reset Request',
-      text: `Reset your password by visiting the link below:\n${resetUrl}\n\nIf you are using a client app, submit this token to POST /v1/auth/password-reset:\n${token}`,
+      text: `Your 6-digit password reset code is: ${resetCode}\n\nThis code will expire in 15 minutes.`,
     });
 
     // Audit: password reset requested
@@ -212,7 +209,7 @@ export class AuthIdentityService {
 
     return {
       success: true,
-      message: 'Password reset instructions have been sent to your email.',
+      message: 'Password reset code has been sent to your email.',
     };
   }
 
@@ -290,25 +287,22 @@ export class AuthIdentityService {
   }
 
   async resetPassword(dto: ResetPasswordDto, ipAddress?: string, userAgent?: string) {
-    let payload: any;
-    try {
-      payload = this.jwtService.verify(dto.token, {
-        secret: this.getSecret('PASSWORD_RESET_SECRET', 'password_reset_secret'),
-      });
-    } catch (err) {
-      throw new BadRequestException('Invalid or expired password reset token');
-    }
-
-    if (payload.type !== 'password_reset') {
-      throw new BadRequestException('Invalid password reset token');
-    }
-
-    const user = await this.usersRepository.findOne({ where: { id: payload.sub } });
+    const user = await this.usersRepository.findOne({ where: { email: dto.email } });
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
+    if (!user.passwordResetCode || user.passwordResetCode !== dto.code) {
+      throw new BadRequestException('Invalid verification code');
+    }
+
+    if (!user.passwordResetExpires || user.passwordResetExpires.getTime() < Date.now()) {
+      throw new BadRequestException('Verification code has expired');
+    }
+
     user.password = await bcrypt.hash(dto.newPassword, 10);
+    user.passwordResetCode = undefined;
+    user.passwordResetExpires = undefined;
     await this.usersRepository.save(user);
 
     // Audit: password reset completed
