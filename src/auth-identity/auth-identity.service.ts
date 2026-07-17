@@ -66,6 +66,9 @@ export class AuthIdentityService {
       throw new ConflictException('Email already in use');
     }
 
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const verificationExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+
     const hashed = await bcrypt.hash(registerDto.password, 10);
     const user = this.usersRepository.create({
       email: registerDto.email,
@@ -74,6 +77,8 @@ export class AuthIdentityService {
       fullName: registerDto.fullName,
       phoneNumber: registerDto.phoneNumber,
       emailVerified: false,
+      emailVerificationCode: verificationCode,
+      emailVerificationExpires: verificationExpires,
       phoneVerified: false,
       isActive: true,
     });
@@ -82,6 +87,13 @@ export class AuthIdentityService {
 
     // Seed default consents for the new user
     await this.consentService.seedDefaultConsents(saved.id, saved.email);
+
+    // Send registration verification email with 6-digit code
+    await this.mailService.sendMail({
+      to: saved.email,
+      subject: 'Verify Your Registration',
+      text: `Welcome to the AI-Native Real Estate Platform! Your 6-digit verification code is: ${verificationCode}\n\nThis code will expire in 15 minutes.`,
+    });
 
     // Audit: user registered
     await this.auditService.log({
@@ -99,17 +111,28 @@ export class AuthIdentityService {
 
   async login(loginDto: LoginUserDto, ipAddress?: string, userAgent?: string): Promise<{ accessToken: string }> {
     const user = await this.usersRepository.findOne({ where: { email: loginDto.email } });
-    if (!user || !user.password || !user.isActive) {
+    if (!user || !user.password || !user.isActive || !user.emailVerified) {
       // Audit: failed login attempt
       await this.auditService.log({
         event: AuditEvent.USER_LOGIN_FAILED,
         userId: user?.id ?? null,
         email: loginDto.email,
-        metadata: { reason: !user ? 'user_not_found' : !user.password ? 'no_password' : 'inactive' },
+        metadata: {
+          reason: !user
+            ? 'user_not_found'
+            : !user.password
+            ? 'no_password'
+            : !user.isActive
+            ? 'inactive'
+            : 'email_unverified',
+        },
         ipAddress,
         userAgent,
       });
-      throw new UnauthorizedException('Invalid credentials');
+      const message = !user || !user.password || !user.isActive
+        ? 'Invalid credentials'
+        : 'Email verification is pending. Please verify your email first.';
+      throw new UnauthorizedException(message);
     }
 
     const valid = await bcrypt.compare(loginDto.password, user.password);
@@ -198,19 +221,18 @@ export class AuthIdentityService {
       throw new NotFoundException('User not found');
     }
 
-    const token = this.jwtService.sign(
-      { sub: user.id, type: 'verify_email' },
-      {
-        secret: this.getSecret('EMAIL_VERIFICATION_SECRET', 'email_verification_secret'),
-        expiresIn: '1d',
-      },
-    );
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const verificationExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
 
-    const verifyUrl = `${this.getAppUrl()}/v1/auth/verify-email?token=${encodeURIComponent(token)}`;
+    user.emailVerificationCode = verificationCode;
+    user.emailVerificationExpires = verificationExpires;
+    user.emailVerified = false;
+    await this.usersRepository.save(user);
+
     await this.mailService.sendMail({
       to: user.email,
       subject: 'Verify Your Email',
-      text: `Verify your email by clicking the link below:\n${verifyUrl}\n\nIf you are using a client app, submit this token to POST /v1/auth/verify-email.`,
+      text: `Your 6-digit verification code is: ${verificationCode}\n\nThis code will expire in 15 minutes.`,
     });
 
     // Audit: email verification requested
@@ -301,25 +323,49 @@ export class AuthIdentityService {
   }
 
   async verifyEmail(dto: VerifyEmailDto, ipAddress?: string, userAgent?: string) {
-    let payload: any;
-    try {
-      payload = this.jwtService.verify(dto.token, {
-        secret: this.getSecret('EMAIL_VERIFICATION_SECRET', 'email_verification_secret'),
-      });
-    } catch (err) {
-      throw new BadRequestException('Invalid or expired email verification token');
+    let user: User | null = null;
+
+    if (dto.token) {
+      let payload: any;
+      try {
+        payload = this.jwtService.verify(dto.token, {
+          secret: this.getSecret('EMAIL_VERIFICATION_SECRET', 'email_verification_secret'),
+        });
+      } catch (err) {
+        throw new BadRequestException('Invalid or expired email verification token');
+      }
+
+      if (payload.type !== 'verify_email') {
+        throw new BadRequestException('Invalid email verification token');
+      }
+
+      user = await this.usersRepository.findOne({ where: { id: payload.sub } });
+    } else {
+      if (!dto.email || !dto.code) {
+        throw new BadRequestException('Email and verification code are required');
+      }
+
+      user = await this.usersRepository.findOne({ where: { email: dto.email } });
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      if (!user.emailVerificationCode || user.emailVerificationCode !== dto.code) {
+        throw new BadRequestException('Invalid verification code');
+      }
+
+      if (!user.emailVerificationExpires || user.emailVerificationExpires.getTime() < Date.now()) {
+        throw new BadRequestException('Verification code has expired');
+      }
     }
 
-    if (payload.type !== 'verify_email') {
-      throw new BadRequestException('Invalid email verification token');
-    }
-
-    const user = await this.usersRepository.findOne({ where: { id: payload.sub } });
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
     user.emailVerified = true;
+    user.emailVerificationCode = null;
+    user.emailVerificationExpires = null;
     await this.usersRepository.save(user);
 
     // Audit: email verified

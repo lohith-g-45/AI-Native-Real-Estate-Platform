@@ -3,9 +3,13 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { User } from './../src/auth-identity/entities/user.entity';
+import { Repository } from 'typeorm';
 
 describe('Auth & Consent & Audit System (e2e)', () => {
   let app: INestApplication<App>;
+  let usersRepository: Repository<User>;
   let accessToken: string;
   let userId: string;
   const uniqueEmail = `user-${Date.now()}@example.com`;
@@ -19,6 +23,8 @@ describe('Auth & Consent & Audit System (e2e)', () => {
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
     await app.init();
+
+    usersRepository = moduleFixture.get<Repository<User>>(getRepositoryToken(User));
   });
 
   afterAll(async () => {
@@ -59,6 +65,35 @@ describe('Auth & Consent & Audit System (e2e)', () => {
     });
   });
 
+  // 1.5 EMAIL VERIFICATION CODE FLOW
+  describe('Email Verification Code Gating', () => {
+    it('should reject login attempt if email is not yet verified', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/v1/auth/login')
+        .send({
+          email: uniqueEmail,
+          password: password,
+        })
+        .expect(401);
+
+      expect(response.body.message).toContain('Email verification is pending');
+    });
+
+    it('should successfully verify email with correct 6-digit code', async () => {
+      const user = await usersRepository.findOne({ where: { id: userId } });
+      expect(user).toBeDefined();
+      expect(user.emailVerificationCode).toBeDefined();
+
+      await request(app.getHttpServer())
+        .post('/v1/auth/verify-email')
+        .send({
+          email: uniqueEmail,
+          code: user.emailVerificationCode,
+        })
+        .expect(201);
+    });
+  });
+
   // 2. LOGIN
   describe('POST /v1/auth/login', () => {
     it('should fail to login with wrong password (401)', async () => {
@@ -71,7 +106,7 @@ describe('Auth & Consent & Audit System (e2e)', () => {
         .expect(401);
     });
 
-    it('should successfully login and return JWT access token', async () => {
+    it('should successfully login and return JWT access token after verification', async () => {
       const response = await request(app.getHttpServer())
         .post('/v1/auth/login')
         .send({
@@ -193,9 +228,15 @@ describe('Auth & Consent & Audit System (e2e)', () => {
       expect(Array.isArray(response.body)).toBe(true);
       expect(response.body.length).toBeGreaterThanOrEqual(1);
       
-      const failedLog = response.body.find((log: any) => log.email === uniqueEmail);
-      expect(failedLog).toBeDefined();
-      expect(failedLog.metadata.reason).toBe('wrong_password');
+      const wrongPasswordLog = response.body.find(
+        (log: any) => log.email === uniqueEmail && log.metadata?.reason === 'wrong_password',
+      );
+      expect(wrongPasswordLog).toBeDefined();
+
+      const unverifiedLog = response.body.find(
+        (log: any) => log.email === uniqueEmail && log.metadata?.reason === 'email_unverified',
+      );
+      expect(unverifiedLog).toBeDefined();
     });
   });
 });

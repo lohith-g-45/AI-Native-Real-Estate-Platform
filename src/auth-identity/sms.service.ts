@@ -14,8 +14,8 @@ export class SmsService {
     const accountSid = this.configService.get<string>('TWILIO_ACCOUNT_SID');
     const authToken = this.configService.get<string>('TWILIO_AUTH_TOKEN');
 
-    if (!accountSid || !authToken) {
-      this.logger.warn('Twilio is not configured; SMS will be logged instead of sent.');
+    if (process.env.NODE_ENV === 'test' || !accountSid || !authToken || accountSid.includes('your-') || authToken.includes('your-')) {
+      this.logger.warn('Twilio is not configured or in test mode; SMS will be logged instead of sent.');
       return null;
     }
 
