@@ -160,18 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(data.message || 'Verification failed');
                 }
 
-                // Success! Redirect to login.html
-                heading.querySelector('h1').textContent = 'Account Created!';
-                heading.querySelector('p').textContent = 'Your email has been verified. Redirecting you to sign in...';
-                signupForm.innerHTML = `
-                    <div style="text-align: center; color: #4cd964; font-size: 50px; margin: 20px 0;">
-                        <i class='bx bx-check-circle'></i>
-                    </div>
-                `;
-
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 2000);
+                // Success! Redirect immediately to waiting.html
+                window.location.href = 'waiting.html';
 
             } catch (error) {
                 showError(error.message);

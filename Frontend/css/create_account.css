@@ -451,14 +451,14 @@ body{
 
     inset:0;
 
-   background:url("../images/floorplan.png")
+   background:url("../images/email_background.png")
 center center;
 
 background-size:cover;
 
 background-repeat:no-repeat;
 
-    opacity:.30;
+    opacity:.85;
 
     animation:blueprintFloat 18s ease-in-out infinite;
 
@@ -475,9 +475,9 @@ background-repeat:no-repeat;
 
     linear-gradient(
     135deg,
-    rgba(244,248,255,.90),
-    rgba(236,243,255,.75),
-    rgba(248,251,255,.92));
+    rgba(15,23,42,.70),
+    rgba(15,23,42,.75),
+    rgba(15,23,42,.80));
 
 }
 
