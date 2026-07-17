@@ -193,7 +193,8 @@ export class AuthIdentityService {
       },
     );
 
-    const resetUrl = `${this.getAppUrl()}/v1/auth/password-reset?token=${encodeURIComponent(token)}`;
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL', 'http://localhost:8080');
+    const resetUrl = `${frontendUrl}/reset_password.html?token=${encodeURIComponent(token)}`;
     await this.mailService.sendMail({
       to: user.email,
       subject: 'Password Reset Request',
