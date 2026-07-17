@@ -28,7 +28,7 @@ export class ConsentService {
     const consents: Consent[] = [];
     for (const def of defaults) {
       const consent = this.consentRepository.create({
-        userId,
+        user: { id: userId } as any,
         category: def.category,
         granted: def.granted,
         required: def.required,
@@ -51,24 +51,29 @@ export class ConsentService {
    * Get all consent records for a user.
    */
   async getUserConsents(userId: string): Promise<Consent[]> {
-    return this.consentRepository.find({
-      where: { userId },
-      order: { category: 'ASC' },
-    });
+    return this.consentRepository
+      .createQueryBuilder('consent')
+      .where('consent.userId = :userId', { userId })
+      .orderBy('consent.category', 'ASC')
+      .getMany();
   }
 
   /**
    * Grant consent for a specific category.
    */
   async grantConsent(userId: string, email: string, category: ConsentCategory): Promise<Consent> {
-    let consent = await this.consentRepository.findOne({ where: { userId, category } });
+    let consent = await this.consentRepository
+      .createQueryBuilder('consent')
+      .where('consent.userId = :userId', { userId })
+      .andWhere('consent.category = :category', { category })
+      .getOne();
 
     if (consent) {
       consent.granted = true;
       consent = await this.consentRepository.save(consent);
     } else {
       consent = this.consentRepository.create({
-        userId,
+        user: { id: userId } as any,
         category,
         granted: true,
         required: false,
@@ -90,7 +95,11 @@ export class ConsentService {
    * Withdraw consent for a non-required category.
    */
   async withdrawConsent(userId: string, email: string, category: ConsentCategory): Promise<Consent> {
-    const consent = await this.consentRepository.findOne({ where: { userId, category } });
+    const consent = await this.consentRepository
+      .createQueryBuilder('consent')
+      .where('consent.userId = :userId', { userId })
+      .andWhere('consent.category = :category', { category })
+      .getOne();
 
     if (!consent) {
       throw new BadRequestException(`No consent record found for category: ${category}`);

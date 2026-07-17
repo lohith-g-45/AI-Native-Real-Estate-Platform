@@ -2,9 +2,14 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { JsonLogger } from './common/json-logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // Use custom JSON Logger for structured logs in production (central logging ingestion ready)
+  const app = await NestFactory.create(AppModule, {
+    logger: new JsonLogger(),
+  });
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

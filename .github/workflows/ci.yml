@@ -30,6 +30,10 @@ jobs:
       - name: Test
         run: pnpm run test --runInBand
 
+      - name: Security Vulnerability Audit
+        run: pnpm audit --audit-level=high
+
+
   # ─── Deploy to staging (runs only on push to main, after tests pass) ───
   deploy-staging:
     needs: build-and-test
