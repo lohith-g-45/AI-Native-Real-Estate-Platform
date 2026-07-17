@@ -9,7 +9,10 @@ import { AuthIdentityModule } from './auth-identity/auth-identity.module';
 import { AuditObservabilityModule } from './audit-observability/audit-observability.module';
 import { CommonModule } from './common/common.module';
 import { User } from './auth-identity/entities/user.entity';
+import { Consent } from './auth-identity/entities/consent.entity';
 import { RevokedToken } from './auth-identity/entities/revoked-token.entity';
+import { AuditLog } from './audit-observability/entities/audit-log.entity';
+import { JwtAuthGuard } from './auth-identity/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -19,11 +22,12 @@ import { RevokedToken } from './auth-identity/entities/revoked-token.entity';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         const dbType = config.get<'sqlite' | 'postgres'>('DB_TYPE', 'postgres');
+        const entities = [User, Consent, RevokedToken, AuditLog];
         return dbType === 'sqlite'
           ? {
               type: 'sqlite',
               database: config.get<string>('DB_NAME', ':memory:'),
-              entities: [User, RevokedToken],
+              entities,
               synchronize: true,
             }
           : {
@@ -33,7 +37,7 @@ import { RevokedToken } from './auth-identity/entities/revoked-token.entity';
               username: config.get<string>('DB_USERNAME', 'postgres'),
               password: config.get<string>('DB_PASSWORD', 'postgres'),
               database: config.get<string>('DB_NAME', 'real_estate'),
-              entities: [User, RevokedToken],
+              entities,
               synchronize: true,
             };
       },
@@ -47,6 +51,12 @@ import { RevokedToken } from './auth-identity/entities/revoked-token.entity';
     AuditObservabilityModule,
   ],
   controllers: [AppController],
-  providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
+  providers: [
+    AppService,
+    // Global rate limiting
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    // Global JWT authentication — all endpoints require auth unless marked @Public()
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+  ],
 })
 export class AppModule {}

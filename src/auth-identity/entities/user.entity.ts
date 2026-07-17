@@ -29,6 +29,12 @@ export class User {
   @Column({ default: false })
   emailVerified: boolean;
 
+  @Column({ nullable: true })
+  emailVerificationCode?: string;
+
+  @Column({ nullable: true, type: 'timestamp' })
+  emailVerificationExpires?: Date;
+
   @Column({ default: false })
   phoneVerified: boolean;
 

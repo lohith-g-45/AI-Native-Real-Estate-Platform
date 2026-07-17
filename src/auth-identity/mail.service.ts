@@ -16,8 +16,8 @@ export class MailService {
     const user = this.configService.get<string>('SMTP_USER');
     const pass = this.configService.get<string>('SMTP_PASS');
 
-    if (!host || !port || !user || !pass) {
-      this.logger.warn('SMTP is not fully configured; emails will be logged instead of sent.');
+    if (process.env.NODE_ENV === 'test' || !host || !port || !user || !pass) {
+      this.logger.warn('SMTP is not fully configured or in test mode; emails will be logged instead of sent.');
       return null;
     }
 
