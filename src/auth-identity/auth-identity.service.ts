@@ -364,8 +364,8 @@ export class AuthIdentityService {
     }
 
     user.emailVerified = true;
-    user.emailVerificationCode = null;
-    user.emailVerificationExpires = null;
+    user.emailVerificationCode = undefined;
+    user.emailVerificationExpires = undefined;
     await this.usersRepository.save(user);
 
     // Audit: email verified

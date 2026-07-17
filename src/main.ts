@@ -10,6 +10,8 @@ async function bootstrap() {
     logger: new JsonLogger(),
   });
 
+  app.enableCors();
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

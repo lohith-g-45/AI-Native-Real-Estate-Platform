@@ -60,7 +60,7 @@
 
         <!-- Form -->
 
-        <form>
+        <form id="signupForm">
 
             <!-- Name -->
 
@@ -70,6 +70,7 @@
 
                 <input
                     type="text"
+                    id="fullName"
                     placeholder="Full Name"
                     required>
 
@@ -84,6 +85,7 @@
 
                 <input
                     type="email"
+                    id="email"
                     placeholder="Email Address"
                     required>
 
@@ -98,6 +100,7 @@
 
                 <input
                     type="tel"
+                    id="phoneNumber"
                     placeholder="Phone Number"
                     required>
 
@@ -112,6 +115,7 @@
 
                 <input
                     type="password"
+                    id="password"
                     placeholder="Password"
                     required>
 
@@ -128,6 +132,7 @@
 
                 <input
                     type="password"
+                    id="confirmPassword"
                     placeholder="Confirm Password"
                     required>
 
@@ -142,7 +147,7 @@
 
                 <label>
 
-                    <input type="checkbox">
+                    <input type="checkbox" id="termsCheck" required>
 
                     I agree to the
                     <a href="#">Terms</a>
@@ -156,9 +161,11 @@
 
             <!-- Button -->
 
-            <button class="signup-btn" onclick="window.location.href='email_sent.html'">
-    Create Account
-</button>
+            <button class="signup-btn" type="submit">
+
+                Create Account
+
+            </button>
 
         </form>
 
@@ -202,6 +209,8 @@
     </div>
 
 </div>
+
+<script src="js/create_account.js"></script>
 
 </body>
 </html>
