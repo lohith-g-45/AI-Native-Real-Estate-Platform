@@ -1,0 +1,619 @@
+/* ==========================================
+   GOOGLE FONT
+========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+
+/* ==========================================
+   RESET
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    width:100%;
+    height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
+
+    background:
+    linear-gradient(
+        rgba(15,23,42,.55),
+        rgba(15,23,42,.55)
+    ),
+    url("../images/email_background.png");
+
+    background-size:cover;
+    background-position:center;
+}
+
+/* ==========================================
+   DARK OVERLAY
+========================================== */
+
+.overlay{
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    background:linear-gradient(
+        rgba(12,25,45,.72),
+        rgba(18,40,70,.72)
+    );
+
+    z-index:1;
+
+}
+
+
+/* ==========================================
+   MAIN CONTAINER
+========================================== */
+
+.verification-page{
+
+    width:100%;
+    height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+
+/* ==========================================
+   GLASS CARD
+========================================== */
+
+.verification-card{
+
+    position: relative;
+    z-index: 10;
+
+     width:470px;
+
+    padding:25px 28px;
+
+    background: #ffffff;
+
+    border-radius: 32px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.12);
+
+    animation: fadeUp .7s ease;
+
+}
+
+/* ==========================================
+   ICON
+========================================== */
+
+.icon-circle{
+
+    width:95px;
+    height:95px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        #4A90E2,
+        #2D6CDF
+    );
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    margin-bottom:28px;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.25);
+
+    animation:floatIcon 3s ease-in-out infinite;
+
+}
+
+
+.icon-circle i{
+
+    font-size:42px;
+
+    color:#fff;
+
+}
+
+
+/* ==========================================
+   HEADINGS
+========================================== */
+
+.verification-card h1{
+
+    font-size:26px;
+
+    color:#1E293B;
+
+    font-weight:700;
+
+    margin-bottom:12px;
+
+}
+
+
+.subtitle{
+
+    color:#6B7280;
+
+    font-size:15px;
+
+    margin-bottom:12px;
+
+}
+
+
+/* ==========================================
+   EMAIL BOX
+========================================== */
+
+.email-box{
+
+    width:100%;
+
+    padding:14px 18px;
+
+    border-radius:18px;
+
+    background:#F5F9FF;
+
+    border:1px solid #D9E3F5;
+
+    color:#2563EB;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    text-align:center;      /* ADD THIS */
+
+}
+
+/* ==========================================
+   DESCRIPTION
+========================================== */
+
+.description{
+
+    color:#4B5563;
+
+    font-size:15px;
+
+    line-height:1.8;
+
+    margin-bottom:20px;
+
+}
+/* ==========================================
+   INFO BOX
+========================================== */
+
+.info-box{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    background:#FFF8E6;
+
+    border:1px solid #FFE08A;
+
+    color:#6B5A00;
+
+    margin-bottom:20px;
+
+}
+
+
+.info-box i{
+
+    font-size:20px;
+
+    color:#FFD54F;
+
+}
+
+.info-box strong{
+
+    color:#050505;
+
+}
+
+
+/* ==========================================
+   BUTTON GROUP
+========================================== */
+
+.button-group{
+
+    width:100%;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:12px;
+
+    margin-bottom:25px;
+
+}
+
+
+/* ==========================================
+   PRIMARY BUTTON
+========================================== */
+
+.primary-btn{
+
+    width:100%;
+
+    height:58px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-decoration:none;
+
+    color:hsl(248, 81%, 46%);
+
+    font-size:18px;
+
+    font-weight:600;
+
+    border-radius:18px;
+
+    background:#e9ebef;
+
+        padding:18px;
+
+}
+.primary-btn:hover{
+
+    transform:translateY(-3px);
+
+    background:#1F5FD4;
+
+    box-shadow:
+    0 15px 30px rgba(45,108,223,.45);
+
+}
+
+
+/* ==========================================
+   SECONDARY BUTTON
+========================================== */
+
+.secondary-btn{
+
+    width:100%;
+
+    padding:18px;
+
+    border-radius:18px;
+
+    border:2px solid #3366FF;
+
+    background:white;
+
+    color:#3366FF;
+
+    font-size:20px;
+
+    font-weight:600;
+
+}
+
+.secondary-btn:hover{
+
+    background:#2563EB;
+
+    color:#ffffff;
+
+}
+
+
+}
+
+
+/* ==========================================
+   FOOTER LINK
+========================================== */
+
+.footer-link{
+
+    width:100%;
+
+    text-align:center;
+    margin-top: 25px;
+
+
+}
+
+.footer-link a{
+
+    color:#2563EB;
+
+    text-decoration:none;
+
+    font-weight:500;
+    
+    display: inline-block;
+     margin-top: 18 px;
+
+
+
+
+}
+
+.footer-link a i{
+
+    margin-right:8px;
+
+}
+
+.footer-link a:hover{
+     text-decoration:underline;
+
+    color:#8EC5FF;
+
+}
+
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(50px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+@keyframes floatIcon{
+
+    0%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-10px);
+
+    }
+
+    100%{
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+/* ==========================================
+   RESPONSIVE DESIGN
+========================================== */
+
+@media(max-width:768px){
+
+    .verification-card{
+
+        width:90%;
+
+        padding:35px 25px;
+
+        position:relative;
+
+        z-index:5;
+
+    }
+
+    .verification-card h1{
+
+        font-size:28px;
+
+    }
+
+    .icon-circle{
+
+        width:80px;
+        height:80px;
+
+    }
+
+    .icon-circle i{
+
+        font-size:34px;
+
+    }
+
+    .description{
+
+        font-size:14px;
+
+    }
+
+}
+
+
+@media(max-width:480px){
+
+    .verification-card{
+
+        padding:30px 20px;
+
+    }
+
+    .verification-card h1{
+
+        font-size:24px;
+
+    }
+
+    .subtitle{
+
+        font-size:14px;
+
+    }
+
+    .email-box{
+
+        font-size:14px;
+
+    }
+
+    .primary-btn,
+    .secondary-btn{
+
+        font-size:15px;
+
+        padding:14px;
+
+    }
+
+}
+
+/* ===========================
+   OTP
+=========================== */
+
+.otp-container{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:12px;
+
+    margin:30px 0;
+
+}
+
+.otp-input{
+
+    width:55px;
+
+    height:60px;
+
+    border:2px solid #D6DCE7;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    font-size:22px;
+
+    font-weight:600;
+
+    outline:none;
+
+    transition:.3s;
+
+}
+
+.otp-input:focus{
+
+    border-color:#2563EB;
+
+    box-shadow:0 0 10px rgba(37,99,235,.25);
+
+}
+
+.timer{
+
+    margin-top:25px;
+
+    color:#666;
+
+    font-size:15px;
+
+}
+
+.resend-link{
+
+    display:inline-block;
+
+    margin-top:10px;
+
+    margin-bottom:28px;
+
+    color:#2563EB;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+}
+
+.resend-link:hover{
+
+    text-decoration:underline;
+
+}
