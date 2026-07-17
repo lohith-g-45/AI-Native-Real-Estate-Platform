@@ -3,3 +3,8 @@ allowBuilds:
   bcrypt: true
   sqlite3: true
   unrs-resolver: false
+
+overrides:
+  tar: "^7.5.11"
+  lodash: "^4.17.24"
+
