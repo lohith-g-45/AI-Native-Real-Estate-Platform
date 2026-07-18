@@ -391,84 +391,188 @@ footer a:hover{
 
 }
 /* ================= MOBILE VERSION ================= */
-@media(max-width:480px) {
+/* =========================================
+            MOBILE RESPONSIVE
+========================================= */
 
-  /* Body + Footer fix */
-  body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* always full screen */
-  }
+@media screen and (max-width: 480px){
 
-  footer {
-    margin-top: auto; /* pushes footer down */
-    height: 8vh; /* slim footer */
-    font-size: 12px;
-    padding: 8px;
-    border-top: 1px solid #eee;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-  }
+    body{
+        overflow-x:hidden;
+    }
 
-  /* Hero section smaller */
-  .hero {
-    height: 30vh; /* shrink hero */
-    min-height: auto;
-  }
+    /* ================= HERO ================= */
 
-  .hero-content h1 {
-    font-size: 22px;
-  }
+    .hero{
+        min-height:65vh;
+        background-position:center;
+    }
 
-  .hero-content p {
-    font-size: 13px;
-  }
+    .hero-content{
+        width:90%;
+        top:12%;
+    }
 
-  .hero-btn {
-    width: 160px;
-    height: 44px;
-    font-size: 16px;
-  }
+    .hero-content h1{
+        font-size:30px;
+        line-height:1.3;
+        margin-bottom:18px;
+    }
 
-  /* Featured Properties block */
-  .featured-properties {
-    height: 62vh; /* fill middle portion */
-    overflow-x: auto; /* horizontal scroll only */
-    overflow-y: hidden;
-    padding: 10px 0;
-  }
+    .hero-btn{
+        width:190px;
+        height:52px;
+        line-height:52px;
+        font-size:18px;
+        border-radius:12px;
+        margin-top:20px;
+    }
 
-  .property-slider {
-    height: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
+    /* ================= FEATURED ================= */
 
-  .property-track {
-    gap: 12px;
-    width: max-content; /* ensures horizontal scroll */
-  }
+    .featured-properties{
 
-  .property-card {
-    min-width: 180px;
-    height: 220px; /* smaller cards */
-  }
+        position:relative;
+        top:auto;
+        left:auto;
+        transform:none;
 
-  .property-card img {
-    height: 100px; /* shrink image */
-  }
+        width:100%;
 
-  .property-info h3 {
-    font-size: 14px;
-  }
+        margin-top:-70px;
 
-  .property-info p {
-    font-size: 12px;
-  }
+        padding:20px 0 40px;
 
-  .property-info h4 {
-    font-size: 16px;
-  }
+    }
+
+    .section-heading{
+
+        padding:0 20px;
+        margin-bottom:20px;
+
+    }
+
+    .section-heading h2{
+
+        font-size:32px;
+
+    }
+
+    .section-heading p{
+
+        font-size:15px;
+        line-height:1.6;
+
+    }
+
+    /* ================= SLIDER ================= */
+
+    .property-slider{
+
+        overflow-x:auto;
+        overflow-y:hidden;
+
+        padding:15px;
+
+        scroll-snap-type:x mandatory;
+
+        -webkit-overflow-scrolling:touch;
+
+        scrollbar-width:none;
+
+    }
+
+    .property-slider::-webkit-scrollbar{
+
+        display:none;
+
+    }
+
+    .property-track{
+
+        display:flex;
+
+        gap:18px;
+
+        width:max-content;
+
+        animation:none;
+
+    }
+
+    /* ================= CARD ================= */
+
+    .property-card{
+
+        width:260px;
+        min-width:260px;
+        height:350px;
+
+        scroll-snap-align:center;
+
+    }
+
+    .property-card img{
+
+        height:180px;
+
+    }
+
+    .badge{
+
+        font-size:12px;
+        padding:7px 14px;
+
+    }
+
+    .property-info{
+
+        padding:14px;
+
+    }
+
+    .property-info h3{
+
+        font-size:18px;
+
+    }
+
+    .property-info p{
+
+        font-size:14px;
+
+    }
+
+    .property-info h4{
+
+        font-size:24px;
+
+    }
+
+    .property-details{
+
+        font-size:13px;
+
+    }
+
+    /* ================= FOOTER ================= */
+
+    footer{
+
+        padding:18px;
+
+        gap:12px;
+
+        flex-wrap:wrap;
+
+        text-align:center;
+
+    }
+
+    footer a{
+
+        font-size:13px;
+
+    }
+
 }

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <!-- Poppins Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Boxicons for modern icons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #F4F8FF, #EEF4FF, #FAFCFF);
+            min-height: 100vh;
+            color: #334155;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2D5BFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            font-size: 26px;
+        }
+
+        .user-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-badge {
+            background: rgba(45, 91, 255, 0.1);
+            color: #2D5BFF;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .logout-btn {
+            background: #ff3b30;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3);
+        }
+
+        /* Container & Layout */
+        .dashboard-container {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1E293B;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #F1F5F9;
+            padding-bottom: 15px;
+        }
+
+        .card-title i {
+            color: #2D5BFF;
+            font-size: 22px;
+        }
+
+        /* Profile Details */
+        .profile-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed #E2E8F0;
+        }
+
+        .profile-row span:first-child {
+            font-weight: 600;
+            color: #64748B;
+        }
+
+        .profile-row span:last-child {
+            color: #1E293B;
+        }
+
+        /* Consents List */
+        .consent-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            transition: 0.3s;
+        }
+
+        .consent-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+        }
+
+        .consent-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .consent-label {
+            font-weight: 600;
+            color: #1E293B;
+            font-size: 14px;
+            text-transform: capitalize;
+        }
+
+        .consent-desc {
+            font-size: 12px;
+            color: #64748B;
+        }
+
+        .consent-badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+        }
+
+        .badge-granted {
+            background: #DEF7EC;
+            color: #03543F;
+        }
+
+        .badge-withdrawn {
+            background: #FDE8E8;
+            color: #9B1C1C;
+        }
+
+        /* Switch CSS */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #CBD5E1;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2D5BFF;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2D5BFF;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        input:disabled + .slider {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Logs List */
+        .logs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .log-item {
+            padding: 12px 15px;
+            background: #F8FAFC;
+            border-left: 4px solid #2D5BFF;
+            border-radius: 0 12px 12px 0;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            color: #1E293B;
+        }
+
+        .log-time {
+            font-size: 11px;
+            color: #64748B;
+            font-weight: normal;
+        }
+
+        .log-meta {
+            font-size: 11px;
+            color: #64748B;
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e293b;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 100;
+            display: none;
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+   <header class="navbar">
+
+    <div></div>
+
+    <div class="user-nav">
+
+        <button class="logout-btn" id="logoutBtn">
+            <i class="bx bx-log-out"></i>
+            Sign Out
+        </button>
+
+    </div>
+
+</header>
+
+    <!-- Main Container -->
+    <main class="dashboard-container">
+        
+        <!-- Left: Profile & Consents -->
+        <div class="card">
+            <h2 class="card-title">
+                <i class="bx bx-user-circle"></i>
+                Profile Information
+            </h2>
+            <div id="profileDetails">
+                <div class="profile-row">
+                    <span>Full Name:</span>
+                    <span id="profName">-</span>
+                </div>
+                <div class="profile-row">
+                    <span>Email Address:</span>
+                    <span id="profEmail">-</span>
+                </div>
+
+            </div>
+
+            <h2 class="card-title" style="margin-top: 20px;">
+                <i class="bx bx-shield-quarter"></i>
+                Privacy & Consents
+            </h2>
+            <div id="consentsList" style="display: flex; flex-direction: column; gap: 15px;">
+                <!-- Dynamically loaded consents -->
+                <p style="text-align: center; color: #64748B;">Loading consents...</p>
+            </div>
+        </div>
+
+        <!-- Right: Audit Logs -->
+        <div class="card">
+            <h2 class="card-title">
+                <i class="bx bx-list-ul"></i>
+                Activity & Audit History
+            </h2>
+            <div class="logs-list" id="logsList">
+                <!-- Dynamically loaded logs -->
+                <p style="text-align: center; color: #64748B;">Loading activity logs...</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Toast container -->
+    <div class="toast" id="toast">Changes saved successfully</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Handle Logout
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.removeItem('accessToken');
+                window.location.href = 'login.html';
+            });
+
+            let userId = '';
+
+            try {
+                // 1. Fetch user profile
+                const profileRes = await fetch('http://localhost:3000/v1/auth/profile', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!profileRes.ok) {
+                    throw new Error('Session expired');
+                }
+
+                const user = await profileRes.json();
+                userId = user.id;
+
+                // Populate profile UI
+                document.getElementById('profName').textContent = user.fullName || 'User';
+                document.getElementById('profEmail').textContent = user.email;
+                // Load dynamically changing lists
+                await loadConsents();
+                await loadAuditLogs();
+
+            } catch (err) {
+                console.error(err);
+                localStorage.removeItem('accessToken');
+                window.location.href = 'login.html';
+            }
+
+            // Load Consents Function
+            async function loadConsents() {
+                try {
+                    const res = await fetch('http://localhost:3000/v1/auth/consents', {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    const consents = await res.json();
+                    
+                    const container = document.getElementById('consentsList');
+                    container.innerHTML = '';
+
+                    const categoryDescriptions = {
+                        'verification_processing': 'Consent to verify identity information (Mandatory).',
+                        'ai_usage': 'Consent to use AI recommendation algorithms.',
+                        'communications': 'Consent to receive service update notifications.',
+                        'marketing': 'Consent to receive newsletters & promotional updates.'
+                    };
+
+                    consents.forEach(c => {
+                        const item = document.createElement('div');
+                        item.className = 'consent-item';
+
+                        const isGranted = c.granted;
+                        const isRequired = c.required;
+                        const desc = categoryDescriptions[c.category] || 'Privacy consent.';
+
+                        item.innerHTML = `
+                            <div class="consent-info">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="consent-label">${c.category.replace('_', ' ')}</span>
+                                    <span class="consent-badge ${isGranted ? 'badge-granted' : 'badge-withdrawn'}">
+                                        ${isGranted ? 'Granted' : 'Withdrawn'}
+                                    </span>
+                                </div>
+                                <span class="consent-desc">${desc}</span>
+                            </div>
+                            <div>
+                                <label class="switch">
+                                    <input type="checkbox" class="consent-toggle" data-category="${c.category}" 
+                                        ${isGranted ? 'checked' : ''} ${isRequired ? 'disabled' : ''}>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        `;
+                        container.appendChild(item);
+                    });
+
+                    // Add Event Listeners for Toggles
+                    document.querySelectorAll('.consent-toggle').forEach(toggle => {
+                        toggle.addEventListener('change', async (e) => {
+                            const category = e.target.getAttribute('data-category');
+                            const checked = e.target.checked;
+                            const endpoint = checked ? 'grant' : 'withdraw';
+
+                            try {
+                                const response = await fetch(`http://localhost:3000/v1/auth/consents/${endpoint}`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${token}`
+                                    },
+                                    body: JSON.stringify({ category })
+                                });
+
+                                if (!response.ok) {
+                                    throw new Error('Failed to update consent');
+                                }
+
+                                showToast(`Consent for "${category.replace('_', ' ')}" updated!`);
+                                // Refresh lists
+                                await loadConsents();
+                                await loadAuditLogs();
+
+                            } catch (error) {
+                                console.error(error);
+                                e.target.checked = !checked; // revert
+                                showToast('Error saving consent', true);
+                            }
+                        });
+                    });
+
+                } catch (e) {
+                    document.getElementById('consentsList').innerHTML = `<p style="color: #ff3b30;">Error loading consents.</p>`;
+                }
+            }
+
+            // Load Audit Logs Function
+            async function loadAuditLogs() {
+                try {
+                    const res = await fetch(`http://localhost:3000/audit-observability/logs/user/${userId}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    const logs = await res.json();
+                    
+                    const container = document.getElementById('logsList');
+                    container.innerHTML = '';
+
+                    if (logs.length === 0) {
+                        container.innerHTML = '<p style="text-align: center; color: #64748B;">No recent activity logs.</p>';
+                        return;
+                    }
+
+                    logs.forEach(log => {
+                        const item = document.createElement('div');
+                        item.className = 'log-item';
+                        
+                        // Pick border color based on event type
+                        if (log.event.includes('FAILED')) {
+                            item.style.borderLeftColor = '#ff3b30';
+                        } else if (log.event.includes('VERIFIED') || log.event.includes('GRANTED')) {
+                            item.style.borderLeftColor = '#4cd964';
+                        } else if (log.event.includes('WITHDRAWN')) {
+                            item.style.borderLeftColor = '#ffcc00';
+                        }
+
+                        const timeStr = new Date(log.timestamp).toLocaleString();
+                        const ip = log.ipAddress || 'unknown';
+                        const ua = log.userAgent ? log.userAgent.split(' ')[0] : 'unknown';
+
+                        item.innerHTML = `
+                            <div class="log-header">
+                                <span>${log.event.replace('_', ' ')}</span>
+                                <span class="log-time">${timeStr}</span>
+                            </div>
+                            <div class="log-meta">
+                                IP: ${ip} | User-Agent: ${ua}
+                            </div>
+                        `;
+                        container.appendChild(item);
+                    });
+
+                } catch (e) {
+                    document.getElementById('logsList').innerHTML = `<p style="color: #ff3b30; text-align: center;">Error loading logs.</p>`;
+                }
+            }
+
+            function showToast(message, isError = false) {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.style.background = isError ? '#ff3b30' : '#1e293b';
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
