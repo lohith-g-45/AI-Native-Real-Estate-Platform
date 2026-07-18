@@ -1,124 +1,72 @@
-# AI Native Real Estate Platform
+# AI-Native Real Estate Platform
 
-## Overview
+Welcome to the AI-Native Real Estate Platform, a cutting-edge web application designed to streamline property discovery and management. 
 
-- Backend: `AI-Native-Real-Estate-Platform` root directory.
-- Frontend: `AI-Native-Real-Estate-Platform/Frontend` static site.
+## Project Overview
 
-The frontend is a simple HTML/CSS/JS static app. It should call the backend API at `http://localhost:3000/v1/auth`.
+This repository contains the complete end-to-end integration for our Real Estate Platform. We have successfully delivered a secure, responsive, and data-driven ecosystem consisting of a NestJS backend architecture and a modular vanilla JavaScript frontend.
 
-## Run the Backend
+### Features Implemented
+- **Secure Authentication System:** Fully operational local email/password registration and Google OAuth integrations.
+- **Verification Workflows:** Embedded OTP-based email verification and streamlined inline password reset functionality.
+- **Identity & Access Management:** JWT-based session handling, protected API endpoints, and client-side route guards.
+- **Comprehensive Dashboards:** 
+  - **Main Dashboard:** Dynamic property discovery with responsive horizontal sliders.
+  - **Buyer Hub:** Centralized hub featuring Saved Properties, AI Suggestions, Market Alerts, and a Pre-Approval Calculator.
+  - **Seller Hub:** Management interface for Active/Pending listings, Performance Analytics, and AI Home Valuations.
+- **User Profile Management:** Secure rendering of privacy consent toggles and system-level audit logs for robust observability.
 
-1. Open a terminal in the project root:
-   - `D:\Ai_native_real-estate\AI-Native-Real-Estate-Platform`
-2. Install dependencies (if needed):
-   - `pnpm install`
-3. Create `.env` from `.env.example` and update values:
-   - `DB_TYPE=postgres` or `sqlite`
-   - `DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`
-   - `JWT_SECRET`, `SMTP_*` values if email is used
-4. Start the backend:
-   - `pnpm run start:dev`
-5. The backend listens on:
-   - `http://localhost:3000`
+---
 
-## Run the Frontend
+## Environment Setup
 
-The frontend is static files in the `Frontend` folder.
+### 1. Prerequisites
+Ensure you have the following installed on your machine:
+- [Node.js](https://nodejs.org/en/) (v16+ recommended)
+- `npm` (comes with Node.js) or `pnpm`
+- A local database instance (PostgreSQL, or SQLite as fallback)
 
-Example local server command:
+### 2. Backend Initialization (API)
+The backend service powers our authentication and database management.
 
-```powershell
-Set-Location 'D:\Ai_native_real-estate\AI-Native-Real-Estate-Platform'
-python -m http.server 8001 --directory .\Frontend
+```bash
+# Navigate to the project root directory
+cd AI-Native-Real-Estate-Platform
+
+# Install server dependencies
+npm install
+
+# Environment Configuration
+# Copy the `.env.example` file to `.env` and configure your database and SMTP credentials.
+cp .env.example .env
+
+# Launch the NestJS backend
+npm run start:dev
 ```
+> The API server will successfully launch and listen on `http://localhost:3000`.
 
-Then open in the browser:
+### 3. Frontend Initialization (Client)
+The frontend consists of static HTML, CSS, and JS assets.
 
-- `http://localhost:8001`
-
-## Backend API Base URL
-
-Use this base URL from frontend code:
-
-- `http://localhost:3000/v1/auth`
-
-## Available Backend Routes
-
-The frontend should call these backend endpoints.
-
-- `GET /v1/auth/health`
-  - Health check. Returns `{ status: 'ok', module: 'auth-identity' }`
-- `POST /v1/auth/register`
-  - Register a new user.
-- `POST /v1/auth/login`
-  - Login with credentials.
-- `POST /v1/auth/logout`
-  - Logout. Requires `Authorization: Bearer <token>` header.
-- `POST /v1/auth/password-reset/request`
-  - Request password reset email.
-- `POST /v1/auth/password-reset`
-  - Reset password with token.
-- `POST /v1/auth/verify-email/request`
-  - Request email verification.
-- `POST /v1/auth/verify-email`
-  - Verify email with token.
-- `POST /v1/auth/verify-phone/request`
-  - Request phone verification.
-- `POST /v1/auth/verify-phone`
-  - Verify phone with token.
-- `GET /v1/auth/profile`
-  - Returns user profile. Requires `Authorization: Bearer <token>`.
-- `GET /v1/auth/google`
-  - Starts Google OAuth login.
-- `GET /v1/auth/google/redirect`
-  - OAuth redirect callback.
-
-## Frontend to Backend Wiring
-
-In the frontend code, set the API URL constant like:
-
-```js
-const API_BASE = 'http://localhost:3000/v1/auth';
+```bash
+# From the project root, launch a local HTTP server targeting the Frontend folder.
+# You can use npx serve on port 8080:
+npx serve Frontend -p 8080
 ```
+> Navigate your browser to `http://localhost:8080` to access the platform.
 
-Then use `fetch` or `axios` to call the routes.
+---
 
-Example login request:
+## Troubleshooting Guide
 
-```js
-await fetch(`${API_BASE}/login`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ email, password }),
-});
-```
+### Issue: "Failed to fetch" Error on Login or Registration
+If you encounter a `Failed to fetch` error when attempting to authenticate, this indicates that the frontend client cannot establish a connection with the backend API. 
 
-Example protected request:
+**Root Causes & Solutions:**
+1. **Local Database Connection Error:** Your PostgreSQL/SQLite database might not be running or the credentials in the `.env` file are incorrect. Verify that your database service is active and the `DB_*` variables precisely match your configuration.
+2. **Backend Server is Offline:** Ensure that the NestJS server is actively running in a terminal instance (`npm run start:dev`). If the server crashed or was terminated, restart it and verify it reports `🚀 Server running on http://localhost:3000` before attempting to log in again.
+3. **CORS Restrictions:** Confirm that you are accessing the frontend via the local HTTP server (`http://localhost:8080`) and not opening the HTML files directly from the file explorer (`file://...`), as strict CORS policies are enforced.
 
-```js
-await fetch(`${API_BASE}/profile`, {
-  method: 'GET',
-  headers: {
-    'Authorization': `Bearer ${token}`,
-  },
-});
-```
+---
 
-## Notes for Your Friend
-
-- The backend is NestJS and runs on port `3000`.
-- The frontend is static and runs on port `8001` when served locally.
-- Use POST requests from the frontend. Do not type POST routes directly into the browser address bar.
-- If using `DB_TYPE=postgres`, make sure Postgres is running and the database exists.
-- If `DB_TYPE=sqlite`, the app will use a local SQLite file.
-
-## Current Frontend Status
-
-- `Frontend/index.html` is the landing page.
-- `Frontend/js/main.js` contains navigation logic only.
-- `Frontend/register.html` and `Frontend/dashboard.html` are placeholders and need real form/API code.
-
-## Recommended Next Step
-
-Add actual frontend form pages that send JSON to the backend routes above and store the returned JWT in `localStorage`.
+*This architecture adheres to modern web standards, prioritizing high cohesion, security, and an optimal user experience.*
