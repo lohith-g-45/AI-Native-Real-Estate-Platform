@@ -452,4 +452,13 @@ export class AuthIdentityService {
 
     return { accessToken: this.issueAccessToken(user) };
   }
+
+  async getProfile(userId: string) {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    const { password, ...rest } = user;
+    return rest;
+  }
 }

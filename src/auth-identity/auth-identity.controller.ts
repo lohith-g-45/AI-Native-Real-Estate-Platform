@@ -134,7 +134,7 @@ export class AuthIdentityController {
   @ApiResponse({ status: 200, description: 'Returns user profile' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   getProfile(@Request() req: any) {
-    return req.user;
+    return this.authService.getProfile(req.user.sub);
   }
 
   @UseGuards(RolesGuard)
