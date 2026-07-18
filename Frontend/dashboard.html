@@ -977,6 +977,16 @@
 </aside>
 </section>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Simple auth guard
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+    });
+</script>
+
 </body>
 
 </html>
