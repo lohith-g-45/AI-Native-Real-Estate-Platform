@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy | Real Estate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="nav-container">
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="dashboard.html">Home</a></li>
+                    <li><a href="buy.html" class="active">Buy</a></li>
+                    <li><a href="sell.html">Sell</a></li>
+                </ul>
+            </nav>
+            <div class="nav-right">
+                <a href="buy.html" class="saved-link">
+                    <i class="fa-regular fa-heart"></i>
+                    <span>Saved</span>
+                </a>
+                <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+                <button class="icon-btn"><i class="fa-regular fa-message"></i></button>
+                <a href="profile.html">
+                    <button class="profile-btn"><img src="images/profile.png" alt="Profile"></button>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="dashboard-content" style="padding-top: 40px;">
+        <div class="left-panel" style="width: 100%;">
+            
+            <section class="featured-properties">
+                <div class="section-header">
+                    <div>
+                        <h2>Saved Properties</h2>
+                        <p>Properties you have bookmarked.</p>
+                    </div>
+                </div>
+                <div class="property-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                    
+                    <div class="property-card">
+                        <div class="property-image">
+                            <img src="images/condo_img.png" alt="Property">
+                            <button class="favorite-btn" style="color: #ff3b30; opacity: 1;"><i class="fa-solid fa-heart"></i></button>
+                        </div>
+                        <div class="property-content">
+                            <h3>Luxury Condo</h3>
+                            <p class="location"><i class="fa-solid fa-location-dot"></i> North York</p>
+                            <div class="property-meta">
+                                <span><i class="fa-solid fa-star"></i> 4.8</span>
+                                <span>2 Beds</span>
+                                <span>2 Baths</span>
+                            </div>
+                            <div class="property-footer">
+                                <h4>$845,000</h4>
+                                <a href="#" class="details-btn">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="property-card">
+                        <div class="property-image">
+                            <img src="images/duplex_img.png" alt="Property">
+                            <button class="favorite-btn" style="color: #ff3b30; opacity: 1;"><i class="fa-solid fa-heart"></i></button>
+                        </div>
+                        <div class="property-content">
+                            <h3>Spacious Duplex</h3>
+                            <p class="location"><i class="fa-solid fa-location-dot"></i> Downtown Toronto</p>
+                            <div class="property-meta">
+                                <span><i class="fa-solid fa-star"></i> 4.6</span>
+                                <span>3 Beds</span>
+                                <span>2 Baths</span>
+                            </div>
+                            <div class="property-footer">
+                                <h4>$910,000</h4>
+                                <a href="#" class="details-btn">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="featured-properties" style="margin-top: 40px;">
+                <div class="section-header">
+                    <div>
+                        <h2>Suggested Properties for You</h2>
+                        <p>Based on your search history and preferences.</p>
+                    </div>
+                </div>
+                <div class="property-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                    
+                    <div class="property-card">
+                        <div class="property-image">
+                            <img src="images/townhouse_img.png" alt="Property">
+                            <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
+                        </div>
+                        <div class="property-content">
+                            <h3>Elegant Townhouse</h3>
+                            <p class="location"><i class="fa-solid fa-location-dot"></i> Scarborough</p>
+                            <div class="property-meta">
+                                <span><i class="fa-solid fa-star"></i> 4.7</span>
+                                <span>3 Beds</span>
+                                <span>2 Baths</span>
+                            </div>
+                            <div class="property-footer">
+                                <h4>$935,000</h4>
+                                <a href="#" class="details-btn">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!localStorage.getItem('accessToken')) {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html>
