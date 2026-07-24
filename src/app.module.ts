@@ -43,7 +43,10 @@ import { JwtAuthGuard } from './auth-identity/guards/jwt-auth.guard';
               synchronize: true,
               ssl:
                 config.get<string>('DB_SSL') === 'true'
-                  ? { rejectUnauthorized: false }
+                  ? {
+                      rejectUnauthorized: false,
+                      servername: config.get<string>('DB_HOST'),
+                    }
                   : false,
             };
       },
