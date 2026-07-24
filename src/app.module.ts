@@ -36,8 +36,7 @@ import { JwtAuthGuard } from './auth-identity/guards/jwt-auth.guard';
               port: config.get<number>('DB_PORT', 5432),
               username: config.get<string>('DB_USERNAME', 'postgres'),
               password: config.get<string>('DB_PASSWORD', 'postgres'),
-              database: config.get<string>('DB_NAME', 'real_estate'),
-              entities,
+              database: config.get<string>('DB_DATABASE', 'postgres'),                entities,
               synchronize: true,
             };
       },
