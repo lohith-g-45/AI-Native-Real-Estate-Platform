@@ -108,6 +108,29 @@
             }
         }
 
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 14px 18px;
+            }
+            .dashboard-container {
+                margin: 15px auto;
+                padding: 0 12px;
+                gap: 15px;
+            }
+            .card {
+                padding: 20px 16px;
+                border-radius: 18px;
+                gap: 18px;
+            }
+            .profile-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+            .consent-item {
+                padding: 12px;
+            }
+        }
+
         /* Cards */
         .card {
             background: rgba(255, 255, 255, 0.92);
@@ -389,6 +412,10 @@
     <div class="toast" id="toast">Changes saved successfully</div>
 
     <script>
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:3000' 
+            : 'https://ai-native-real-estate-platform.onrender.com';
+
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('accessToken');
             if (!token) {
@@ -406,7 +433,7 @@
 
             try {
                 // 1. Fetch user profile
-                const profileRes = await fetch('http://localhost:3000/v1/auth/profile', {
+                const profileRes = await fetch(`${API_BASE_URL}/v1/auth/profile`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
@@ -433,7 +460,7 @@
             // Load Consents Function
             async function loadConsents() {
                 try {
-                    const res = await fetch('http://localhost:3000/v1/auth/consents', {
+                    const res = await fetch(`${API_BASE_URL}/v1/auth/consents`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     const consents = await res.json();
@@ -485,7 +512,7 @@
                             const endpoint = checked ? 'grant' : 'withdraw';
 
                             try {
-                                const response = await fetch(`http://localhost:3000/v1/auth/consents/${endpoint}`, {
+                                const response = await fetch(`${API_BASE_URL}/v1/auth/consents/${endpoint}`, {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json',
@@ -519,7 +546,7 @@
             // Load Audit Logs Function
             async function loadAuditLogs() {
                 try {
-                    const res = await fetch(`http://localhost:3000/audit-observability/logs/user/${userId}`, {
+                    const res = await fetch(`${API_BASE_URL}/audit-observability/logs/user/${userId}`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     const logs = await res.json();

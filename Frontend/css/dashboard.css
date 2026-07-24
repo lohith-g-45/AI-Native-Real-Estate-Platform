@@ -1584,4 +1584,107 @@ body{
 
     }
 
+    /* Additional Mobile Polish */
+    body {
+        overflow-x: hidden;
+    }
+
+    .slider-container,
+    .recent-slider {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 15px;
+    }
+
+    .property-card,
+    .recent-card {
+        scroll-snap-align: start;
+    }
+
+    .filter-group,
+    .form-group,
+    .search-group {
+        width: 100%;
+    }
+
+    .stats-container,
+    .metrics-grid,
+    .grid-container {
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+    }
+
+    .modal-content {
+        width: 95% !important;
+        margin: 20px auto;
+        padding: 20px;
+    }
+}
+
+@media (max-width:480px){
+
+    .hero{
+
+        height:auto;
+
+        min-height:440px;
+
+        padding: 80px 15px 40px;
+
+    }
+
+    .hero h1{
+
+        font-size:28px;
+
+    }
+
+    .hero-description{
+
+        font-size:14px;
+
+    }
+
+    .search-box{
+
+        padding:12px;
+
+        gap:10px;
+
+    }
+
+    .search-input,
+    .search-select,
+    .search-box button{
+
+        font-size:14px;
+
+        padding:12px 15px;
+
+        min-height:44px;
+
+    }
+
+    .property-card,
+    .recent-card{
+
+        flex:0 0 85vw;
+
+        max-width:85vw;
+
+    }
+
+    .section-header h2{
+
+        font-size:22px;
+
+    }
+
+    .nav-logo h2,
+    .logo-text h2{
+
+        font-size:20px;
+
+    }
 }

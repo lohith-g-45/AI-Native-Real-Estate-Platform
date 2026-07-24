@@ -715,38 +715,55 @@ padding:40px;
 
 body{
 
-padding:15px;
+padding:12px;
+overflow-x: hidden;
 
 }
 
 .left-panel{
 
-padding:25px;
+padding:20px 18px;
+width: 100%;
 
 }
 
 .welcome h1{
 
-font-size:36px;
+font-size:28px;
 
 }
 
 .logo-text h2{
 
-font-size:25px;
+font-size:22px;
 
 }
 
 .google-btn{
 
 font-size:14px;
+min-height: 46px;
+padding: 12px;
 
 }
 
 .login-btn{
 
 font-size:16px;
+min-height: 46px;
+padding: 12px;
 
+}
+
+.input-box input{
+font-size: 15px;
+min-height: 44px;
+}
+
+.options{
+flex-direction: column;
+gap: 12px;
+align-items: flex-start;
 }
 
 }

@@ -1,3 +1,7 @@
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:3000' 
+    : 'https://ai-native-real-estate-platform.onrender.com';
+
 document.addEventListener('DOMContentLoaded', () => {
     const signupForm = document.getElementById('signupForm');
     const card = document.querySelector('.signup-card');
@@ -50,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         signupBtn.textContent = 'Creating Account...';
 
         try {
-            const response = await fetch('http://localhost:3000/v1/auth/register', {
+            const response = await fetch(`${API_BASE_URL}/v1/auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -143,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             verifyBtn.textContent = 'Verifying...';
 
             try {
-                const response = await fetch('http://localhost:3000/v1/auth/verify-email', {
+                const response = await fetch(`${API_BASE_URL}/v1/auth/verify-email`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -181,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resendBtn.textContent = 'Sending...';
 
             try {
-                const response = await fetch('http://localhost:3000/v1/auth/verify-email/request', {
+                const response = await fetch(`${API_BASE_URL}/v1/auth/verify-email/request`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

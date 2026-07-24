@@ -404,20 +404,45 @@ body{
 
 @media(max-width:600px){
 
+    body {
+        padding: 10px;
+        overflow-x: hidden;
+    }
+
     .signup-card{
 
-        width:100%;
+        width:95%;
+        max-width: 100%;
 
-        padding:24px;
+        padding:20px 16px;
 
         border-radius:22px;
+
+        transform: translateY(0);
+
+        margin: 15px auto;
 
     }
 
     .heading h1{
 
-        font-size:28px;
+        font-size:24px;
 
+    }
+
+    .form-row,
+    .name-row,
+    .grid-2 {
+        grid-template-columns: 1fr !important;
+        gap: 12px;
+    }
+
+    .input-box input,
+    .role-select,
+    .submit-btn,
+    .btn {
+        min-height: 44px;
+        font-size: 15px;
     }
 
 }

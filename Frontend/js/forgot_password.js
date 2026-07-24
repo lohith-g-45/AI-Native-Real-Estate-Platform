@@ -1,3 +1,7 @@
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:3000' 
+    : 'https://ai-native-real-estate-platform.onrender.com';
+
 document.addEventListener('DOMContentLoaded', () => {
     const forgotForm = document.getElementById('forgotForm');
     const formHeader = document.getElementById('form-header');
@@ -18,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.textContent = 'Sending...';
 
         try {
-            const response = await fetch('http://localhost:3000/v1/auth/password-reset/request', {
+            const response = await fetch(`${API_BASE_URL}/v1/auth/password-reset/request`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email })
@@ -97,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resetBtn.textContent = 'Resetting...';
 
             try {
-                const response = await fetch('http://localhost:3000/v1/auth/password-reset', {
+                const response = await fetch(`${API_BASE_URL}/v1/auth/password-reset`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: userEmail, code, newPassword })
