@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Successful registration - now prompt for 6-digit verification code
-            renderVerificationForm(email);
+            renderVerificationForm(email, data.emailVerificationCode);
 
         } catch (error) {
             showError(error.message);
@@ -98,13 +98,23 @@ document.addEventListener('DOMContentLoaded', () => {
         errorEl.textContent = message;
     }
 
-    function renderVerificationForm(userEmail) {
+    function renderVerificationForm(userEmail, code) {
         // Change heading text
         heading.querySelector('h1').textContent = 'Verify Your Email';
         heading.querySelector('p').textContent = `We sent a 6-digit verification code to ${userEmail}. Enter it below to complete registration.`;
 
+        let codeNotice = '';
+        if (code) {
+            codeNotice = `
+                <div style="background-color: #eaf2ff; border: 1px solid #2D5BFF; color: #2D5BFF; padding: 12px; border-radius: 12px; font-size: 14px; text-align: center; margin-bottom: 15px; font-weight: 500;">
+                    [Test Mode] Verification Code: <span style="font-weight: 700; font-size: 16px; letter-spacing: 2px;">${code}</span>
+                </div>
+            `;
+        }
+
         // Replace signupForm content with verification form
         signupForm.innerHTML = `
+            ${codeNotice}
             <div class="input-box">
                 <i class='bx bx-key' style="left: 18px; position: absolute; top: 50%; transform: translateY(-50%); color: #7a8ca5; font-size: 20px;"></i>
                 <input
@@ -199,6 +209,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (!response.ok) {
                     throw new Error(data.message || 'Resend failed');
+                }
+
+                // Update verification code display in test mode
+                if (data.verificationCode) {
+                    const noticeSpan = signupForm.querySelector('div span');
+                    if (noticeSpan) {
+                        noticeSpan.textContent = data.verificationCode;
+                    }
                 }
 
                 resendBtn.textContent = 'Sent!';

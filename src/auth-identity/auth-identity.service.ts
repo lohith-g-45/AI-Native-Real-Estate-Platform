@@ -217,6 +217,7 @@ export class AuthIdentityService {
     return {
       success: true,
       message: 'Password reset code has been sent to your email.',
+      resetCode: resetCode,
     };
   }
 
@@ -254,6 +255,7 @@ export class AuthIdentityService {
     return {
       success: true,
       message: 'Verification email has been sent to your inbox.',
+      verificationCode: verificationCode,
     };
   }
 

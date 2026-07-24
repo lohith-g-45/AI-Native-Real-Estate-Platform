@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(data.message || 'Failed to send reset code');
             }
 
-            renderResetForm(email);
+            renderResetForm(email, data.resetCode);
 
         } catch (error) {
             showError(error.message);
@@ -43,13 +43,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function renderResetForm(userEmail) {
+    function renderResetForm(userEmail, code) {
+        let codeNotice = '';
+        if (code) {
+            codeNotice = `
+                <div style="background-color: #eaf2ff; border: 1px solid #2D5BFF; color: #2D5BFF; padding: 12px; border-radius: 12px; font-size: 14px; text-align: center; margin-bottom: 15px; font-weight: 500;">
+                    [Test Mode] Reset Code: <span style="font-weight: 700; font-size: 16px; letter-spacing: 2px;">${code}</span>
+                </div>
+            `;
+        }
+
         formHeader.innerHTML = `
             <h1>Check Your Email</h1>
             <p>We've sent a 6-digit code to <strong>${userEmail}</strong>.</p>
         `;
 
         forgotForm.innerHTML = `
+            ${codeNotice}
             <div class="input-group">
                 <label>6-Digit Reset Code</label>
                 <div class="input-box">
