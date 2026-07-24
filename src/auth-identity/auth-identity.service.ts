@@ -4,6 +4,7 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
+  Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -25,6 +26,8 @@ import { AuditService, AuditEvent } from '../audit-observability/audit.service';
 
 @Injectable()
 export class AuthIdentityService {
+  private readonly logger = new Logger(AuthIdentityService.name);
+
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
@@ -88,11 +91,13 @@ export class AuthIdentityService {
     // Seed default consents for the new user
     await this.consentService.seedDefaultConsents(saved.id, saved.email);
 
-    // Send registration verification email with 6-digit code
-    await this.mailService.sendMail({
+    // Send registration verification email with 6-digit code (non-blocking)
+    this.mailService.sendMail({
       to: saved.email,
       subject: 'Verify Your Registration',
       text: `Welcome to the AI-Native Real Estate Platform! Your 6-digit verification code is: ${verificationCode}\n\nThis code will expire in 15 minutes.`,
+    }).catch(err => {
+      this.logger.error(`Failed to send verification email to ${saved.email}: ${err.message}`);
     });
 
     // Audit: user registered
@@ -192,10 +197,12 @@ export class AuthIdentityService {
     user.passwordResetExpires = resetExpires;
     await this.usersRepository.save(user);
 
-    await this.mailService.sendMail({
+    this.mailService.sendMail({
       to: user.email,
       subject: 'Password Reset Request',
       text: `Your 6-digit password reset code is: ${resetCode}\n\nThis code will expire in 15 minutes.`,
+    }).catch(err => {
+      this.logger.error(`Failed to send password reset email to ${user.email}: ${err.message}`);
     });
 
     // Audit: password reset requested
@@ -227,10 +234,12 @@ export class AuthIdentityService {
     user.emailVerified = false;
     await this.usersRepository.save(user);
 
-    await this.mailService.sendMail({
+    this.mailService.sendMail({
       to: user.email,
       subject: 'Verify Your Email',
       text: `Your 6-digit verification code is: ${verificationCode}\n\nThis code will expire in 15 minutes.`,
+    }).catch(err => {
+      this.logger.error(`Failed to send email verification request to ${user.email}: ${err.message}`);
     });
 
     // Audit: email verification requested
