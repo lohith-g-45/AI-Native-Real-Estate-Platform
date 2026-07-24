@@ -93,19 +93,13 @@
         /* Container & Layout */
         .dashboard-container {
             flex: 1;
-            max-width: 1200px;
+            max-width: 600px;
             width: 100%;
             margin: 40px auto;
             padding: 0 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 30px;
-        }
-
-        @media (max-width: 900px) {
-            .dashboard-container {
-                grid-template-columns: 1fr;
-            }
         }
 
         @media (max-width: 600px) {
@@ -394,18 +388,6 @@
             </div>
         </div>
 
-        <!-- Right: Audit Logs -->
-        <div class="card">
-            <h2 class="card-title">
-                <i class="bx bx-list-ul"></i>
-                Activity & Audit History
-            </h2>
-            <div class="logs-list" id="logsList">
-                <!-- Dynamically loaded logs -->
-                <p style="text-align: center; color: #64748B;">Loading activity logs...</p>
-            </div>
-        </div>
-
     </main>
 
     <!-- Toast container -->
@@ -449,7 +431,6 @@
                 document.getElementById('profEmail').textContent = user.email;
                 // Load dynamically changing lists
                 await loadConsents();
-                await loadAuditLogs();
 
             } catch (err) {
                 console.error(err);
@@ -528,7 +509,6 @@
                                 showToast(`Consent for "${category.replace('_', ' ')}" updated!`);
                                 // Refresh lists
                                 await loadConsents();
-                                await loadAuditLogs();
 
                             } catch (error) {
                                 console.error(error);
@@ -543,55 +523,7 @@
                 }
             }
 
-            // Load Audit Logs Function
-            async function loadAuditLogs() {
-                try {
-                    const res = await fetch(`${API_BASE_URL}/audit-observability/logs/user/${userId}`, {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    const logs = await res.json();
-                    
-                    const container = document.getElementById('logsList');
-                    container.innerHTML = '';
 
-                    if (logs.length === 0) {
-                        container.innerHTML = '<p style="text-align: center; color: #64748B;">No recent activity logs.</p>';
-                        return;
-                    }
-
-                    logs.forEach(log => {
-                        const item = document.createElement('div');
-                        item.className = 'log-item';
-                        
-                        // Pick border color based on event type
-                        if (log.event.includes('FAILED')) {
-                            item.style.borderLeftColor = '#ff3b30';
-                        } else if (log.event.includes('VERIFIED') || log.event.includes('GRANTED')) {
-                            item.style.borderLeftColor = '#4cd964';
-                        } else if (log.event.includes('WITHDRAWN')) {
-                            item.style.borderLeftColor = '#ffcc00';
-                        }
-
-                        const timeStr = new Date(log.timestamp).toLocaleString();
-                        const ip = log.ipAddress || 'unknown';
-                        const ua = log.userAgent ? log.userAgent.split(' ')[0] : 'unknown';
-
-                        item.innerHTML = `
-                            <div class="log-header">
-                                <span>${log.event.replace('_', ' ')}</span>
-                                <span class="log-time">${timeStr}</span>
-                            </div>
-                            <div class="log-meta">
-                                IP: ${ip} | User-Agent: ${ua}
-                            </div>
-                        `;
-                        container.appendChild(item);
-                    });
-
-                } catch (e) {
-                    document.getElementById('logsList').innerHTML = `<p style="color: #ff3b30; text-align: center;">Error loading logs.</p>`;
-                }
-            }
 
             function showToast(message, isError = false) {
                 const toast = document.getElementById('toast');
