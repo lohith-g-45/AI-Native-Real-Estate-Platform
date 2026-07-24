@@ -10,7 +10,7 @@ RUN corepack enable \
 
 COPY . .
 
-RUN pnpm build
+RUN pnpm run build
 
 ENV NODE_ENV=production
 
