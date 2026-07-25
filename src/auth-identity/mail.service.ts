@@ -49,6 +49,34 @@ export class MailService {
     text: string;
     html?: string;
   }): Promise<SentMessageInfo | { messageId: string; previewUrl: string | null }> {
+    const resendKey = this.configService.get<string>('RESEND_API_KEY');
+    if (resendKey) {
+      this.logger.log(`Sending email via Resend API to=${options.to}`);
+      const from = this.configService.get<string>('SMTP_FROM', 'onboarding@resend.dev');
+      const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${resendKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from,
+          to: options.to,
+          subject: options.subject,
+          text: options.text,
+          html: options.html,
+        }),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`Resend API error: ${res.statusText} - ${errText}`);
+      }
+
+      const result = (await res.json()) as any;
+      return { messageId: result.id, previewUrl: null };
+    }
+
     const transporter = this.getTransporter();
     const from = this.configService.get<string>('SMTP_FROM', 'no-reply@example.com');
 

@@ -46,18 +46,21 @@ export class AuthIdentityController {
 
   @Get('mail-config')
   @Public()
-  @ApiOperation({ summary: 'Get SMTP configuration details (excluding password)' })
+  @ApiOperation({ summary: 'Get mail configuration details' })
   getMailConfig() {
     const host = this.configService.get<string>('SMTP_HOST');
     const port = this.configService.get<string>('SMTP_PORT');
     const user = this.configService.get<string>('SMTP_USER');
     const hasPass = !!this.configService.get<string>('SMTP_PASS');
+    const hasResend = !!this.configService.get<string>('RESEND_API_KEY');
     return {
-      configured: !!(host && port && user && hasPass),
+      configured: !!(hasResend || (host && port && user && hasPass)),
+      mode: hasResend ? 'resend' : 'smtp',
       host,
       port,
       user,
       hasPass,
+      hasResend,
     };
   }
 
