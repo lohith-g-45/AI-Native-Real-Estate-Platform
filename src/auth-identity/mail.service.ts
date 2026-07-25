@@ -29,9 +29,9 @@ export class MailService {
         user,
         pass,
       },
-      connectionTimeout: 2000,
-      socketTimeout: 2000,
-      greetingTimeout: 2000,
+      connectionTimeout: 10000,
+      socketTimeout: 10000,
+      greetingTimeout: 10000,
     });
   }
 
