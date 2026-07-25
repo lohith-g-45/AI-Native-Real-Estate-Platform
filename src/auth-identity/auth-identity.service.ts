@@ -111,6 +111,9 @@ export class AuthIdentityService {
     });
 
     delete saved.password;
+    if (this.configService.get<string>('NODE_ENV') === 'production') {
+      delete saved.emailVerificationCode;
+    }
     return saved;
   }
 
@@ -217,7 +220,7 @@ export class AuthIdentityService {
     return {
       success: true,
       message: 'Password reset code has been sent to your email.',
-      resetCode: resetCode,
+      ...(this.configService.get<string>('NODE_ENV') !== 'production' && { resetCode }),
     };
   }
 
@@ -255,7 +258,7 @@ export class AuthIdentityService {
     return {
       success: true,
       message: 'Verification email has been sent to your inbox.',
-      verificationCode: verificationCode,
+      ...(this.configService.get<string>('NODE_ENV') !== 'production' && { verificationCode }),
     };
   }
 
