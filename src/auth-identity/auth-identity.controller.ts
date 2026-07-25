@@ -4,6 +4,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagg
 import { ConfigService } from '@nestjs/config';
 import { AuthIdentityService } from './auth-identity.service';
 import { ConsentService } from './consent.service';
+import { MailService } from './mail.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RequestPasswordResetDto } from './dto/request-password-reset.dto';
@@ -24,6 +25,7 @@ export class AuthIdentityController {
     private readonly authService: AuthIdentityService,
     private readonly consentService: ConsentService,
     private readonly configService: ConfigService,
+    private readonly mailService: MailService,
   ) {}
 
   // ─── Helper to extract IP + User-Agent from request ──────────────────
@@ -57,6 +59,32 @@ export class AuthIdentityController {
       user,
       hasPass,
     };
+  }
+
+  @Get('test-mail')
+  @Public()
+  @ApiOperation({ summary: 'Test SMTP mail sending connectivity' })
+  async testMail() {
+    const user = this.configService.get<string>('SMTP_USER');
+    try {
+      const res = await this.mailService.sendMail({
+        to: user || 'realestateapp.07@gmail.com',
+        subject: 'Test Email Verification',
+        text: 'This is a test email verification to confirm SMTP configuration is working!',
+      });
+      return {
+        success: true,
+        message: 'Mail sent successfully!',
+        info: res,
+      };
+    } catch (err: any) {
+      return {
+        success: false,
+        message: 'Mail sending failed.',
+        error: err.message,
+        stack: err.stack,
+      };
+    }
   }
 
   @Post('register')
