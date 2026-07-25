@@ -100,8 +100,8 @@ export class AuthIdentityService {
       this.logger.error(`Failed to send verification email to ${saved.email}: ${err.message}`);
     });
 
-    // Audit: user registered
-    await this.auditService.log({
+    // Audit: user registered (fire-and-forget)
+    this.auditService.log({
       event: AuditEvent.USER_REGISTERED,
       userId: saved.id,
       email: saved.email,
@@ -117,8 +117,8 @@ export class AuthIdentityService {
   async login(loginDto: LoginUserDto, ipAddress?: string, userAgent?: string): Promise<{ accessToken: string }> {
     const user = await this.usersRepository.findOne({ where: { email: loginDto.email } });
     if (!user || !user.password || !user.isActive || !user.emailVerified) {
-      // Audit: failed login attempt
-      await this.auditService.log({
+      // Audit: failed login attempt (fire-and-forget)
+      this.auditService.log({
         event: AuditEvent.USER_LOGIN_FAILED,
         userId: user?.id ?? null,
         email: loginDto.email,
@@ -142,8 +142,8 @@ export class AuthIdentityService {
 
     const valid = await bcrypt.compare(loginDto.password, user.password);
     if (!valid) {
-      // Audit: failed login attempt
-      await this.auditService.log({
+      // Audit: failed login attempt (fire-and-forget)
+      this.auditService.log({
         event: AuditEvent.USER_LOGIN_FAILED,
         userId: user.id,
         email: user.email,
@@ -154,8 +154,8 @@ export class AuthIdentityService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Audit: successful login
-    await this.auditService.log({
+    // Audit: successful login (fire-and-forget)
+    this.auditService.log({
       event: AuditEvent.USER_LOGIN,
       userId: user.id,
       email: user.email,
@@ -172,8 +172,8 @@ export class AuthIdentityService {
     }
     await this.tokenBlacklistService.revokeToken(token);
 
-    // Audit: user logout
-    await this.auditService.log({
+    // Audit: user logout (fire-and-forget)
+    this.auditService.log({
       event: AuditEvent.USER_LOGOUT,
       userId: userId ?? null,
       email: email ?? null,
@@ -205,8 +205,8 @@ export class AuthIdentityService {
       this.logger.error(`Failed to send password reset email to ${user.email}: ${err.message}`);
     });
 
-    // Audit: password reset requested
-    await this.auditService.log({
+    // Audit: password reset requested (fire-and-forget)
+    this.auditService.log({
       event: AuditEvent.PASSWORD_RESET_REQUESTED,
       userId: user.id,
       email: user.email,
@@ -243,8 +243,8 @@ export class AuthIdentityService {
       this.logger.error(`Failed to send email verification request to ${user.email}: ${err.message}`);
     });
 
-    // Audit: email verification requested
-    await this.auditService.log({
+    // Audit: email verification requested (fire-and-forget)
+    this.auditService.log({
       event: AuditEvent.EMAIL_VERIFICATION_REQUESTED,
       userId: user.id,
       email: user.email,
@@ -282,8 +282,8 @@ export class AuthIdentityService {
       `Verify your phone by visiting ${verifyUrl} or submit this token to POST /v1/auth/verify-phone.`,
     );
 
-    // Audit: phone verification requested
-    await this.auditService.log({
+    // Audit: phone verification requested (fire-and-forget)
+    this.auditService.log({
       event: AuditEvent.PHONE_VERIFICATION_REQUESTED,
       userId: user.id,
       email: user.email,
@@ -316,8 +316,8 @@ export class AuthIdentityService {
     user.passwordResetExpires = undefined;
     await this.usersRepository.save(user);
 
-    // Audit: password reset completed
-    await this.auditService.log({
+    // Audit: password reset completed (fire-and-forget)
+    this.auditService.log({
       event: AuditEvent.PASSWORD_RESET_COMPLETED,
       userId: user.id,
       email: user.email,
@@ -374,8 +374,8 @@ export class AuthIdentityService {
     user.emailVerificationExpires = undefined;
     await this.usersRepository.save(user);
 
-    // Audit: email verified
-    await this.auditService.log({
+    // Audit: email verified (fire-and-forget)
+    this.auditService.log({
       event: AuditEvent.EMAIL_VERIFIED,
       userId: user.id,
       email: user.email,
@@ -408,8 +408,8 @@ export class AuthIdentityService {
     user.phoneVerified = true;
     await this.usersRepository.save(user);
 
-    // Audit: phone verified
-    await this.auditService.log({
+    // Audit: phone verified (fire-and-forget)
+    this.auditService.log({
       event: AuditEvent.PHONE_VERIFIED,
       userId: user.id,
       email: user.email,
@@ -451,8 +451,8 @@ export class AuthIdentityService {
       await this.usersRepository.save(user);
     }
 
-    // Audit: Google login/registration
-    await this.auditService.log({
+    // Audit: Google login/registration (fire-and-forget)
+    this.auditService.log({
       event: isNewUser ? AuditEvent.GOOGLE_ACCOUNT_CREATED : AuditEvent.GOOGLE_LOGIN,
       userId: user.id,
       email: user.email,

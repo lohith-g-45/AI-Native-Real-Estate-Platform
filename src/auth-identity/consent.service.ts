@@ -25,26 +25,29 @@ export class ConsentService {
       { category: ConsentCategory.DOCUMENT_SHARING, granted: true, required: false },
     ];
 
-    const consents: Consent[] = [];
-    for (const def of defaults) {
-      const consent = this.consentRepository.create({
+    const consentEntities = defaults.map(def =>
+      this.consentRepository.create({
         user: { id: userId } as any,
         category: def.category,
         granted: def.granted,
         required: def.required,
-      });
-      consents.push(await this.consentRepository.save(consent));
+      })
+    );
 
-      // Audit each consent grant
-      await this.auditService.log({
+    // Save all default consents in a single bulk operation
+    const savedConsents = await this.consentRepository.save(consentEntities);
+
+    // Log all audits asynchronously (fire-and-forget)
+    defaults.forEach(def => {
+      this.auditService.log({
         event: AuditEvent.CONSENT_GRANTED,
         userId,
         email,
         metadata: { category: def.category, required: def.required },
       });
-    }
+    });
 
-    return consents;
+    return savedConsents;
   }
 
   /**
@@ -81,7 +84,8 @@ export class ConsentService {
       consent = await this.consentRepository.save(consent);
     }
 
-    await this.auditService.log({
+    // Fire-and-forget audit log
+    this.auditService.log({
       event: AuditEvent.CONSENT_GRANTED,
       userId,
       email,
@@ -114,7 +118,8 @@ export class ConsentService {
     consent.granted = false;
     const saved = await this.consentRepository.save(consent);
 
-    await this.auditService.log({
+    // Fire-and-forget audit log
+    this.auditService.log({
       event: AuditEvent.CONSENT_WITHDRAWN,
       userId,
       email,
