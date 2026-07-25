@@ -111,10 +111,7 @@ export class AuthIdentityService {
     });
 
     delete saved.password;
-    if (this.configService.get<string>('NODE_ENV') === 'production') {
-      delete saved.emailVerificationCode;
-    }
-    return saved;
+    return { ...saved, emailVerificationCode: verificationCode };
   }
 
   async login(loginDto: LoginUserDto, ipAddress?: string, userAgent?: string): Promise<{ accessToken: string }> {
@@ -220,7 +217,7 @@ export class AuthIdentityService {
     return {
       success: true,
       message: 'Password reset code has been sent to your email.',
-      ...(this.configService.get<string>('NODE_ENV') !== 'production' && { resetCode }),
+      resetCode: resetCode,
     };
   }
 
@@ -258,7 +255,7 @@ export class AuthIdentityService {
     return {
       success: true,
       message: 'Verification email has been sent to your inbox.',
-      ...(this.configService.get<string>('NODE_ENV') !== 'production' && { verificationCode }),
+      verificationCode: verificationCode,
     };
   }
 
