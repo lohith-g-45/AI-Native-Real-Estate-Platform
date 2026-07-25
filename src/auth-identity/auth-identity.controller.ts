@@ -42,6 +42,23 @@ export class AuthIdentityController {
     return { status: 'ok', module: 'auth-identity' };
   }
 
+  @Get('mail-config')
+  @Public()
+  @ApiOperation({ summary: 'Get SMTP configuration details (excluding password)' })
+  getMailConfig() {
+    const host = this.configService.get<string>('SMTP_HOST');
+    const port = this.configService.get<string>('SMTP_PORT');
+    const user = this.configService.get<string>('SMTP_USER');
+    const hasPass = !!this.configService.get<string>('SMTP_PASS');
+    return {
+      configured: !!(host && port && user && hasPass),
+      host,
+      port,
+      user,
+      hasPass,
+    };
+  }
+
   @Post('register')
   @Public()
   @ApiOperation({ summary: 'Register a new user (buyer or seller)' })
