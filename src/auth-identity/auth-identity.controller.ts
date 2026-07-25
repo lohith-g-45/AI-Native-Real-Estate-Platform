@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, UseGuards, BadRequestException } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UseGuards, BadRequestException, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
@@ -66,27 +66,18 @@ export class AuthIdentityController {
 
   @Get('test-mail')
   @Public()
-  @ApiOperation({ summary: 'Test SMTP mail sending connectivity' })
-  async testMail() {
-    const user = this.configService.get<string>('SMTP_USER');
+  @ApiOperation({ summary: 'Send a diagnostic test mail to verify mail setup' })
+  async testMail(@Query('to') to?: string) {
+    const recipient = to || 'lohithg_aiml@ksit.edu.in';
     try {
-      const res = await this.mailService.sendMail({
-        to: user || 'realestateapp.07@gmail.com',
-        subject: 'Test Email Verification',
-        text: 'This is a test email verification to confirm SMTP configuration is working!',
+      const result = await this.mailService.sendMail({
+        to: recipient,
+        subject: 'Real Estate Platform - Mail Diagnostic Test',
+        text: `This is a test email sent from the Real Estate Platform backend diagnostic endpoint to ${recipient}. If you see this, your mail connection is fully working!`,
       });
-      return {
-        success: true,
-        message: 'Mail sent successfully!',
-        info: res,
-      };
-    } catch (err: any) {
-      return {
-        success: false,
-        message: 'Mail sending failed.',
-        error: err.message,
-        stack: err.stack,
-      };
+      return { success: true, message: `Mail sent successfully to ${recipient}.`, result };
+    } catch (error: any) {
+      return { success: false, message: 'Mail sending failed.', error: error.message, stack: error.stack };
     }
   }
 
