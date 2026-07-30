@@ -1,0 +1,151 @@
+/* ===========================
+   NAVBAR
+=========================== */
+
+header{
+    background:#ffffff;
+    border-bottom:1px solid #e2e8f0;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+header .container{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:72px;
+}
+
+/* Logo */
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.logo-icon{
+    width:38px;
+    height:38px;
+    background:#2563eb;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+}
+
+.logo-text{
+    font-size:11px;
+    color:#64748b;
+    font-weight:500;
+}
+
+/* Navigation */
+
+.main-nav{
+    display:flex;
+    align-items:center;
+    gap:30px;
+}
+
+.nav-link{
+    position:relative;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:500;
+    color:#64748b;
+    transition:all .25s ease;
+    white-space:nowrap;
+}
+
+.nav-link:hover{
+    color:#2563eb;
+}
+
+.nav-link.active{
+    color:#2563eb;
+    font-weight:600;
+}
+
+.nav-link.active::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-10px;
+    transform:translateX(-50%);
+    width:26px;
+    height:3px;
+    background:#2563eb;
+    border-radius:10px;
+}
+
+/* Right Side */
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.hdr-btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:500;
+    color:#334155;
+    transition:.25s;
+}
+
+.hdr-btn:hover{
+    color:#2563eb;
+}
+
+.hdr-icon-btn{
+    position:relative;
+    background:none;
+    border:none;
+    color:#334155;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:.25s;
+}
+
+.hdr-icon-btn:hover{
+    color:#2563eb;
+}
+
+.notif-dot{
+    position:absolute;
+    top:-3px;
+    right:-3px;
+    width:8px;
+    height:8px;
+    background:#dc2626;
+    border-radius:50%;
+}
+
+/* Profile Avatar */
+
+.avatar-btn{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:#e2e8f0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#475569;
+    text-decoration:none;
+    transition:.25s;
+}
+
+.avatar-btn:hover{
+    background:#2563eb;
+    color:#ffffff;
+}

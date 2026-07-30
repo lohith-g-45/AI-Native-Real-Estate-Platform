@@ -1,540 +1,327 @@
+
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Page</title>
-    <!-- Poppins Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Boxicons for modern icons -->
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HomeHaven – Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
 
-        body {
-            background: linear-gradient(135deg, #F4F8FF, #EEF4FF, #FAFCFF);
-            min-height: 100vh;
-            color: #334155;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Navbar */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .logo {
-            font-size: 22px;
-            font-weight: 700;
-            color: #2D5BFF;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logo i {
-            font-size: 26px;
-        }
-
-        .user-nav {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .user-badge {
-            background: rgba(45, 91, 255, 0.1);
-            color: #2D5BFF;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .logout-btn {
-            background: #ff3b30;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .logout-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3);
-        }
-
-        /* Container & Layout */
-        .dashboard-container {
-            flex: 1;
-            max-width: 600px;
-            width: 100%;
-            margin: 40px auto;
-            padding: 0 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        @media (max-width: 600px) {
-            .navbar {
-                padding: 14px 18px;
-            }
-            .dashboard-container {
-                margin: 15px auto;
-                padding: 0 12px;
-                gap: 15px;
-            }
-            .card {
-                padding: 20px 16px;
-                border-radius: 18px;
-                gap: 18px;
-            }
-            .profile-row {
-                flex-direction: column;
-                gap: 4px;
-            }
-            .consent-item {
-                padding: 12px;
-            }
-        }
-
-        /* Cards */
-        .card {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1E293B;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 2px solid #F1F5F9;
-            padding-bottom: 15px;
-        }
-
-        .card-title i {
-            color: #2D5BFF;
-            font-size: 22px;
-        }
-
-        /* Profile Details */
-        .profile-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px dashed #E2E8F0;
-        }
-
-        .profile-row span:first-child {
-            font-weight: 600;
-            color: #64748B;
-        }
-
-        .profile-row span:last-child {
-            color: #1E293B;
-        }
-
-        /* Consents List */
-        .consent-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px;
-            background: #F8FAFC;
-            border: 1px solid #E2E8F0;
-            border-radius: 16px;
-            transition: 0.3s;
-        }
-
-        .consent-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
-        }
-
-        .consent-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .consent-label {
-            font-weight: 600;
-            color: #1E293B;
-            font-size: 14px;
-            text-transform: capitalize;
-        }
-
-        .consent-desc {
-            font-size: 12px;
-            color: #64748B;
-        }
-
-        .consent-badge {
-            font-size: 11px;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 12px;
-            text-transform: uppercase;
-        }
-
-        .badge-granted {
-            background: #DEF7EC;
-            color: #03543F;
-        }
-
-        .badge-withdrawn {
-            background: #FDE8E8;
-            color: #9B1C1C;
-        }
-
-        /* Switch CSS */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 46px;
-            height: 26px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #CBD5E1;
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: #2D5BFF;
-        }
-
-        input:focus + .slider {
-            box-shadow: 0 0 1px #2D5BFF;
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(20px);
-        }
-
-        input:disabled + .slider {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Logs List */
-        .logs-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .log-item {
-            padding: 12px 15px;
-            background: #F8FAFC;
-            border-left: 4px solid #2D5BFF;
-            border-radius: 0 12px 12px 0;
-            font-size: 13px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .log-header {
-            display: flex;
-            justify-content: space-between;
-            font-weight: 600;
-            color: #1E293B;
-        }
-
-        .log-time {
-            font-size: 11px;
-            color: #64748B;
-            font-weight: normal;
-        }
-
-        .log-meta {
-            font-size: 11px;
-            color: #64748B;
-        }
-
-        /* Toast notifications */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #1e293b;
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 14px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            z-index: 100;
-            display: none;
-            animation: slideIn 0.3s ease forwards;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-    </style>
-</head>
+<link href="css/profile.css" rel="stylesheet"/></head>
 <body>
-
-   <header class="navbar">
-
-    <div></div>
-
-    <div class="user-nav">
-
-        <button class="logout-btn" id="logoutBtn">
-            <i class="bx bx-log-out"></i>
-            Sign Out
+<!-- ══════════════════════════════════════════
+     HEADER — pixel-identical to home page
+══════════════════════════════════════════ -->
+<header>
+<div class="container">
+<div class="header-inner">
+<a class="logo-wrap" href="dash.html">
+<div class="logo-mark">
+<i data-feather="home" style="width:20px;height:20px;color:#fff;"></i>
+</div>
+<div>
+<div class="logo-name">HomeHaven</div>
+<div class="logo-sub">AI Native Real Estate Platform</div>
+</div>
+</a>
+<nav class="main-nav">
+<a class="nav-link" href="dash.html">Home</a>
+<a class="nav-link" href="#">Buy</a>
+<a class="nav-link" href="#">Sell</a>
+<a class="nav-link" href="#">AI Search</a>
+<a class="nav-link" href="#">Mortgage</a>
+<a class="nav-link" href="#">Market Trends</a>
+</nav>
+<div class="header-right">
+<button class="hdr-btn">
+<i data-feather="heart" style="width:17px;height:17px;"></i>
+          Saved
         </button>
-
-    </div>
-
+<button class="hdr-icon-btn">
+<div class="notif-dot"></div>
+<i data-feather="bell" style="width:19px;height:19px;"></i>
+</button>
+<button class="hdr-icon-btn">
+<i data-feather="message-square" style="width:19px;height:19px;"></i>
+</button>
+</div>
+</div>
+</div>
 </header>
-
-    <!-- Main Container -->
-    <main class="dashboard-container">
-        
-        <!-- Left: Profile & Consents -->
-        <div class="card">
-            <h2 class="card-title">
-                <i class="bx bx-user-circle"></i>
-                Profile Information
-            </h2>
-            <div id="profileDetails">
-                <div class="profile-row">
-                    <span>Full Name:</span>
-                    <span id="profName">-</span>
-                </div>
-                <div class="profile-row">
-                    <span>Email Address:</span>
-                    <span id="profEmail">-</span>
-                </div>
-
+<!-- ══════════════════════════════════════════
+     HERO — original profile content,
+     restyled to match home page card look
+══════════════════════════════════════════ -->
+<section class="hero-section">
+<div class="container">
+<div class="hero-card">
+<!-- Left — original welcome copy -->
+<div class="hero-left">
+<h2>Welcome to <span class="accent">HomeHaven</span></h2>
+<p class="sub">Sign in or create an account to unlock personalized real estate experiences, save properties and more.</p>
+<button class="btn-primary">
+<i data-feather="user" style="width:16px;height:16px;"></i>
+          Sign In
+        </button>
+<!-- Original 4 perks — restyled with home's icon circles -->
+<div class="perks-grid">
+<div class="perk">
+<div class="perk-icon c-red">
+<i data-feather="heart" style="width:17px;height:17px;"></i>
+</div>
+<div>
+<strong>Save Your Favorites</strong>
+<span>Save properties you love and view them anytime.</span>
+</div>
+</div>
+<div class="perk">
+<div class="perk-icon c-green">
+<i data-feather="bell" style="width:17px;height:17px;"></i>
+</div>
+<div>
+<strong>Get Smart Alerts</strong>
+<span>Receive AI-powered alerts for new properties.</span>
+</div>
+</div>
+<div class="perk">
+<div class="perk-icon c-purple">
+<i data-feather="cpu" style="width:17px;height:17px;"></i>
+</div>
+<div>
+<strong>Personalized Experience</strong>
+<span>Get recommendations that match your needs.</span>
+</div>
+</div>
+<div class="perk">
+<div class="perk-icon c-blue">
+<i data-feather="shield" style="width:17px;height:17px;"></i>
+</div>
+<div>
+<strong>Secure &amp; Private</strong>
+<span>Your data is safe with enterprise-grade security.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right — house photo (same card image style as home property cards) -->
+<div class="hero-right">
+<div class="house-img-wrap">
+<img alt="Modern home" src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&amp;w=900&amp;auto=format&amp;fit=crop"/>
+</div>
+<!-- Floating AI card — same style as home's snapshot card -->
+<div class="ai-float-card">
+<div class="ai-float-icon">
+<i data-feather="home" style="width:20px;height:20px;color:#fff;"></i>
+</div>
+<div>
+<strong>Find Your Perfect Home with AI</strong>
+<span>Discover properties that match your lifestyle and budget.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ══════════════════════════════════════════
+     EXPLORE AS GUEST — original content,
+     home page card styling
+══════════════════════════════════════════ -->
+<section class="guest-section">
+<div class="container">
+<div class="section-header">
+<div>
+<div class="section-title">Explore as a Guest</div>
+<p class="section-sub">You can explore properties, view market trends and more without an account.</p>
+</div>
+</div>
+<div class="guest-grid">
+<div class="guest-card">
+<div class="gc-icon blue">
+<i data-feather="home" style="width:22px;height:22px;"></i>
+</div>
+<h4>Browse Properties</h4>
+<p>Explore thousands of listings across Canada.</p>
+<a class="arrow-link" href="#">
+          Browse Now <i data-feather="arrow-right" style="width:14px;height:14px;"></i>
+</a>
+</div>
+<div class="guest-card">
+<div class="gc-icon green">
+<i data-feather="trending-up" style="width:22px;height:22px;"></i>
+</div>
+<h4>Market Trends</h4>
+<p>View real-time market insights and reports.</p>
+<a class="arrow-link" href="#">
+          View Trends <i data-feather="arrow-right" style="width:14px;height:14px;"></i>
+</a>
+</div>
+<div class="guest-card">
+<div class="gc-icon purple">
+<i data-feather="pocket" style="width:22px;height:22px;"></i>
+</div>
+<h4>Mortgage Calculator</h4>
+<p>Calculate your mortgage and affordability.</p>
+<a class="arrow-link" href="#">
+          Try Calculator <i data-feather="arrow-right" style="width:14px;height:14px;"></i>
+</a>
+</div>
+<div class="guest-card">
+<div class="gc-icon orange">
+<i data-feather="map-pin" style="width:22px;height:22px;"></i>
+</div>
+<h4>Popular Locations</h4>
+<p>Discover top neighbourhoods and communities.</p>
+<a class="arrow-link" href="#">
+          Explore Locations <i data-feather="arrow-right" style="width:14px;height:14px;"></i>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- ══════════════════════════════════════════
+     CTA BANNER — original profile content,
+     restyled with home's dark navy gradient
+══════════════════════════════════════════ -->
+<section class="cta-section">
+<div class="container">
+<div class="cta-banner">
+<!-- Mockup visual (from original profile) -->
+<div class="cta-mockup">
+<div class="cta-mockup-inner">
+<div class="mockup-search">
+<i data-feather="search" style="width:9px;height:9px;color:#94A3B8;"></i>
+<span>Search your dream home...</span>
+</div>
+<div class="mockup-prop-row">
+<div class="mockup-prop-img"></div>
+<div>
+<div class="mpi-tag">Toronto, ON</div>
+<div class="mpi-name">Modern Villa</div>
+<div class="mpi-price">$1.2M</div>
+</div>
+</div>
+<div class="mockup-score-row">
+<div class="score-ring">
+<span class="score-pct">95%</span>
+</div>
+<div class="score-lbl">
+<strong>AI Match Score</strong>
+              Perfect for you!
             </div>
-
-            <h2 class="card-title" style="margin-top: 20px;">
-                <i class="bx bx-shield-quarter"></i>
-                Privacy & Consents
-            </h2>
-            <div id="consentsList" style="display: flex; flex-direction: column; gap: 15px;">
-                <!-- Dynamically loaded consents -->
-                <p style="text-align: center; color: #64748B;">Loading consents...</p>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Toast container -->
-    <div class="toast" id="toast">Changes saved successfully</div>
-
-    <script>
-        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-            ? 'http://localhost:3000' 
-            : 'https://ai-native-real-estate-platform.onrender.com';
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            const token = localStorage.getItem('accessToken');
-            if (!token) {
-                window.location.href = 'login.html';
-                return;
-            }
-
-            // Handle Logout
-            document.getElementById('logoutBtn').addEventListener('click', () => {
-                localStorage.removeItem('accessToken');
-                window.location.href = 'login.html';
-            });
-
-            let userId = '';
-
-            try {
-                // 1. Fetch user profile
-                const profileRes = await fetch(`${API_BASE_URL}/v1/auth/profile`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-
-                if (!profileRes.ok) {
-                    throw new Error('Session expired');
-                }
-
-                const user = await profileRes.json();
-                userId = user.id;
-
-                // Populate profile UI
-                document.getElementById('profName').textContent = user.fullName || 'User';
-                document.getElementById('profEmail').textContent = user.email;
-                // Load dynamically changing lists
-                await loadConsents();
-
-            } catch (err) {
-                console.error(err);
-                localStorage.removeItem('accessToken');
-                window.location.href = 'login.html';
-            }
-
-            // Load Consents Function
-            async function loadConsents() {
-                try {
-                    const res = await fetch(`${API_BASE_URL}/v1/auth/consents`, {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    const consents = await res.json();
-                    
-                    const container = document.getElementById('consentsList');
-                    container.innerHTML = '';
-
-                    const categoryDescriptions = {
-                        'verification_processing': 'Consent to verify identity information (Mandatory).',
-                        'ai_usage': 'Consent to use AI recommendation algorithms.',
-                        'communications': 'Consent to receive service update notifications.',
-                        'marketing': 'Consent to receive newsletters & promotional updates.'
-                    };
-
-                    consents.forEach(c => {
-                        const item = document.createElement('div');
-                        item.className = 'consent-item';
-
-                        const isGranted = c.granted;
-                        const isRequired = c.required;
-                        const desc = categoryDescriptions[c.category] || 'Privacy consent.';
-
-                        item.innerHTML = `
-                            <div class="consent-info">
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <span class="consent-label">${c.category.replace('_', ' ')}</span>
-                                    <span class="consent-badge ${isGranted ? 'badge-granted' : 'badge-withdrawn'}">
-                                        ${isGranted ? 'Granted' : 'Withdrawn'}
-                                    </span>
-                                </div>
-                                <span class="consent-desc">${desc}</span>
-                            </div>
-                            <div>
-                                <label class="switch">
-                                    <input type="checkbox" class="consent-toggle" data-category="${c.category}" 
-                                        ${isGranted ? 'checked' : ''} ${isRequired ? 'disabled' : ''}>
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-                        `;
-                        container.appendChild(item);
-                    });
-
-                    // Add Event Listeners for Toggles
-                    document.querySelectorAll('.consent-toggle').forEach(toggle => {
-                        toggle.addEventListener('change', async (e) => {
-                            const category = e.target.getAttribute('data-category');
-                            const checked = e.target.checked;
-                            const endpoint = checked ? 'grant' : 'withdraw';
-
-                            try {
-                                const response = await fetch(`${API_BASE_URL}/v1/auth/consents/${endpoint}`, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Authorization': `Bearer ${token}`
-                                    },
-                                    body: JSON.stringify({ category })
-                                });
-
-                                if (!response.ok) {
-                                    throw new Error('Failed to update consent');
-                                }
-
-                                showToast(`Consent for "${category.replace('_', ' ')}" updated!`);
-                                // Refresh lists
-                                await loadConsents();
-
-                            } catch (error) {
-                                console.error(error);
-                                e.target.checked = !checked; // revert
-                                showToast('Error saving consent', true);
-                            }
-                        });
-                    });
-
-                } catch (e) {
-                    document.getElementById('consentsList').innerHTML = `<p style="color: #ff3b30;">Error loading consents.</p>`;
-                }
-            }
-
-
-
-            function showToast(message, isError = false) {
-                const toast = document.getElementById('toast');
-                toast.textContent = message;
-                toast.style.background = isError ? '#ff3b30' : '#1e293b';
-                toast.style.display = 'block';
-                setTimeout(() => {
-                    toast.style.display = 'none';
-                }, 3000);
-            }
-        });
-    </script>
+</div>
+</div>
+</div>
+<!-- Original CTA text -->
+<div class="cta-text">
+<h3>Create an Account Today</h3>
+<p class="cta-sub">Join thousands of smart buyers and sellers using AI to make better real estate decisions.</p>
+<div class="cta-checks">
+<div class="cta-check">
+<div class="check-dot">
+<i data-feather="check" style="width:10px;height:10px;"></i>
+</div>
+            Save unlimited properties
+          </div>
+<div class="cta-check">
+<div class="check-dot">
+<i data-feather="check" style="width:10px;height:10px;"></i>
+</div>
+            Track property value changes
+          </div>
+<div class="cta-check">
+<div class="check-dot">
+<i data-feather="check" style="width:10px;height:10px;"></i>
+</div>
+            Get AI recommendations
+          </div>
+<div class="cta-check">
+<div class="check-dot">
+<i data-feather="check" style="width:10px;height:10px;"></i>
+</div>
+            Manage alerts and settings
+          </div>
+</div>
+</div>
+<!-- Original CTA action -->
+<div class="cta-action">
+<button class="btn-signup">Sign Up Now</button>
+<span class="cta-note">Free and easy to get started</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ══════════════════════════════════════════
+     FOOTER — identical to home page
+══════════════════════════════════════════ -->
+<footer>
+<div class="container">
+<div class="footer-grid">
+<div>
+<div class="footer-logo-row">
+<div class="footer-logo-mark">
+<i data-feather="home" style="width:16px;height:16px;color:#fff;"></i>
+</div>
+<div>
+<div class="footer-brand-name">HomeHaven</div>
+<div class="footer-brand-tag">AI Native Real Estate Platform</div>
+</div>
+</div>
+<p class="footer-desc">Using AI and data to help you find, buy, and sell properties with confidence.</p>
+<div class="footer-socials">
+<a href="#"><i data-feather="facebook" style="width:17px;height:17px;"></i></a>
+<a href="#"><i data-feather="instagram" style="width:17px;height:17px;"></i></a>
+<a href="#"><i data-feather="linkedin" style="width:17px;height:17px;"></i></a>
+<a href="#"><i data-feather="twitter" style="width:17px;height:17px;"></i></a>
+</div>
+</div>
+<div class="footer-col">
+<h5>Company</h5>
+<a class="footer-link" href="#">About Us</a>
+<a class="footer-link" href="#">Careers</a>
+<a class="footer-link" href="#">Blog</a>
+<a class="footer-link" href="#">Press</a>
+<a class="footer-link" href="#">Contact</a>
+</div>
+<div class="footer-col">
+<h5>Resources</h5>
+<a class="footer-link" href="#">Market Trends</a>
+<a class="footer-link" href="#">Buying Guide</a>
+<a class="footer-link" href="#">Selling Guide</a>
+<a class="footer-link" href="#">Mortgage Calculator</a>
+<a class="footer-link" href="#">Help Center</a>
+</div>
+<div class="footer-col">
+<h5>Support</h5>
+<a class="footer-link" href="#">FAQs</a>
+<a class="footer-link" href="#">Privacy Policy</a>
+<a class="footer-link" href="#">Terms &amp; Conditions</a>
+<a class="footer-link" href="#">Accessibility</a>
+</div>
+<div class="footer-col">
+<h5>Download Our App</h5>
+<div class="app-badge">
+<i data-feather="smartphone" style="width:15px;height:15px;"></i>
+<div>
+<div style="font-size:9px;opacity:.7;">Download on the</div>
+<div style="font-size:12px;font-weight:700;">App Store</div>
+</div>
+</div>
+<div class="app-badge">
+<i data-feather="play" style="width:15px;height:15px;"></i>
+<div>
+<div style="font-size:9px;opacity:.7;">Get it on</div>
+<div style="font-size:12px;font-weight:700;">Google Play</div>
+</div>
+</div>
+</div>
+</div>
+<div class="footer-bottom">
+      © 2025 HomeHaven. All Rights Reserved.
+    </div>
+</div>
+</footer>
+<script>feather.replace();</script>
 </body>
 </html>
