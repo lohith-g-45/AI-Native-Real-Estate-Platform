@@ -114,7 +114,7 @@ export class AuthIdentityService {
     return { ...saved, emailVerificationCode: verificationCode };
   }
 
-  async login(loginDto: LoginUserDto, ipAddress?: string, userAgent?: string): Promise<{ accessToken: string }> {
+  async login(loginDto: LoginUserDto, ipAddress?: string, userAgent?: string): Promise<{ accessToken: string, role?: string }> {
     const user = await this.usersRepository.findOne({ where: { email: loginDto.email } });
     if (!user || !user.password || !user.isActive || !user.emailVerified) {
       // Audit: failed login attempt (fire-and-forget)
@@ -163,7 +163,53 @@ export class AuthIdentityService {
       userAgent,
     });
 
-    return { accessToken: this.issueAccessToken(user) };
+    return { accessToken: this.issueAccessToken(user), role: user.role };
+  }
+
+  async requestLoginOtp(dto: { email: string }, ipAddress?: string, userAgent?: string) {
+    const user = await this.usersRepository.findOne({ where: { email: dto.email } });
+    if (!user) {
+      return { success: true, message: 'If the email exists, an OTP has been sent.' };
+    }
+    if (!user.isActive) {
+      throw new UnauthorizedException('Account is inactive.');
+    }
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpires = new Date(Date.now() + 5 * 60 * 1000);
+    user.loginOtpCode = otpCode;
+    user.loginOtpExpires = otpExpires;
+    await this.usersRepository.save(user);
+
+    this.mailService.sendMail({
+      to: user.email,
+      subject: 'Your Login Code',
+      text: `Your 6-digit login code is: ${otpCode}\n\nThis code will expire in 5 minutes.`,
+    }).catch(err => {
+      this.logger.error(`Failed to send login OTP to ${user.email}: ${err.message}`);
+    });
+    return { success: true, message: 'If the email exists, an OTP has been sent.' };
+  }
+
+  async verifyLoginOtp(dto: { email: string; otp: string }, ipAddress?: string, userAgent?: string) {
+    const user = await this.usersRepository.findOne({ where: { email: dto.email } });
+    if (!user) throw new UnauthorizedException('Invalid credentials');
+    if (!user.loginOtpCode || user.loginOtpCode !== dto.otp) throw new UnauthorizedException('Invalid OTP code');
+    if (!user.loginOtpExpires || new Date() > user.loginOtpExpires) throw new UnauthorizedException('OTP code has expired');
+    
+    user.loginOtpCode = undefined;
+    user.loginOtpExpires = undefined;
+    await this.usersRepository.save(user);
+
+    this.auditService.log({
+      event: AuditEvent.USER_LOGIN,
+      userId: user.id,
+      email: user.email,
+      ipAddress,
+      userAgent,
+      metadata: { method: 'otp' },
+    });
+
+    return { accessToken: this.issueAccessToken(user), role: user.role };
   }
 
   async logout(token: string, userId?: string, email?: string, ipAddress?: string, userAgent?: string) {
@@ -461,7 +507,7 @@ export class AuthIdentityService {
       userAgent,
     });
 
-    return { accessToken: this.issueAccessToken(user) };
+    return { accessToken: this.issueAccessToken(user), role: user.role };
   }
 
   async loginWithFacebook(profile: any, ipAddress?: string, userAgent?: string) {
@@ -505,7 +551,51 @@ export class AuthIdentityService {
       userAgent,
     } as any); // cast to any since FACEBOOK_LOGIN is not explicitly defined in AuditEvent enum yet, or we assume it is
 
-    return { accessToken: this.issueAccessToken(user) };
+    return { accessToken: this.issueAccessToken(user), role: user.role };
+  }
+
+  async loginWithTwitter(profile: any, ipAddress?: string, userAgent?: string) {
+    const email = profile?.email;
+    if (!email) {
+      throw new UnauthorizedException('Twitter account did not provide an email');
+    }
+
+    let user = await this.usersRepository.findOne({ where: [{ twitterId: profile.twitterId }, { email }] });
+    let isNewUser = false;
+
+    if (!user) {
+      isNewUser = true;
+      user = this.usersRepository.create({
+        email,
+        twitterId: profile.twitterId,
+        fullName: profile.fullName,
+        photoUrl: profile.photo,
+        role: 'buyer',
+        emailVerified: profile.emailVerified ?? true,
+        phoneVerified: false,
+        isActive: true,
+      });
+      user = await this.usersRepository.save(user);
+
+      // Seed default consents for Twitter user
+      await this.consentService.seedDefaultConsents(user.id, user.email);
+    } else if (!user.twitterId) {
+      user.twitterId = profile.twitterId;
+      user.emailVerified = user.emailVerified || profile.emailVerified;
+      await this.usersRepository.save(user);
+    }
+
+    // Audit: Twitter login/registration
+    this.auditService.log({
+      event: isNewUser ? AuditEvent.TWITTER_ACCOUNT_CREATED : AuditEvent.TWITTER_LOGIN,
+      userId: user.id,
+      email: user.email,
+      metadata: { twitterId: profile.twitterId },
+      ipAddress,
+      userAgent,
+    });
+
+    return { accessToken: this.issueAccessToken(user), role: user.role };
   }
 
   async getProfile(userId: string) {

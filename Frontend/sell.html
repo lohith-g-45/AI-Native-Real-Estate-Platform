@@ -52,7 +52,7 @@
         <div class="nav-container">
             <nav>
                 <ul class="nav-links">
-                    <li><a href="dashboard.html">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="buy.html">Buy</a></li>
                     <li><a href="sell.html" class="active">Sell</a></li>
                 </ul>
@@ -66,6 +66,9 @@
                 <button class="icon-btn"><i class="fa-regular fa-message"></i></button>
                 <a href="profile.html">
                     <button class="profile-btn"><img src="images/profile.png" alt="Profile"></button>
+                </a>
+                <a href="#" onclick="localStorage.removeItem('accessToken'); sessionStorage.removeItem('loginIntent'); window.location.href='login.html';" style="margin-left: 15px; color: #dc2626; text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 5px;" title="Sign Out">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 </a>
             </div>
         </div>
@@ -288,7 +291,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if (!localStorage.getItem('accessToken')) {
-                window.location.href = 'login.html';
+                window.location.href = 'login.html?redirect=sell';
             }
         });
     </script>

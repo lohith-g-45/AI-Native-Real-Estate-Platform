@@ -12,9 +12,11 @@ import { VerifyEmailDto } from './dto/verify-email.dto';
 import { VerifyPhoneDto } from './dto/verify-phone.dto';
 import { GrantConsentDto } from './dto/grant-consent.dto';
 import { WithdrawConsentDto } from './dto/withdraw-consent.dto';
+import { VerifyLoginOtpDto } from './dto/verify-login-otp.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { FacebookAuthGuard } from './guards/facebook-auth.guard';
+import { TwitterAuthGuard } from './guards/twitter-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
 import { Public } from './decorators/public.decorator';
@@ -63,6 +65,22 @@ export class AuthIdentityController {
   login(@Body() dto: LoginUserDto, @Request() req: any) {
     const { ipAddress, userAgent } = this.getRequestMeta(req);
     return this.authService.login(dto, ipAddress, userAgent);
+  }
+
+  @Post('login-otp/request')
+  @Public()
+  @ApiOperation({ summary: 'Request an OTP for login' })
+  requestLoginOtp(@Body() dto: RequestPasswordResetDto, @Request() req: any) {
+    const { ipAddress, userAgent } = this.getRequestMeta(req);
+    return this.authService.requestLoginOtp(dto, ipAddress, userAgent);
+  }
+
+  @Post('login-otp/verify')
+  @Public()
+  @ApiOperation({ summary: 'Verify OTP for login and receive JWT' })
+  verifyLoginOtp(@Body() dto: VerifyLoginOtpDto, @Request() req: any) {
+    const { ipAddress, userAgent } = this.getRequestMeta(req);
+    return this.authService.verifyLoginOtp(dto, ipAddress, userAgent);
   }
 
   @Post('password-reset/request')
@@ -206,7 +224,7 @@ export class AuthIdentityController {
       throw new BadRequestException('Google OAuth is not configured.');
     }
     const result = await this.authService.loginWithGoogle(req.user);
-    res.redirect(`http://localhost:8080/dashboard.html#token=${result.accessToken}`);
+    res.redirect(`http://localhost:8080/index.html#token=${result.accessToken}`);
   }
 
   // ─── Facebook OAuth ────────────────────────────────────────────────────
@@ -236,7 +254,37 @@ export class AuthIdentityController {
       throw new BadRequestException('Facebook OAuth is not configured.');
     }
     const result = await this.authService.loginWithFacebook(req.user);
-    res.redirect(`http://localhost:8080/dashboard.html#token=${result.accessToken}`);
+    res.redirect(`http://localhost:8080/index.html#token=${result.accessToken}`);
+  }
+
+  // ─── Twitter OAuth ────────────────────────────────────────────────────
+
+  @Get('twitter')
+  @Public()
+  @UseGuards(TwitterAuthGuard)
+  @ApiOperation({ summary: 'Initiate Twitter OAuth login' })
+  @ApiResponse({ status: 400, description: 'Twitter OAuth not configured' })
+  twitterAuth(@Request() req: any) {
+    const consumerKey = this.configService.get<string>('TWITTER_CONSUMER_KEY');
+    if (!consumerKey || consumerKey.startsWith('your-')) {
+      throw new BadRequestException(
+        'Twitter OAuth is not configured. Set TWITTER_CONSUMER_KEY and TWITTER_CONSUMER_SECRET in your .env file.',
+      );
+    }
+    return { message: 'Redirecting to Twitter...' };
+  }
+
+  @Get('twitter/redirect')
+  @Public()
+  @UseGuards(TwitterAuthGuard)
+  @ApiOperation({ summary: 'Twitter OAuth callback redirect' })
+  async twitterAuthRedirect(@Request() req: any, @Res() res: any) {
+    const consumerKey = this.configService.get<string>('TWITTER_CONSUMER_KEY');
+    if (!consumerKey || consumerKey.startsWith('your-')) {
+      throw new BadRequestException('Twitter OAuth is not configured.');
+    }
+    const result = await this.authService.loginWithTwitter(req.user);
+    res.redirect(`http://localhost:8080/index.html#token=${result.accessToken}`);
   }
 }
 

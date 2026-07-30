@@ -24,6 +24,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Twitter Login
+    const twitterBtn = document.querySelector('.twitter-btn');
+    if (twitterBtn) {
+        twitterBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = `${API_BASE_URL}/v1/auth/twitter`;
+        });
+    }
+
     // Toggle password visibility
     document.querySelectorAll('.toggle-password').forEach(icon => {
         icon.addEventListener('click', function() {
@@ -40,19 +49,135 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    if (!loginForm) return;
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectIntent = urlParams.get('redirect');
+    if (redirectIntent) {
+        sessionStorage.setItem('loginIntent', redirectIntent);
+    }
+    const intent = redirectIntent || sessionStorage.getItem('loginIntent');
+    const signupLink = document.querySelector('.signup a');
+    if (signupLink && intent) {
+        signupLink.href = 'create_account.html?redirect=' + intent;
+    }
 
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
 
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+
+    const step1Form = document.getElementById('step1Form');
+    const otpForm = document.getElementById('otpForm');
+    const passwordForm = document.getElementById('passwordForm');
+
+    window.showStep = function(step) {
+        document.getElementById('step-1').style.display = 'none';
+        document.getElementById('step-2').style.display = 'none';
+        document.getElementById('step-3').style.display = 'none';
+        document.getElementById(`step-${step}`).style.display = 'block';
+    }
+
+    if (step1Form) {
+        step1Form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            if (email) {
+                const btn = step1Form.querySelector('.login-btn');
+                btn.disabled = true;
+                btn.textContent = 'Sending code...';
+                try {
+                    await fetch(`${API_BASE_URL}/v1/auth/login-otp/request`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    document.getElementById('display-email').innerText = email;
+                    showStep(2);
+                } catch (error) {
+                    alert("Error requesting code: " + error.message);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'Continue';
+                }
+            }
+        });
+    }
+
+    if (otpForm) {
+        // OTP box auto-advance logic
+        const otpBoxes = otpForm.querySelectorAll('.otp-box');
+        otpBoxes.forEach((box, index) => {
+            box.addEventListener('input', () => {
+                if (box.value.length === 1 && index < otpBoxes.length - 1) {
+                    otpBoxes[index + 1].focus();
+                }
+            });
+            box.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && box.value.length === 0 && index > 0) {
+                    otpBoxes[index - 1].focus();
+                }
+            });
+        });
+
+        otpForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            let otp = '';
+            otpBoxes.forEach(box => otp += box.value);
+            
+            if (otp.length < 6) {
+                alert("Please enter the full 6-digit code.");
+                return;
+            }
+
+            const email = document.getElementById('email').value;
+            const btn = otpForm.querySelector('.login-btn');
+            btn.disabled = true;
+            btn.textContent = 'Verifying...';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/v1/auth/login-otp/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, otp })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Invalid code');
+                }
+
+                localStorage.setItem('accessToken', data.accessToken);
+                
+                const currentIntent = sessionStorage.getItem('loginIntent');
+                if (currentIntent === 'sell' || data.role === 'seller') {
+                    sessionStorage.removeItem('loginIntent');
+                    window.location.href = 'sell.html';
+                } else if (currentIntent === 'buy') {
+                    sessionStorage.removeItem('loginIntent');
+                    window.location.href = 'buy.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                alert("Error: " + error.message);
+                otpBoxes.forEach(box => box.value = '');
+                otpBoxes[0].focus();
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Continue';
+            }
+        });
+    }
+
+    if (passwordForm) {
+        passwordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
         // Clear existing errors
         let errorEl = document.getElementById('form-error');
         if (errorEl) errorEl.remove();
 
-        const loginBtn = loginForm.querySelector('.login-btn');
+        const loginBtn = passwordForm.querySelector('.login-btn');
         loginBtn.disabled = true;
         loginBtn.textContent = 'Signing In...';
 
@@ -77,8 +202,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // Save token to localStorage
             localStorage.setItem('accessToken', data.accessToken);
             
-            // Redirect to dashboard
-            window.location.href = 'dashboard.html';
+            const currentIntent = sessionStorage.getItem('loginIntent');
+            if (currentIntent === 'sell' || data.role === 'seller') {
+                sessionStorage.removeItem('loginIntent');
+                window.location.href = 'sell.html';
+            } else if (currentIntent === 'buy') {
+                sessionStorage.removeItem('loginIntent');
+                window.location.href = 'buy.html';
+            } else {
+                window.location.href = 'index.html';
+            }
 
         } catch (error) {
             showError(error.message, email);
@@ -86,6 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
             loginBtn.textContent = 'Sign In';
         }
     });
+}
 
     function showError(message, email = '') {
         let errorEl = document.getElementById('form-error');
@@ -94,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
             errorEl.id = 'form-error';
             errorEl.style.marginTop = '15px';
             errorEl.style.textAlign = 'center';
-            loginForm.appendChild(errorEl);
+            passwordForm.appendChild(errorEl);
         }
 
         // Render error message text

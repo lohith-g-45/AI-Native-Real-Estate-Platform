@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const isTokenValid = validateToken(authToken);
 
     if (isTokenValid) {
-      window.location.href = "dashboard.html"; // ✅ valid session
+      window.location.href = "index.html"; // ✅ valid session
     } else {
       window.location.href = "login.html"; // ❌ expired/invalid session
     }
