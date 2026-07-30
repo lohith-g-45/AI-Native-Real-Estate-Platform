@@ -464,5 +464,27 @@
 </footer>
 
 <script>feather.replace();</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check for token in URL hash (from Google Auth redirect)
+        const hash = window.location.hash;
+        let urlToken = null;
+        if (hash.startsWith('#token=')) {
+            urlToken = hash.substring(7); // Remove '#token='
+        }
+        
+        if (urlToken) {
+            localStorage.setItem('accessToken', urlToken);
+            // Clean up URL hash
+            window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
+        }
+
+        // Simple auth guard
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+    });
+</script>
 </body>
 </html>

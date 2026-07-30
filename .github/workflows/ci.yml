@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install pnpm
         run: corepack enable && corepack prepare pnpm@latest --activate
@@ -31,7 +31,7 @@ jobs:
         run: pnpm run test --runInBand
 
       - name: Security Vulnerability Audit
-        run: pnpm audit --audit-level=high || true
+        run: pnpm audit --audit-level=high
 
 
   # ─── Deploy to staging (runs only on push to main, after tests pass) ───
@@ -46,7 +46,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install pnpm
         run: corepack enable && corepack prepare pnpm@latest --activate

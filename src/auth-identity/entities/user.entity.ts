@@ -14,6 +14,9 @@ export class User {
   @Column({ nullable: true, unique: true })
   googleId?: string;
 
+  @Column({ nullable: true, unique: true })
+  facebookId?: string;
+
   @Column({ type: 'varchar', length: 16 })
   role: 'buyer' | 'seller';
 

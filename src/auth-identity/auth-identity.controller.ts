@@ -1,10 +1,9 @@
-import { Body, Controller, Get, Post, Request, UseGuards, BadRequestException, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, Res, UseGuards, BadRequestException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { AuthIdentityService } from './auth-identity.service';
 import { ConsentService } from './consent.service';
-import { MailService } from './mail.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RequestPasswordResetDto } from './dto/request-password-reset.dto';
@@ -14,6 +13,8 @@ import { VerifyPhoneDto } from './dto/verify-phone.dto';
 import { GrantConsentDto } from './dto/grant-consent.dto';
 import { WithdrawConsentDto } from './dto/withdraw-consent.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
+import { FacebookAuthGuard } from './guards/facebook-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
 import { Public } from './decorators/public.decorator';
@@ -25,7 +26,6 @@ export class AuthIdentityController {
     private readonly authService: AuthIdentityService,
     private readonly consentService: ConsentService,
     private readonly configService: ConfigService,
-    private readonly mailService: MailService,
   ) {}
 
   // ─── Helper to extract IP + User-Agent from request ──────────────────
@@ -42,43 +42,6 @@ export class AuthIdentityController {
   @ApiOperation({ summary: 'Auth module health check' })
   getHealth(): { status: string; module: string } {
     return { status: 'ok', module: 'auth-identity' };
-  }
-
-  @Get('mail-config')
-  @Public()
-  @ApiOperation({ summary: 'Get mail configuration details' })
-  getMailConfig() {
-    const host = this.configService.get<string>('SMTP_HOST');
-    const port = this.configService.get<string>('SMTP_PORT');
-    const user = this.configService.get<string>('SMTP_USER');
-    const hasPass = !!this.configService.get<string>('SMTP_PASS');
-    const hasResend = !!this.configService.get<string>('RESEND_API_KEY');
-    return {
-      configured: !!(hasResend || (host && port && user && hasPass)),
-      mode: hasResend ? 'resend' : 'smtp',
-      host,
-      port,
-      user,
-      hasPass,
-      hasResend,
-    };
-  }
-
-  @Get('test-mail')
-  @Public()
-  @ApiOperation({ summary: 'Send a diagnostic test mail to verify mail setup' })
-  async testMail(@Query('to') to?: string) {
-    const recipient = to || 'lohithg_aiml@ksit.edu.in';
-    try {
-      const result = await this.mailService.sendMail({
-        to: recipient,
-        subject: 'Real Estate Platform - Mail Diagnostic Test',
-        text: `This is a test email sent from the Real Estate Platform backend diagnostic endpoint to ${recipient}. If you see this, your mail connection is fully working!`,
-      });
-      return { success: true, message: `Mail sent successfully to ${recipient}.`, result };
-    } catch (error: any) {
-      return { success: false, message: 'Mail sending failed.', error: error.message, stack: error.stack };
-    }
   }
 
   @Post('register')
@@ -218,6 +181,7 @@ export class AuthIdentityController {
 
   @Get('google')
   @Public()
+  @UseGuards(GoogleAuthGuard)
   @ApiOperation({ summary: 'Initiate Google OAuth login' })
   @ApiResponse({ status: 400, description: 'Google OAuth not configured' })
   googleAuth(@Request() req: any) {
@@ -234,12 +198,45 @@ export class AuthIdentityController {
 
   @Get('google/redirect')
   @Public()
+  @UseGuards(AuthGuard('google'))
   @ApiOperation({ summary: 'Google OAuth callback redirect' })
-  googleAuthRedirect(@Request() req: any) {
+  async googleAuthRedirect(@Request() req: any, @Res() res: any) {
     const clientID = this.configService.get<string>('GOOGLE_CLIENT_ID');
     if (!clientID || clientID.startsWith('your-')) {
       throw new BadRequestException('Google OAuth is not configured.');
     }
-    return this.authService.loginWithGoogle(req.user);
+    const result = await this.authService.loginWithGoogle(req.user);
+    res.redirect(`http://localhost:8080/dashboard.html#token=${result.accessToken}`);
+  }
+
+  // ─── Facebook OAuth ────────────────────────────────────────────────────
+
+  @Get('facebook')
+  @Public()
+  @UseGuards(FacebookAuthGuard)
+  @ApiOperation({ summary: 'Initiate Facebook OAuth login' })
+  @ApiResponse({ status: 400, description: 'Facebook OAuth not configured' })
+  facebookAuth(@Request() req: any) {
+    const clientID = this.configService.get<string>('FACEBOOK_APP_ID');
+    if (!clientID || clientID.startsWith('your-')) {
+      throw new BadRequestException(
+        'Facebook OAuth is not configured. Set FACEBOOK_APP_ID and FACEBOOK_APP_SECRET in your .env file.',
+      );
+    }
+    return { message: 'Redirecting to Facebook...' };
+  }
+
+  @Get('facebook/redirect')
+  @Public()
+  @UseGuards(FacebookAuthGuard)
+  @ApiOperation({ summary: 'Facebook OAuth callback redirect' })
+  async facebookAuthRedirect(@Request() req: any, @Res() res: any) {
+    const clientID = this.configService.get<string>('FACEBOOK_APP_ID');
+    if (!clientID || clientID.startsWith('your-')) {
+      throw new BadRequestException('Facebook OAuth is not configured.');
+    }
+    const result = await this.authService.loginWithFacebook(req.user);
+    res.redirect(`http://localhost:8080/dashboard.html#token=${result.accessToken}`);
   }
 }
+

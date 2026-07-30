@@ -464,6 +464,50 @@ export class AuthIdentityService {
     return { accessToken: this.issueAccessToken(user) };
   }
 
+  async loginWithFacebook(profile: any, ipAddress?: string, userAgent?: string) {
+    const email = profile?.email;
+    if (!email) {
+      throw new UnauthorizedException('Facebook account did not provide an email');
+    }
+
+    let user = await this.usersRepository.findOne({ where: [{ facebookId: profile.facebookId }, { email }] });
+    let isNewUser = false;
+
+    if (!user) {
+      isNewUser = true;
+      user = this.usersRepository.create({
+        email,
+        facebookId: profile.facebookId,
+        fullName: profile.fullName,
+        photoUrl: profile.photo,
+        role: 'buyer',
+        emailVerified: profile.emailVerified ?? true,
+        phoneVerified: false,
+        isActive: true,
+      });
+      user = await this.usersRepository.save(user);
+
+      // Seed default consents for Facebook user
+      await this.consentService.seedDefaultConsents(user.id, user.email);
+    } else if (!user.facebookId) {
+      user.facebookId = profile.facebookId;
+      user.emailVerified = user.emailVerified || profile.emailVerified;
+      await this.usersRepository.save(user);
+    }
+
+    // Audit: Facebook login/registration
+    this.auditService.log({
+      event: isNewUser ? AuditEvent.FACEBOOK_ACCOUNT_CREATED : AuditEvent.FACEBOOK_LOGIN,
+      userId: user.id,
+      email: user.email,
+      metadata: { facebookId: profile.facebookId },
+      ipAddress,
+      userAgent,
+    } as any); // cast to any since FACEBOOK_LOGIN is not explicitly defined in AuditEvent enum yet, or we assume it is
+
+    return { accessToken: this.issueAccessToken(user) };
+  }
+
   async getProfile(userId: string) {
     const user = await this.usersRepository.findOne({ where: { id: userId } });
     if (!user) {

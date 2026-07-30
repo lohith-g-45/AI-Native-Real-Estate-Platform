@@ -6,6 +6,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const welcome = document.querySelector('.welcome');
 
+    // Google Login
+    const googleBtn = document.querySelector('.google-btn');
+    if (googleBtn) {
+        googleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = `${API_BASE_URL}/v1/auth/google`;
+        });
+    }
+
+    // Facebook Login
+    const facebookBtn = document.querySelector('.facebook-btn');
+    if (facebookBtn) {
+        facebookBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = `${API_BASE_URL}/v1/auth/facebook`;
+        });
+    }
+
     // Toggle password visibility
     document.querySelectorAll('.toggle-password').forEach(icon => {
         icon.addEventListener('click', function() {
