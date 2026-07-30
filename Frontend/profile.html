@@ -1,327 +1,694 @@
-
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>HomeHaven – Profile</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
-
-<link href="css/profile.css" rel="stylesheet"/></head>
+<style>
+  /* ── Design tokens (mirrors dash.css) ── */
+  :root {
+    --navy:    #0a122d;
+    --navy-2:  #121e42;
+    --navy-3:  #1a2a56;
+    --blue:    #2563eb;
+    --blue-lt: #4f8cff;
+    --line:    #e2e8f0;
+    --muted:   #64748b;
+    --text:    #1e293b;
+  }
+ 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    background: #f8fafc;
+  }
+ 
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+ 
+  /* ── HEADER ── */
+  header {
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+  }
+  .logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .logo-mark {
+    width: 38px; height: 38px;
+    background: var(--blue);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-name  { font-size: 16px; font-weight: 800; color: var(--text); }
+  .logo-sub   { font-size: 11px; color: var(--muted); }
+  .main-nav   { display: flex; gap: 30px; }
+  .nav-link   { font-size: 14px; font-weight: 500; color: #334155; text-decoration: none; }
+  .nav-link:hover { color: var(--blue); }
+  .header-right { display: flex; align-items: center; gap: 14px; }
+ 
+  .hdr-btn {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 14px; font-weight: 500; color: #334155;
+    background: none; border: none; cursor: pointer;
+  }
+  .hdr-icon-btn {
+    position: relative;
+    background: none; border: none; cursor: pointer;
+    color: #334155;
+  }
+  .notif-dot {
+    position: absolute; top: -3px; right: -3px;
+    width: 8px; height: 8px;
+    background: #dc2626; border-radius: 50%;
+  }
+ 
+  /* ── BUTTONS ── */
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--blue);
+    color: #fff;
+    border: none; border-radius: 9px;
+    padding: 12px 22px;
+    font-size: 14.5px; font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .btn-primary:hover { background: #1d4ed8; }
+ 
+  /* ── HERO SECTION ── */
+  .hero-section {
+    position: relative;
+    overflow: hidden;
+    /* Same dark navy photo overlay as dashboard hero */
+    background: var(--navy);
+  }
+  .hero-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1800&auto=format&fit=crop') center/cover no-repeat;
+    opacity: .18;
+  }
+  /* Directional navy fade identical to dashboard */
+  .hero-section::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg,
+      rgba(10,18,45,.97) 0%,
+      rgba(10,18,45,.82) 45%,
+      rgba(10,18,45,.55) 80%,
+      rgba(10,18,45,.30) 100%
+    );
+  }
+ 
+  .hero-card {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    padding: 72px 0 68px;
+  }
+  .hero-left  { flex: 1; }
+  .hero-right { flex: 0 0 380px; }
+ 
+  .hero-left h2 {
+    font-size: 44px; font-weight: 800; line-height: 1.13;
+    letter-spacing: -.02em;
+    color: #fff;
+    margin-bottom: 14px;
+  }
+  .accent { color: var(--blue-lt); }
+ 
+  .hero-left .sub {
+    color: #cbd5e1;
+    font-size: 16px; line-height: 1.6;
+    margin-bottom: 28px;
+    max-width: 460px;
+  }
+ 
+  /* perks grid */
+  .perks-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  .perk {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .perk-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .c-red    { background: rgba(220,38,38,.18);  color: #f87171; }
+  .c-green  { background: rgba(22,163,74,.18);  color: #4ade80; }
+  .c-purple { background: rgba(124,58,237,.18); color: #a78bfa; }
+  .c-blue   { background: rgba(37,99,235,.22);  color: #60a5fa; }
+ 
+  .perk strong { display: block; font-size: 13.5px; font-weight: 700; color: #f1f5f9; margin-bottom: 2px; }
+  .perk span   { font-size: 12.5px; color: #94a3b8; line-height: 1.45; }
+ 
+  /* House image */
+  .house-img-wrap {
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0,0,0,.45);
+    aspect-ratio: 4/3;
+  }
+  .house-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+ 
+  /* Floating AI card */
+  .ai-float-card {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,.08);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-top: 14px;
+  }
+  .ai-float-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ai-float-card strong { display: block; font-size: 13.5px; font-weight: 700; color: #f1f5f9; }
+  .ai-float-card span   { font-size: 12px; color: #94a3b8; }
+ 
+  /* ── GUEST SECTION ── */
+  .guest-section { background: #fff; padding: 60px 0; }
+ 
+  .section-header { margin-bottom: 28px; }
+  .section-title  { font-size: 22px; font-weight: 800; color: var(--text); }
+  .section-sub    { font-size: 14px; color: var(--muted); margin-top: 4px; }
+ 
+  .guest-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .guest-card {
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px 22px;
+    transition: box-shadow .2s, transform .2s;
+  }
+  .guest-card:hover {
+    box-shadow: 0 8px 28px rgba(37,99,235,.10);
+    transform: translateY(-2px);
+  }
+  .gc-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .gc-icon.blue   { background: #eaf1ff; color: var(--blue); }
+  .gc-icon.green  { background: #e6f7ec; color: #16a34a; }
+  .gc-icon.purple { background: #f2ecff; color: #7c3aed; }
+  .gc-icon.orange { background: #fdf0e0; color: #d97706; }
+ 
+  .guest-card h4  { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .guest-card p   { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 16px; }
+ 
+  .arrow-link {
+    display: inline-flex; align-items: center; gap: 5px;
+    color: var(--blue); font-size: 13px; font-weight: 600;
+    text-decoration: none;
+  }
+  .arrow-link:hover { text-decoration: underline; }
+ 
+  /* ── CTA SECTION ── same dark navy gradient as dashboard newsletter ── */
+  .cta-section {
+    background: linear-gradient(90deg, var(--navy), var(--navy-2));
+    padding: 60px 0;
+  }
+  .cta-banner {
+    display: flex;
+    align-items: center;
+    gap: 52px;
+  }
+ 
+  /* Mockup visual */
+  .cta-mockup {
+    flex: 0 0 220px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 18px;
+    padding: 20px;
+  }
+  .cta-mockup-inner { display: flex; flex-direction: column; gap: 14px; }
+ 
+  .mockup-search {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,.08);
+    border-radius: 8px; padding: 8px 10px;
+    font-size: 10px; color: #94a3b8;
+  }
+  .mockup-prop-row {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,.06);
+    border-radius: 10px; padding: 10px;
+  }
+  .mockup-prop-img {
+    width: 40px; height: 40px; border-radius: 8px;
+    background: linear-gradient(135deg, #2563eb44, #7c3aed44);
+    flex-shrink: 0;
+  }
+  .mpi-tag   { font-size: 9px;  color: #60a5fa; font-weight: 600; }
+  .mpi-name  { font-size: 11px; color: #f1f5f9; font-weight: 700; }
+  .mpi-price { font-size: 10px; color: #94a3b8; }
+ 
+  .mockup-score-row {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,.06);
+    border-radius: 10px; padding: 10px;
+  }
+  .score-ring {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 3px solid #4f8cff;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .score-pct  { font-size: 10px; font-weight: 800; color: #4f8cff; }
+  .score-lbl strong { display: block; font-size: 10.5px; color: #f1f5f9; font-weight: 700; }
+  .score-lbl  { font-size: 10px; color: #94a3b8; }
+ 
+  /* CTA text block */
+  .cta-text { flex: 1; }
+  .cta-text h3 {
+    font-size: 28px; font-weight: 800; color: #fff;
+    margin-bottom: 10px;
+  }
+  .cta-sub {
+    font-size: 14.5px; color: #b6c0e0; line-height: 1.6;
+    margin-bottom: 22px; max-width: 440px;
+  }
+  .cta-checks { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .cta-check  {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13.5px; color: #cbd5e1; font-weight: 500;
+  }
+  .check-dot {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(37,99,235,.35);
+    display: flex; align-items: center; justify-content: center;
+    color: #60a5fa; flex-shrink: 0;
+  }
+ 
+  /* CTA action */
+  .cta-action { display: flex; align-items: center; gap: 18px; }
+  .btn-signup {
+    background: var(--blue);
+    color: #fff; border: none; border-radius: 9px;
+    padding: 13px 28px;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    transition: background .2s;
+  }
+  .btn-signup:hover { background: #1d4ed8; }
+  .cta-note { font-size: 12.5px; color: #94a3b8; }
+ 
+  /* ── FOOTER ── */
+  footer {
+    background: #fff;
+    padding: 50px 0 20px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.8fr 1fr 1fr 1fr 1.2fr;
+    gap: 30px;
+    margin-bottom: 36px;
+  }
+  .footer-logo-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+  }
+  .footer-logo-mark {
+    width: 32px; height: 32px;
+    background: var(--blue); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .footer-brand-name { font-size: 15px; font-weight: 800; }
+  .footer-brand-tag  { font-size: 10.5px; color: var(--muted); }
+  .footer-desc { font-size: 13px; color: var(--muted); line-height: 1.6; max-width: 260px; margin-bottom: 16px; }
+  .footer-socials { display: flex; gap: 14px; }
+  .footer-socials a { color: #475569; }
+ 
+  .footer-col h5 { font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+  .footer-link {
+    display: block; font-size: 13px; color: var(--muted);
+    text-decoration: none; margin-bottom: 8px;
+  }
+  .footer-link:hover { color: var(--blue); }
+ 
+  .app-badge {
+    display: flex; align-items: center; gap: 8px;
+    background: #111827; color: #fff;
+    border-radius: 8px; padding: 8px 14px;
+    font-size: 12px; margin-bottom: 10px;
+    cursor: pointer;
+  }
+ 
+  .footer-bottom {
+    text-align: center;
+    color: #94a3b8; font-size: 12.5px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+</style>
+</head>
 <body>
+ 
 <!-- ══════════════════════════════════════════
-     HEADER — pixel-identical to home page
+     HEADER
 ══════════════════════════════════════════ -->
 <header>
-<div class="container">
-<div class="header-inner">
-<a class="logo-wrap" href="dash.html">
-<div class="logo-mark">
-<i data-feather="home" style="width:20px;height:20px;color:#fff;"></i>
-</div>
-<div>
-<div class="logo-name">HomeHaven</div>
-<div class="logo-sub">AI Native Real Estate Platform</div>
-</div>
-</a>
-<nav class="main-nav">
-<a class="nav-link" href="dash.html">Home</a>
-<a class="nav-link" href="#">Buy</a>
-<a class="nav-link" href="#">Sell</a>
-<a class="nav-link" href="#">AI Search</a>
-<a class="nav-link" href="#">Mortgage</a>
-<a class="nav-link" href="#">Market Trends</a>
-</nav>
-<div class="header-right">
-<button class="hdr-btn">
-<i data-feather="heart" style="width:17px;height:17px;"></i>
-          Saved
+  <div class="container">
+    <div class="header-inner">
+      <a class="logo-wrap" href="dashboard.html">
+        <div class="logo-mark">
+          <i data-feather="home" style="width:20px;height:20px;color:#fff;"></i>
+        </div>
+        <div>
+          <div class="logo-name">HomeHaven</div>
+          <div class="logo-sub">AI Native Real Estate Platform</div>
+        </div>
+      </a>
+ 
+      <nav class="main-nav">
+        <a class="nav-link" href="dashboard.html">Home</a>
+        <a class="nav-link" href="#">Buy</a>
+        <a class="nav-link" href="sell.html">Sell</a>
+        <a class="nav-link" href="#">AI Search</a>
+        <a class="nav-link" href="#">Mortgage</a>
+        <a class="nav-link" href="#">Market Trends</a>
+      </nav>
+ 
+      <div class="header-right">
+        <button class="hdr-btn">
+          <i data-feather="heart" style="width:17px;height:17px;"></i> Saved
         </button>
-<button class="hdr-icon-btn">
-<div class="notif-dot"></div>
-<i data-feather="bell" style="width:19px;height:19px;"></i>
-</button>
-<button class="hdr-icon-btn">
-<i data-feather="message-square" style="width:19px;height:19px;"></i>
-</button>
-</div>
-</div>
-</div>
+        <button class="hdr-icon-btn">
+          <div class="notif-dot"></div>
+          <i data-feather="bell" style="width:19px;height:19px;"></i>
+        </button>
+        <button class="hdr-icon-btn">
+          <i data-feather="message-square" style="width:19px;height:19px;"></i>
+        </button>
+      </div>
+    </div>
+  </div>
 </header>
+ 
 <!-- ══════════════════════════════════════════
-     HERO — original profile content,
-     restyled to match home page card look
+     HERO
 ══════════════════════════════════════════ -->
 <section class="hero-section">
-<div class="container">
-<div class="hero-card">
-<!-- Left — original welcome copy -->
-<div class="hero-left">
-<h2>Welcome to <span class="accent">HomeHaven</span></h2>
-<p class="sub">Sign in or create an account to unlock personalized real estate experiences, save properties and more.</p>
-<button class="btn-primary">
-<i data-feather="user" style="width:16px;height:16px;"></i>
+  <div class="container">
+    <div class="hero-card">
+ 
+      <!-- Left -->
+      <div class="hero-left">
+        <h2>Welcome to <span class="accent">HomeHaven</span></h2>
+        <p class="sub">Sign in or create an account to unlock personalized real estate experiences, save properties and more.</p>
+        <button class="btn-primary">
+          <i data-feather="user" style="width:16px;height:16px;"></i>
           Sign In
         </button>
-<!-- Original 4 perks — restyled with home's icon circles -->
-<div class="perks-grid">
-<div class="perk">
-<div class="perk-icon c-red">
-<i data-feather="heart" style="width:17px;height:17px;"></i>
-</div>
-<div>
-<strong>Save Your Favorites</strong>
-<span>Save properties you love and view them anytime.</span>
-</div>
-</div>
-<div class="perk">
-<div class="perk-icon c-green">
-<i data-feather="bell" style="width:17px;height:17px;"></i>
-</div>
-<div>
-<strong>Get Smart Alerts</strong>
-<span>Receive AI-powered alerts for new properties.</span>
-</div>
-</div>
-<div class="perk">
-<div class="perk-icon c-purple">
-<i data-feather="cpu" style="width:17px;height:17px;"></i>
-</div>
-<div>
-<strong>Personalized Experience</strong>
-<span>Get recommendations that match your needs.</span>
-</div>
-</div>
-<div class="perk">
-<div class="perk-icon c-blue">
-<i data-feather="shield" style="width:17px;height:17px;"></i>
-</div>
-<div>
-<strong>Secure &amp; Private</strong>
-<span>Your data is safe with enterprise-grade security.</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Right — house photo (same card image style as home property cards) -->
-<div class="hero-right">
-<div class="house-img-wrap">
-<img alt="Modern home" src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&amp;w=900&amp;auto=format&amp;fit=crop"/>
-</div>
-<!-- Floating AI card — same style as home's snapshot card -->
-<div class="ai-float-card">
-<div class="ai-float-icon">
-<i data-feather="home" style="width:20px;height:20px;color:#fff;"></i>
-</div>
-<div>
-<strong>Find Your Perfect Home with AI</strong>
-<span>Discover properties that match your lifestyle and budget.</span>
-</div>
-</div>
-</div>
-</div>
-</div>
+ 
+        <div class="perks-grid">
+          <div class="perk">
+            <div class="perk-icon c-red">
+              <i data-feather="heart" style="width:17px;height:17px;"></i>
+            </div>
+            <div>
+              <strong>Save Your Favorites</strong>
+              <span>Save properties you love and view them anytime.</span>
+            </div>
+          </div>
+          <div class="perk">
+            <div class="perk-icon c-green">
+              <i data-feather="bell" style="width:17px;height:17px;"></i>
+            </div>
+            <div>
+              <strong>Get Smart Alerts</strong>
+              <span>Receive AI-powered alerts for new properties.</span>
+            </div>
+          </div>
+          <div class="perk">
+            <div class="perk-icon c-purple">
+              <i data-feather="cpu" style="width:17px;height:17px;"></i>
+            </div>
+            <div>
+              <strong>Personalized Experience</strong>
+              <span>Get recommendations that match your needs.</span>
+            </div>
+          </div>
+          <div class="perk">
+            <div class="perk-icon c-blue">
+              <i data-feather="shield" style="width:17px;height:17px;"></i>
+            </div>
+            <div>
+              <strong>Secure &amp; Private</strong>
+              <span>Your data is safe with enterprise-grade security.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- Right -->
+      <div class="hero-right">
+        <div class="house-img-wrap">
+          <img alt="Modern home" src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=900&auto=format&fit=crop"/>
+        </div>
+        <div class="ai-float-card">
+          <div class="ai-float-icon">
+            <i data-feather="home" style="width:20px;height:20px;color:#fff;"></i>
+          </div>
+          <div>
+            <strong>Find Your Perfect Home with AI</strong>
+            <span>Discover properties that match your lifestyle and budget.</span>
+          </div>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
 </section>
+ 
 <!-- ══════════════════════════════════════════
-     EXPLORE AS GUEST — original content,
-     home page card styling
+     EXPLORE AS GUEST
 ══════════════════════════════════════════ -->
 <section class="guest-section">
-<div class="container">
-<div class="section-header">
-<div>
-<div class="section-title">Explore as a Guest</div>
-<p class="section-sub">You can explore properties, view market trends and more without an account.</p>
-</div>
-</div>
-<div class="guest-grid">
-<div class="guest-card">
-<div class="gc-icon blue">
-<i data-feather="home" style="width:22px;height:22px;"></i>
-</div>
-<h4>Browse Properties</h4>
-<p>Explore thousands of listings across Canada.</p>
-<a class="arrow-link" href="#">
-          Browse Now <i data-feather="arrow-right" style="width:14px;height:14px;"></i>
-</a>
-</div>
-<div class="guest-card">
-<div class="gc-icon green">
-<i data-feather="trending-up" style="width:22px;height:22px;"></i>
-</div>
-<h4>Market Trends</h4>
-<p>View real-time market insights and reports.</p>
-<a class="arrow-link" href="#">
-          View Trends <i data-feather="arrow-right" style="width:14px;height:14px;"></i>
-</a>
-</div>
-<div class="guest-card">
-<div class="gc-icon purple">
-<i data-feather="pocket" style="width:22px;height:22px;"></i>
-</div>
-<h4>Mortgage Calculator</h4>
-<p>Calculate your mortgage and affordability.</p>
-<a class="arrow-link" href="#">
-          Try Calculator <i data-feather="arrow-right" style="width:14px;height:14px;"></i>
-</a>
-</div>
-<div class="guest-card">
-<div class="gc-icon orange">
-<i data-feather="map-pin" style="width:22px;height:22px;"></i>
-</div>
-<h4>Popular Locations</h4>
-<p>Discover top neighbourhoods and communities.</p>
-<a class="arrow-link" href="#">
-          Explore Locations <i data-feather="arrow-right" style="width:14px;height:14px;"></i>
-</a>
-</div>
-</div>
-</div>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-title">Explore as a Guest</div>
+      <p class="section-sub">You can explore properties, view market trends and more without an account.</p>
+    </div>
+    <div class="guest-grid">
+      <div class="guest-card">
+        <div class="gc-icon blue">
+          <i data-feather="home" style="width:22px;height:22px;"></i>
+        </div>
+        <h4>Browse Properties</h4>
+        <p>Explore thousands of listings across Canada.</p>
+        <a class="arrow-link" href="#">Browse Now <i data-feather="arrow-right" style="width:14px;height:14px;"></i></a>
+      </div>
+      <div class="guest-card">
+        <div class="gc-icon green">
+          <i data-feather="trending-up" style="width:22px;height:22px;"></i>
+        </div>
+        <h4>Market Trends</h4>
+        <p>View real-time market insights and reports.</p>
+        <a class="arrow-link" href="#">View Trends <i data-feather="arrow-right" style="width:14px;height:14px;"></i></a>
+      </div>
+      <div class="guest-card">
+        <div class="gc-icon purple">
+          <i data-feather="pocket" style="width:22px;height:22px;"></i>
+        </div>
+        <h4>Mortgage Calculator</h4>
+        <p>Calculate your mortgage and affordability.</p>
+        <a class="arrow-link" href="#">Try Calculator <i data-feather="arrow-right" style="width:14px;height:14px;"></i></a>
+      </div>
+      <div class="guest-card">
+        <div class="gc-icon orange">
+          <i data-feather="map-pin" style="width:22px;height:22px;"></i>
+        </div>
+        <h4>Popular Locations</h4>
+        <p>Discover top neighbourhoods and communities.</p>
+        <a class="arrow-link" href="#">Explore Locations <i data-feather="arrow-right" style="width:14px;height:14px;"></i></a>
+      </div>
+    </div>
+  </div>
 </section>
+ 
 <!-- ══════════════════════════════════════════
-     CTA BANNER — original profile content,
-     restyled with home's dark navy gradient
+     CTA BANNER
 ══════════════════════════════════════════ -->
 <section class="cta-section">
-<div class="container">
-<div class="cta-banner">
-<!-- Mockup visual (from original profile) -->
-<div class="cta-mockup">
-<div class="cta-mockup-inner">
-<div class="mockup-search">
-<i data-feather="search" style="width:9px;height:9px;color:#94A3B8;"></i>
-<span>Search your dream home...</span>
-</div>
-<div class="mockup-prop-row">
-<div class="mockup-prop-img"></div>
-<div>
-<div class="mpi-tag">Toronto, ON</div>
-<div class="mpi-name">Modern Villa</div>
-<div class="mpi-price">$1.2M</div>
-</div>
-</div>
-<div class="mockup-score-row">
-<div class="score-ring">
-<span class="score-pct">95%</span>
-</div>
-<div class="score-lbl">
-<strong>AI Match Score</strong>
+  <div class="container">
+    <div class="cta-banner">
+ 
+      <!-- Mockup -->
+      <div class="cta-mockup">
+        <div class="cta-mockup-inner">
+          <div class="mockup-search">
+            <i data-feather="search" style="width:9px;height:9px;color:#94A3B8;"></i>
+            <span>Search your dream home...</span>
+          </div>
+          <div class="mockup-prop-row">
+            <div class="mockup-prop-img"></div>
+            <div>
+              <div class="mpi-tag">Toronto, ON</div>
+              <div class="mpi-name">Modern Villa</div>
+              <div class="mpi-price">$1.2M</div>
+            </div>
+          </div>
+          <div class="mockup-score-row">
+            <div class="score-ring">
+              <span class="score-pct">95%</span>
+            </div>
+            <div class="score-lbl">
+              <strong>AI Match Score</strong>
               Perfect for you!
             </div>
-</div>
-</div>
-</div>
-<!-- Original CTA text -->
-<div class="cta-text">
-<h3>Create an Account Today</h3>
-<p class="cta-sub">Join thousands of smart buyers and sellers using AI to make better real estate decisions.</p>
-<div class="cta-checks">
-<div class="cta-check">
-<div class="check-dot">
-<i data-feather="check" style="width:10px;height:10px;"></i>
-</div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- Text -->
+      <div class="cta-text">
+        <h3>Create an Account Today</h3>
+        <p class="cta-sub">Join thousands of smart buyers and sellers using AI to make better real estate decisions.</p>
+        <div class="cta-checks">
+          <div class="cta-check">
+            <div class="check-dot"><i data-feather="check" style="width:10px;height:10px;"></i></div>
             Save unlimited properties
           </div>
-<div class="cta-check">
-<div class="check-dot">
-<i data-feather="check" style="width:10px;height:10px;"></i>
-</div>
+          <div class="cta-check">
+            <div class="check-dot"><i data-feather="check" style="width:10px;height:10px;"></i></div>
             Track property value changes
           </div>
-<div class="cta-check">
-<div class="check-dot">
-<i data-feather="check" style="width:10px;height:10px;"></i>
-</div>
+          <div class="cta-check">
+            <div class="check-dot"><i data-feather="check" style="width:10px;height:10px;"></i></div>
             Get AI recommendations
           </div>
-<div class="cta-check">
-<div class="check-dot">
-<i data-feather="check" style="width:10px;height:10px;"></i>
-</div>
+          <div class="cta-check">
+            <div class="check-dot"><i data-feather="check" style="width:10px;height:10px;"></i></div>
             Manage alerts and settings
           </div>
-</div>
-</div>
-<!-- Original CTA action -->
-<div class="cta-action">
-<button class="btn-signup">Sign Up Now</button>
-<span class="cta-note">Free and easy to get started</span>
-</div>
-</div>
-</div>
+        </div>
+        <div class="cta-action">
+          <button class="btn-signup">Sign Up Now</button>
+          <span class="cta-note">Free and easy to get started</span>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
 </section>
+ 
 <!-- ══════════════════════════════════════════
-     FOOTER — identical to home page
+     FOOTER
 ══════════════════════════════════════════ -->
 <footer>
-<div class="container">
-<div class="footer-grid">
-<div>
-<div class="footer-logo-row">
-<div class="footer-logo-mark">
-<i data-feather="home" style="width:16px;height:16px;color:#fff;"></i>
-</div>
-<div>
-<div class="footer-brand-name">HomeHaven</div>
-<div class="footer-brand-tag">AI Native Real Estate Platform</div>
-</div>
-</div>
-<p class="footer-desc">Using AI and data to help you find, buy, and sell properties with confidence.</p>
-<div class="footer-socials">
-<a href="#"><i data-feather="facebook" style="width:17px;height:17px;"></i></a>
-<a href="#"><i data-feather="instagram" style="width:17px;height:17px;"></i></a>
-<a href="#"><i data-feather="linkedin" style="width:17px;height:17px;"></i></a>
-<a href="#"><i data-feather="twitter" style="width:17px;height:17px;"></i></a>
-</div>
-</div>
-<div class="footer-col">
-<h5>Company</h5>
-<a class="footer-link" href="#">About Us</a>
-<a class="footer-link" href="#">Careers</a>
-<a class="footer-link" href="#">Blog</a>
-<a class="footer-link" href="#">Press</a>
-<a class="footer-link" href="#">Contact</a>
-</div>
-<div class="footer-col">
-<h5>Resources</h5>
-<a class="footer-link" href="#">Market Trends</a>
-<a class="footer-link" href="#">Buying Guide</a>
-<a class="footer-link" href="#">Selling Guide</a>
-<a class="footer-link" href="#">Mortgage Calculator</a>
-<a class="footer-link" href="#">Help Center</a>
-</div>
-<div class="footer-col">
-<h5>Support</h5>
-<a class="footer-link" href="#">FAQs</a>
-<a class="footer-link" href="#">Privacy Policy</a>
-<a class="footer-link" href="#">Terms &amp; Conditions</a>
-<a class="footer-link" href="#">Accessibility</a>
-</div>
-<div class="footer-col">
-<h5>Download Our App</h5>
-<div class="app-badge">
-<i data-feather="smartphone" style="width:15px;height:15px;"></i>
-<div>
-<div style="font-size:9px;opacity:.7;">Download on the</div>
-<div style="font-size:12px;font-weight:700;">App Store</div>
-</div>
-</div>
-<div class="app-badge">
-<i data-feather="play" style="width:15px;height:15px;"></i>
-<div>
-<div style="font-size:9px;opacity:.7;">Get it on</div>
-<div style="font-size:12px;font-weight:700;">Google Play</div>
-</div>
-</div>
-</div>
-</div>
-<div class="footer-bottom">
-      © 2025 HomeHaven. All Rights Reserved.
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo-row">
+          <div class="footer-logo-mark">
+            <i data-feather="home" style="width:16px;height:16px;color:#fff;"></i>
+          </div>
+          <div>
+            <div class="footer-brand-name">HomeHaven</div>
+            <div class="footer-brand-tag">AI Native Real Estate Platform</div>
+          </div>
+        </div>
+        <p class="footer-desc">Using AI and data to help you find, buy, and sell properties with confidence.</p>
+        <div class="footer-socials">
+          <a href="#"><i data-feather="facebook" style="width:17px;height:17px;"></i></a>
+          <a href="#"><i data-feather="instagram" style="width:17px;height:17px;"></i></a>
+          <a href="#"><i data-feather="linkedin" style="width:17px;height:17px;"></i></a>
+          <a href="#"><i data-feather="twitter" style="width:17px;height:17px;"></i></a>
+        </div>
+      </div>
+ 
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a class="footer-link" href="#">About Us</a>
+        <a class="footer-link" href="#">Careers</a>
+        <a class="footer-link" href="#">Blog</a>
+        <a class="footer-link" href="#">Press</a>
+        <a class="footer-link" href="#">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h5>Resources</h5>
+        <a class="footer-link" href="#">Market Trends</a>
+        <a class="footer-link" href="#">Buying Guide</a>
+        <a class="footer-link" href="#">Selling Guide</a>
+        <a class="footer-link" href="#">Mortgage Calculator</a>
+        <a class="footer-link" href="#">Help Center</a>
+      </div>
+      <div class="footer-col">
+        <h5>Support</h5>
+        <a class="footer-link" href="#">FAQs</a>
+        <a class="footer-link" href="#">Privacy Policy</a>
+        <a class="footer-link" href="#">Terms &amp; Conditions</a>
+        <a class="footer-link" href="#">Accessibility</a>
+      </div>
+      <div class="footer-col">
+        <h5>Download Our App</h5>
+        <div class="app-badge">
+          <i data-feather="smartphone" style="width:15px;height:15px;"></i>
+          <div>
+            <div style="font-size:9px;opacity:.7;">Download on the</div>
+            <div style="font-size:12px;font-weight:700;">App Store</div>
+          </div>
+        </div>
+        <div class="app-badge">
+          <i data-feather="play" style="width:15px;height:15px;"></i>
+          <div>
+            <div style="font-size:9px;opacity:.7;">Get it on</div>
+            <div style="font-size:12px;font-weight:700;">Google Play</div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+ 
+    <div class="footer-bottom">
+      © 2026 HomeHaven. All Rights Reserved.
+    </div>
+  </div>
 </footer>
+ 
 <script>feather.replace();</script>
 </body>
 </html>
+ 
+
+
+
