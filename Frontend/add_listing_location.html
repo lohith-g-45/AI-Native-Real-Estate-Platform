@@ -126,16 +126,6 @@
             <input type="text" id="country" placeholder="Canada" value="Canada">
           </div>
 
-          <div class="wiz-row">
-            <div class="wiz-group">
-              <label>Latitude <span class="hint">(from map)</span></label>
-              <input type="number" step="any" id="latitude" placeholder="43.7093">
-            </div>
-            <div class="wiz-group">
-              <label>Longitude <span class="hint">(from map)</span></label>
-              <input type="number" step="any" id="longitude" placeholder="-79.3635">
-            </div>
-          </div>
 
           <div class="wiz-verified" id="locVerified">
             <i data-feather="check-circle"></i>
@@ -146,52 +136,7 @@
           </div>
         </div>
 
-        <!-- RIGHT: map + amenities -->
-        <div class="wiz-split-right">
-          <div class="wiz-map">
-            <div class="wiz-map-road h1"></div>
-            <div class="wiz-map-road h2"></div>
-            <div class="wiz-map-road v1"></div>
-            <div class="wiz-map-road v2"></div>
-            <div class="wiz-map-pin">
-              <div class="wiz-map-pin-dot"></div>
-              <div class="wiz-map-pin-pulse"></div>
-            </div>
-            <div class="wiz-map-label" id="mapLabel">Property Location</div>
-            <div class="wiz-map-zoom">
-              <button type="button">+</button>
-              <button type="button">−</button>
-            </div>
-          </div>
 
-          <div class="wiz-amenities-hd">
-            <h4>Nearby Amenities</h4>
-            <a>View All</a>
-          </div>
-          <div class="wiz-amenities-grid" id="amenitiesGrid">
-            <div class="wiz-amenity">
-              <div class="wiz-amenity-icon" style="background:var(--blue-50);"><i data-feather="book-open" style="width:15px;height:15px;color:var(--blue);"></i></div>
-              <div class="wiz-amenity-num" id="amSchools">–</div>
-              <div class="wiz-amenity-lbl">Schools</div>
-            </div>
-            <div class="wiz-amenity">
-              <div class="wiz-amenity-icon" style="background:var(--green-50);"><i data-feather="trees" style="width:15px;height:15px;color:var(--green);"></i></div>
-              <div class="wiz-amenity-num" id="amParks">–</div>
-              <div class="wiz-amenity-lbl">Parks</div>
-            </div>
-            <div class="wiz-amenity">
-              <div class="wiz-amenity-icon" style="background:var(--purple-50);"><i data-feather="navigation" style="width:15px;height:15px;color:var(--purple);"></i></div>
-              <div class="wiz-amenity-num" id="amTransit">–</div>
-              <div class="wiz-amenity-lbl">Transit</div>
-            </div>
-            <div class="wiz-amenity">
-              <div class="wiz-amenity-icon" style="background:var(--orange-50);"><i data-feather="coffee" style="width:15px;height:15px;color:var(--orange);"></i></div>
-              <div class="wiz-amenity-num" id="amRestaurants">–</div>
-              <div class="wiz-amenity-lbl">Restaurants</div>
-            </div>
-          </div>
-          <div class="wiz-amenity-empty">Amenities are generated automatically once your location is saved.</div>
-        </div>
 
       </div>
     </div>

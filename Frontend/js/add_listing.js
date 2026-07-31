@@ -300,50 +300,13 @@ function initStep3() {
     city: document.getElementById('city'),
     province: document.getElementById('province'),
     zip_code: document.getElementById('zip_code'),
-    country: document.getElementById('country'),
-    latitude: document.getElementById('latitude'),
-    longitude: document.getElementById('longitude'),
+    country: document.getElementById('country')
   };
-  const fieldMap = { address: 'street_address', city: 'city', province: 'province', zip_code: 'postal_code', country: 'country', latitude: 'latitude', longitude: 'longitude' };
+  const fieldMap = { address: 'street_address', city: 'city', province: 'province', zip_code: 'postal_code', country: 'country' };
 
   Object.keys(els).forEach((k) => {
     const backendKey = fieldMap[k];
     if (loc[backendKey] !== undefined && loc[backendKey] !== null && loc[backendKey] !== '') els[k].value = loc[backendKey];
-  });
-
-  function updateMapLabel() {
-    const lbl = document.getElementById('mapLabel');
-    if (lbl) lbl.textContent = els.city.value.trim() || 'Property Location';
-  }
-  els.city.addEventListener('input', updateMapLabel);
-  updateMapLabel();
-
-  async function geocodeAddress() {
-    const address = els.address.value.trim();
-    const city = els.city.value.trim();
-    const province = els.province.value.trim();
-    const country = els.country.value.trim();
-    
-    if (!address || !city || !country) return;
-    
-    const query = `${address}, ${city}, ${province}, ${country}`;
-    const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=1`;
-    
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      if (data && data.features && data.features.length > 0) {
-        const coords = data.features[0].geometry.coordinates; // [lon, lat]
-        els.latitude.value = parseFloat(coords[1]).toFixed(6);
-        els.longitude.value = parseFloat(coords[0]).toFixed(6);
-      }
-    } catch (e) {
-      console.warn("Geocoding failed", e);
-    }
-  }
-
-  ['address', 'city', 'province', 'country'].forEach(k => {
-    els[k].addEventListener('blur', geocodeAddress);
   });
 
   function showVerified() {
@@ -353,7 +316,6 @@ function initStep3() {
 
   if (loc.verified) {
     showVerified();
-    loadAmenities(propertyId);
   }
 
   const backBtn = document.getElementById('backBtn');
@@ -367,22 +329,6 @@ function initStep3() {
     btn.disabled = true;
     btn.innerHTML = 'Verifying…';
 
-    if (!els.latitude.value || !els.longitude.value) {
-      try {
-        await Promise.race([
-          geocodeAddress(),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000))
-        ]);
-      } catch(e) {
-        console.warn("Geocode timeout", e);
-      }
-    }
-
-    const latVal = els.latitude.value;
-    const lngVal = els.longitude.value;
-    const lat = latVal ? parseFloat(latVal) : 0;
-    const lng = lngVal ? parseFloat(lngVal) : 0;
-    
     const errors = [];
     if (!els.address.value.trim()) errors.push('Address is required.');
     if (!els.city.value.trim()) errors.push('City is required.');
@@ -390,8 +336,6 @@ function initStep3() {
     if (!els.zip_code.value.trim()) errors.push('Postal code is required.');
     if (!els.country.value.trim()) errors.push('Country is required.');
     
-    if (latVal && (isNaN(lat) || lat < -90 || lat > 90)) errors.push('Latitude must be between -90 and 90.');
-    if (lngVal && (isNaN(lng) || lng < -180 || lng > 180)) errors.push('Longitude must be between -180 and 180.');
     if (errors.length) { 
       errorDiv.textContent = errors.join(' '); 
       btn.disabled = false;
@@ -406,15 +350,14 @@ function initStep3() {
       province: els.province.value.trim(),
       postal_code: els.zip_code.value.trim(),
       country: els.country.value.trim(),
-      latitude: lat,
-      longitude: lng,
+      latitude: 0,
+      longitude: 0,
     };
 
     try {
       await apiRequest(`/${propertyId}/location`, 'POST', payload);
       setWizardState({ location: { ...payload, verified: true }, currentStep: 4 });
       showVerified();
-      loadAmenities(propertyId);
       setTimeout(() => { window.location.href = 'add_listing_features.html'; }, 900);
     } catch (err) {
       errorDiv.textContent = err.message;
