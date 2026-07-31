@@ -555,27 +555,27 @@
 
     <!-- Profile Card -->
     <div class="profile-card" id="section-profile-card">
-      <div class="profile-avatar">LG</div>
+      <div class="profile-avatar" id="display-avatar">LG</div>
       <div class="profile-info">
-        <div class="profile-name">Lohith G</div>
+        <div class="profile-name" id="display-name">Loading...</div>
         <div class="profile-meta">
           <div class="profile-meta-item">
             <i data-feather="mail" style="width:13px;height:13px;"></i>
-            lohit.g@email.com
+            <span id="display-email">loading@example.com</span>
           </div>
           <div class="profile-meta-item">
             <i data-feather="phone" style="width:13px;height:13px;"></i>
-            +1 (416) 123-4567
+            <span id="display-phone">Not set</span>
           </div>
         </div>
         <div class="profile-meta">
           <div class="profile-meta-item">
             <i data-feather="map-pin" style="width:13px;height:13px;"></i>
-            Toronto, ON, Canada
+            <span id="display-location">Not set</span>
           </div>
           <div class="profile-meta-item">
             <i data-feather="calendar" style="width:13px;height:13px;"></i>
-            Member since April 2026
+            <span id="display-member-since">Loading...</span>
           </div>
         </div>
       </div>
@@ -951,6 +951,41 @@
     const el = document.getElementById(id);
     if (el) observer.observe(el);
   });
+
+  /* ── Load Profile Data ── */
+  async function loadProfileData() {
+    const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+    if (!token) return;
+
+    try {
+      const res = await fetch('http://localhost:3000/v1/auth/profile', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const email = data.email || '';
+        const name = data.fullName || email.split('@')[0] || 'User';
+
+        document.getElementById('display-name').textContent = name;
+        document.getElementById('display-email').textContent = email;
+        document.getElementById('display-phone').textContent = data.phoneNumber || 'Not set';
+        document.getElementById('display-location').textContent = data.location || 'Not set';
+
+        if (name) {
+          const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+          document.getElementById('display-avatar').textContent = initials;
+        }
+
+        if (data.createdAt) {
+          const d = new Date(data.createdAt);
+          document.getElementById('display-member-since').textContent = 'Member since ' + d.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+        }
+      }
+    } catch (err) {
+      console.error('Failed to load profile data', err);
+    }
+  }
+  loadProfileData();
 </script>
 </body>
 </html>

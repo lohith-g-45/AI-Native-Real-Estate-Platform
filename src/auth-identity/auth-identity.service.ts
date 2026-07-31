@@ -606,4 +606,21 @@ export class AuthIdentityService {
     const { password, ...rest } = user;
     return rest;
   }
+
+  async updateProfile(userId: string, updateDto: any) {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    if (updateDto.fullName !== undefined) user.fullName = updateDto.fullName;
+    if (updateDto.phoneNumber !== undefined) user.phoneNumber = updateDto.phoneNumber;
+    if (updateDto.dob !== undefined) user.dob = updateDto.dob;
+    if (updateDto.location !== undefined) user.location = updateDto.location;
+    if (updateDto.bio !== undefined) user.bio = updateDto.bio;
+
+    await this.usersRepository.save(user);
+
+    const { password, ...rest } = user;
+    return rest;
+  }
 }

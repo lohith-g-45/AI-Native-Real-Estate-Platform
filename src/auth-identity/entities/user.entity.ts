@@ -32,6 +32,15 @@ export class User {
   @Column({ nullable: true })
   photoUrl?: string;
 
+  @Column({ nullable: true })
+  dob?: string;
+
+  @Column({ nullable: true })
+  location?: string;
+
+  @Column({ nullable: true })
+  bio?: string;
+
   @Column({ default: false })
   emailVerified: boolean;
 

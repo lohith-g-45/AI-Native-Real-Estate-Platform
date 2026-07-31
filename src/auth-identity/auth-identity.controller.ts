@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, Res, UseGuards, BadRequestException } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Request, Res, UseGuards, BadRequestException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
@@ -13,6 +13,7 @@ import { VerifyPhoneDto } from './dto/verify-phone.dto';
 import { GrantConsentDto } from './dto/grant-consent.dto';
 import { WithdrawConsentDto } from './dto/withdraw-consent.dto';
 import { VerifyLoginOtpDto } from './dto/verify-login-otp.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { FacebookAuthGuard } from './guards/facebook-auth.guard';
@@ -155,6 +156,15 @@ export class AuthIdentityController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   getProfile(@Request() req: any) {
     return this.authService.getProfile(req.user.sub);
+  }
+
+  @Put('profile')
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Update current user profile' })
+  @ApiResponse({ status: 200, description: 'Profile updated successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  updateProfile(@Request() req: any, @Body() dto: UpdateProfileDto) {
+    return this.authService.updateProfile(req.user.sub, dto);
   }
 
   @UseGuards(RolesGuard)

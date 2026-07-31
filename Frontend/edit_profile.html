@@ -393,8 +393,52 @@
 <script>
   feather.replace();
 
+  const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+  if (!token) {
+    window.location.href = 'login.html';
+  }
+
+  // Fetch current profile
+  async function loadProfile() {
+    try {
+      const res = await fetch('http://localhost:3000/v1/auth/profile', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        document.getElementById('full-name').value = data.fullName || '';
+        document.getElementById('email').value = data.email || '';
+        document.getElementById('phone').value = data.phoneNumber || '';
+        document.getElementById('dob').value = data.dob || '';
+        document.getElementById('location').value = data.location || '';
+        document.getElementById('bio').value = data.bio || '';
+        
+        // Update avatar section
+        document.querySelector('.avatar-name').textContent = data.fullName || data.email.split('@')[0];
+        document.querySelector('.avatar-email').textContent = data.email;
+        if (data.fullName) {
+          const initials = data.fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+          document.querySelector('.avatar-circle').textContent = initials;
+        }
+
+        if (data.createdAt) {
+          const d = new Date(data.createdAt);
+          document.querySelector('.avatar-meta-val').textContent = d.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+        }
+
+        document.getElementById('char-count').textContent = document.getElementById('bio').value.length;
+      } else if (res.status === 401) {
+        window.location.href = 'login.html';
+      }
+    } catch (err) {
+      console.error('Failed to load profile', err);
+    }
+  }
+
+  loadProfile();
+
   /* ── Save form ── */
-  document.getElementById('edit-form').addEventListener('submit', function(e) {
+  document.getElementById('edit-form').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const btn = document.getElementById('save-btn');
@@ -402,22 +446,49 @@
     btn.innerHTML = '<i data-feather="loader" style="width:15px;height:15px;"></i> Saving…';
     feather.replace();
 
-    // Simulate save delay
-    setTimeout(() => {
+    const updateData = {
+      fullName: document.getElementById('full-name').value,
+      phoneNumber: document.getElementById('phone').value,
+      dob: document.getElementById('dob').value,
+      location: document.getElementById('location').value,
+      bio: document.getElementById('bio').value
+    };
+
+    try {
+      const res = await fetch('http://localhost:3000/v1/auth/profile', {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
+      });
+
       btn.disabled = false;
       btn.innerHTML = '<i data-feather="save" style="width:15px;height:15px;"></i> Save Changes';
       feather.replace();
 
-      // Show toast
-      const toast = document.getElementById('toast');
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
-    }, 900);
+      if (res.ok) {
+        // Show toast
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+      } else {
+        alert('Failed to update profile.');
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.innerHTML = '<i data-feather="save" style="width:15px;height:15px;"></i> Save Changes';
+      feather.replace();
+      alert('Error saving profile');
+    }
   });
 
   /* ── Live char counter init ── */
   const bioEl = document.getElementById('bio');
-  document.getElementById('char-count').textContent = bioEl.value.length;
+  bioEl.addEventListener('input', function() {
+    document.getElementById('char-count').textContent = this.value.length;
+  });
 </script>
 </body>
 </html>
