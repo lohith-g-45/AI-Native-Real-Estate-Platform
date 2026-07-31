@@ -9,16 +9,30 @@ export class MailService {
 
   constructor(private readonly configService: ConfigService) {}
 
-  private createTransporter() {
+  private async createTransporter() {
     const host = this.configService.get<string>('SMTP_HOST');
     const port = Number(this.configService.get<string>('SMTP_PORT', '587'));
     const secure = String(this.configService.get<string>('SMTP_SECURE', 'false')).toLowerCase() === 'true';
     const user = this.configService.get<string>('SMTP_USER');
     const pass = this.configService.get<string>('SMTP_PASS');
 
-    if (process.env.NODE_ENV === 'test' || !host || !port || !user || !pass) {
-      this.logger.warn('SMTP is not fully configured or in test mode; emails will be logged instead of sent.');
+    if (process.env.NODE_ENV === 'test') {
+      this.logger.warn('Test mode; emails will be logged instead of sent.');
       return null;
+    }
+
+    if (!host || !port || !user || !pass) {
+      this.logger.warn('SMTP is not fully configured. Creating ethereal test account...');
+      const testAccount = await nodemailer.createTestAccount();
+      return nodemailer.createTransport({
+        host: 'smtp.ethereal.email',
+        port: 587,
+        secure: false,
+        auth: {
+          user: testAccount.user,
+          pass: testAccount.pass,
+        },
+      });
     }
 
     return nodemailer.createTransport({
@@ -35,9 +49,9 @@ export class MailService {
     });
   }
 
-  private getTransporter() {
+  private async getTransporter() {
     if (this.transporter === null) {
-      this.transporter = this.createTransporter();
+      this.transporter = await this.createTransporter();
     }
     return this.transporter;
   }
@@ -48,7 +62,7 @@ export class MailService {
     text: string;
     html?: string;
   }): Promise<SentMessageInfo | { messageId: string; previewUrl: string | null }> {
-    const transporter = this.getTransporter();
+    const transporter = await this.getTransporter();
     const from = this.configService.get<string>('SMTP_FROM', 'no-reply@example.com');
 
     if (!transporter) {
