@@ -33,9 +33,11 @@ function renderListings(groupedListings) {
   
   // Flatten all listings into an array to render them
   let allListings = [];
-  if (groupedListings.draft) allListings = allListings.concat(groupedListings.draft);
-  if (groupedListings.under_review) allListings = allListings.concat(groupedListings.under_review);
-  if (groupedListings.published) allListings = allListings.concat(groupedListings.published);
+  Object.values(groupedListings).forEach(group => {
+    if (Array.isArray(group)) {
+      allListings = allListings.concat(group);
+    }
+  });
   
   if (allListings.length === 0) {
     container.innerHTML = `
@@ -61,7 +63,7 @@ function renderListings(groupedListings) {
       statusIcon = 'check-circle';
       statusText = 'Active';
       statusDesc = 'Your listing is live and visible to potential buyers.';
-    } else if (listing.status === 'under_review') {
+    } else if (listing.status === 'submitted' || listing.status === 'verification_pending' || listing.status === 'under_review') {
       statusBg = '#f59e0b';
       statusColor = '#fff';
       statusIcon = 'search';
