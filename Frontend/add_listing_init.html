@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Add New Listing – Step 1 – HomeHaven</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/add_listing.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+</head>
+<body>
+
+<!-- ══════════ HEADER (identical to sell.html) ══════════ -->
+<header>
+  <div class="nav-wrap">
+    <a href="index.html" class="logo" style="text-decoration:none; color:inherit;">
+      <div class="logo-box">
+        <i data-feather="home" style="width:20px;height:20px;color:#fff;"></i>
+      </div>
+      <div>
+        <div class="logo-name">HomeHaven</div>
+        <div class="logo-sub">AI Native Real Estate Platform</div>
+      </div>
+    </a>
+
+    <nav class="top-nav">
+      <a href="index.html">Home</a>
+      <a href="buy.html">Buy</a>
+      <a href="sell.html" class="active">Sell</a>
+      <a href="#">AI Search</a>
+      <a href="#">Mortgage</a>
+      <a href="#">Market Trends</a>
+    </nav>
+
+    <div class="nav-right">
+      <div class="nav-saved">
+        <i data-feather="heart" style="width:17px;height:17px;"></i> Saved
+      </div>
+      <button class="nav-icon-btn">
+        <div class="notif-dot"></div>
+        <i data-feather="bell" style="width:19px;height:19px;"></i>
+      </button>
+      <button class="nav-icon-btn">
+        <i data-feather="message-square" style="width:19px;height:19px;"></i>
+      </button>
+      <a class="avatar-btn" href="profile.html">
+        <i data-feather="user" style="width:17px;height:17px;color:#475569;"></i>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════ BODY LAYOUT ══════════ -->
+<div class="layout">
+
+  <!-- ══ SIDEBAR (identical to sell.html) ══ -->
+  <aside class="sidebar">
+    <a href="sell.html" class="sb-item" style="margin-bottom:12px; margin-top:8px;"><i data-feather="grid" style="width:18px;height:18px; margin-right:8px;"></i> Seller Dashboard</a>
+
+    <div class="sb-item"><i data-feather="home" style="width:18px;height:18px; margin-right:8px;"></i> My Listing <span class="sb-badge">1</span></div>
+    <a href="add_listing.html" class="sb-item active"><i data-feather="plus-circle" style="width:18px;height:18px; margin-right:8px;"></i> Add New Listing</a>
+
+    <div class="sb-item" style="margin-top:10px;"><i data-feather="users" style="width:18px;height:18px; margin-right:8px;"></i> Leads &amp; Inquiries <span class="sb-badge">3</span></div>
+    <div class="sb-item"><i data-feather="calendar" style="width:18px;height:18px; margin-right:8px;"></i> Appointments</div>
+    <div class="sb-item"><i data-feather="file-text" style="width:18px;height:18px; margin-right:8px;"></i> Documents</div>
+    <div class="sb-item"><i data-feather="message-square" style="width:18px;height:18px; margin-right:8px;"></i> Messages <span class="sb-badge">2</span></div>
+
+    <div class="sb-item" style="margin-top:10px;"><i data-feather="zap" style="width:18px;height:18px; margin-right:8px;"></i> AI Pricing Advisor</div>
+    <div class="sb-item"><i data-feather="settings" style="width:18px;height:18px; margin-right:8px;"></i> Settings</div>
+
+    <div class="sb-spacer"></div>
+
+    <!-- Help promo box -->
+    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:18px; text-align:center; margin-top:16px;">
+      <div style="font-size:13.5px; font-weight:800; color:#0f172a; margin-bottom:6px;">Need help selling your home?</div>
+      <div style="font-size:12px; color:#64748b; margin-bottom:14px; line-height:1.5;">Get expert guidance and reach more buyers.</div>
+      <button style="display:flex; align-items:center; justify-content:center; gap:6px; background:#fff; border:1px solid #e2e8f0; color:var(--blue); font-size:12.5px; font-weight:700; border-radius:8px; padding:10px; cursor:pointer; width:100%; box-shadow:var(--shadow-sm); margin-bottom: 12px; font-family:'Inter', sans-serif;">
+        <i data-feather="zap" style="width:14px;height:14px;"></i> Ask HomeHaven AI
+      </button>
+      <img src="https://cdn-icons-png.flaticon.com/512/4712/4712010.png" style="width:90px; margin:0 auto; display:block;" alt="AI Robot">
+    </div>
+  </aside>
+
+  <!-- ══ MAIN CONTENT — Step 1: Initialize ══ -->
+  <main class="wiz-main">
+
+    <div class="wiz-head">
+      <h1>Create New Listing</h1>
+      <p>Let's get your property in front of thousands of buyers.</p>
+    </div>
+
+    <div class="wiz-steps" id="wizSteps"></div>
+
+    <div class="wiz-card">
+      <div class="wiz-hero">
+        <svg class="wiz-hero-illustration" viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="210" cy="235" rx="160" ry="16" fill="#eef2f7"/>
+          <rect x="70" y="110" width="280" height="130" rx="10" fill="#dbeafe"/>
+          <rect x="70" y="110" width="280" height="130" rx="10" fill="url(#g1)" opacity="0.5"/>
+          <polygon points="60,120 210,35 360,120" fill="#2563eb"/>
+          <rect x="180" y="150" width="60" height="90" rx="4" fill="#0a122d"/>
+          <rect x="192" y="168" width="14" height="14" rx="2" fill="#4f8cff"/>
+          <rect x="214" y="168" width="14" height="14" rx="2" fill="#4f8cff"/>
+          <rect x="95" y="150" width="46" height="46" rx="4" fill="#ffffff" stroke="#93c5fd" stroke-width="3"/>
+          <rect x="279" y="150" width="46" height="46" rx="4" fill="#ffffff" stroke="#93c5fd" stroke-width="3"/>
+          <rect x="95" y="210" width="46" height="30" rx="4" fill="#ffffff" stroke="#93c5fd" stroke-width="3"/>
+          <rect x="279" y="210" width="46" height="30" rx="4" fill="#ffffff" stroke="#93c5fd" stroke-width="3"/>
+          <circle cx="330" cy="55" r="22" fill="#fde68a"/>
+          <path d="M20 145 Q40 95 65 145" stroke="#16a34a" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M355 165 Q375 115 400 165" stroke="#16a34a" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+        </svg>
+
+        <h2>Let's get started</h2>
+        <p>We'll guide you through creating a professional listing that attracts more buyers — it only takes a few minutes.</p>
+
+        <button class="wiz-btn wiz-btn-primary wiz-btn-lg" id="initBtn">
+          Initialize Listing <i data-feather="arrow-right" style="width:18px;height:18px;"></i>
+        </button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ══════════ FOOTER (identical to sell.html) ══════════ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="f-logo">
+        <div class="f-logo-box"><i data-feather="home" style="width:15px;height:15px;color:#fff;"></i></div>
+        <div>
+          <div style="font-weight:800;font-size:15px;">HomeHaven</div>
+          <div style="font-size:10.5px;color:var(--muted);">AI Native Real Estate Platform</div>
+        </div>
+      </div>
+      <p class="f-tagline">Using AI and data to help you find, buy, and sell properties with confidence.</p>
+      <div class="f-socials">
+        <a href="#"><i data-feather="facebook" style="width:16px;height:16px;"></i></a>
+        <a href="#"><i data-feather="instagram" style="width:16px;height:16px;"></i></a>
+        <a href="#"><i data-feather="linkedin" style="width:16px;height:16px;"></i></a>
+        <a href="#"><i data-feather="twitter" style="width:16px;height:16px;"></i></a>
+      </div>
+    </div>
+    <div>
+      <div class="f-col-title">Support</div>
+      <a class="f-link" href="#">Contact</a>
+      <a class="f-link" href="#">FAQs</a>
+      <a class="f-link" href="#">Privacy Policy</a>
+      <a class="f-link" href="#">Terms &amp; Conditions</a>
+    </div>
+    <div>
+      <div class="f-col-title">Company</div>
+      <a class="f-link" href="#">About Us</a>
+      <a class="f-link" href="#">Careers</a>
+      <a class="f-link" href="#">Blog</a>
+      <a class="f-link" href="#">Press</a>
+    </div>
+    <div>
+      <div class="f-col-title">Resources</div>
+      <a class="f-link" href="#">Market Trends</a>
+      <a class="f-link" href="#">Buying Guide</a>
+      <a class="f-link" href="#">Selling Guide</a>
+      <a class="f-link" href="#">Mortgage Calculator</a>
+    </div>
+    <div>
+      <div class="f-col-title">Download Our App</div>
+      <div style="background:#111827;color:#fff;border-radius:8px;padding:8px 14px;font-size:12px;display:flex;align-items:center;gap:8px;margin-bottom:10px;cursor:pointer;">
+        <i data-feather="smartphone" style="width:15px;height:15px;"></i>
+        <div><div style="font-size:9px;opacity:.7;">Download on the</div><div style="font-size:12px;font-weight:700;">App Store</div></div>
+      </div>
+      <div style="background:#111827;color:#fff;border-radius:8px;padding:8px 14px;font-size:12px;display:flex;align-items:center;gap:8px;cursor:pointer;">
+        <i data-feather="play" style="width:15px;height:15px;"></i>
+        <div><div style="font-size:9px;opacity:.7;">Get it on</div><div style="font-size:12px;font-weight:700;">Google Play</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="f-bottom">© 2026 HomeHaven. All Rights Reserved.</div>
+</footer>
+
+<script src="js/auth-guard.js"></script>
+<script src="js/add_listing.js"></script>
+<script>
+  initStep1();
+  feather.replace();
+</script>
+</body>
+</html>
