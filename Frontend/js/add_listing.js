@@ -362,9 +362,20 @@ function initStep3() {
   document.getElementById('nextBtn').addEventListener('click', async () => {
     const errorDiv = document.getElementById('step3Error');
     errorDiv.textContent = '';
+    
+    const btn = document.getElementById('nextBtn');
+    btn.disabled = true;
+    btn.innerHTML = 'Verifying…';
 
     if (!els.latitude.value || !els.longitude.value) {
-      await geocodeAddress();
+      try {
+        await Promise.race([
+          geocodeAddress(),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000))
+        ]);
+      } catch(e) {
+        console.warn("Geocode timeout", e);
+      }
     }
 
     const latVal = els.latitude.value;
@@ -381,7 +392,13 @@ function initStep3() {
     
     if (latVal && (isNaN(lat) || lat < -90 || lat > 90)) errors.push('Latitude must be between -90 and 90.');
     if (lngVal && (isNaN(lng) || lng < -180 || lng > 180)) errors.push('Longitude must be between -180 and 180.');
-    if (errors.length) { errorDiv.textContent = errors.join(' '); return; }
+    if (errors.length) { 
+      errorDiv.textContent = errors.join(' '); 
+      btn.disabled = false;
+      btn.innerHTML = 'Next <i data-feather="arrow-right" style="width:16px;height:16px;"></i>';
+      if (window.feather) feather.replace();
+      return; 
+    }
 
     const payload = {
       street_address: els.address.value.trim(),
@@ -393,9 +410,6 @@ function initStep3() {
       longitude: lng,
     };
 
-    const btn = document.getElementById('nextBtn');
-    btn.disabled = true;
-    btn.textContent = 'Verifying…';
     try {
       await apiRequest(`/${propertyId}/location`, 'POST', payload);
       setWizardState({ location: { ...payload, verified: true }, currentStep: 4 });
