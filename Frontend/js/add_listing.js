@@ -90,6 +90,15 @@ async function apiRequest(endpoint, method, body = null, isMultipart = false) {
   if (!response.ok) {
     let errorData = {};
     try { errorData = await response.json(); } catch (e) { /* no body */ }
+    
+    // If the listing no longer exists in the DB (e.g. wiped or deleted)
+    if (response.status === 404) {
+      sessionStorage.removeItem(WIZ_KEY);
+      alert('This listing no longer exists. You will be redirected to start a new one.');
+      window.location.href = 'add_listing_init.html';
+      return new Promise(() => {}); // Stop execution
+    }
+    
     throw new Error(errorData.message || 'API Request Failed');
   }
   if (response.status === 204) return { success: true, data: null };
