@@ -10,7 +10,10 @@ async function bootstrap() {
     logger: new JsonLogger(),
   });
 
-  app.enableCors();
+  app.enableCors({
+    origin: ['http://localhost:5173', 'http://localhost:8080'],
+    credentials: true,
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({

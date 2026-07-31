@@ -12,17 +12,19 @@ import { VerificationDto } from './dto/verification.dto';
 import { RejectListingDto } from './dto/reject-listing.dto';
 import { GetUser } from '../auth-identity/decorators/get-user.decorator';
 import { RolesGuard } from '../auth-identity/guards/roles.guard';
+import { JwtAuthGuard } from '../auth-identity/guards/jwt-auth.guard';
 import { Roles } from '../auth-identity/decorators/roles.decorator';
 
 @ApiTags('Listings')
 @ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
 @Controller('api/listings')
 export class PropertyListingController {
   constructor(private readonly propertyListingService: PropertyListingService) {}
 
   @Post('create')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Create a new draft listing' })
   @ApiResponse({ status: 201, description: 'Listing created successfully' })
   createListing(@GetUser() user: any) {
@@ -31,7 +33,7 @@ export class PropertyListingController {
 
   @Post(':property_id/basic-details')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Save basic details for a listing' })
   @ApiParam({ name: 'property_id', description: 'The ID of the property' })
   saveBasicDetails(
@@ -44,7 +46,7 @@ export class PropertyListingController {
 
   @Get(':property_id/basic-details')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Get basic details of a listing' })
   @ApiParam({ name: 'property_id', description: 'The ID of the property' })
   getBasicDetails(
@@ -56,7 +58,7 @@ export class PropertyListingController {
 
   @Post(':property_id/location')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Save location details for a listing' })
   @ApiParam({ name: 'property_id', description: 'The ID of the property' })
   saveLocation(
@@ -69,7 +71,7 @@ export class PropertyListingController {
 
   @Get(':property_id/location')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Get location details of a listing' })
   @ApiParam({ name: 'property_id', description: 'The ID of the property' })
   getLocation(
@@ -81,7 +83,7 @@ export class PropertyListingController {
 
   @Get(':property_id/progress')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Get the progress of a listing' })
   @ApiParam({ name: 'property_id', description: 'The ID of the property' })
   getProgress(
@@ -93,7 +95,7 @@ export class PropertyListingController {
 
   @Post(':property_id/details')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Save property details for a listing' })
   @ApiParam({ name: 'property_id', description: 'The ID of the property' })
   saveDetails(
@@ -116,7 +118,7 @@ export class PropertyListingController {
 
   @Post(':property_id/media')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Upload media for a listing' })
   @ApiParam({ name: 'property_id', description: 'The ID of the property' })
   @ApiConsumes('multipart/form-data')
@@ -134,7 +136,7 @@ export class PropertyListingController {
 
   @Delete(':property_id/media/:media_id')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Delete media from a listing' })
   @ApiParam({ name: 'property_id', description: 'The ID of the property' })
   @ApiParam({ name: 'media_id', description: 'The ID of the media' })
@@ -158,7 +160,7 @@ export class PropertyListingController {
 
   @Post(':property_id/documents')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Upload document for a listing' })
   @ApiParam({ name: 'property_id', description: 'The ID of the property' })
   @ApiConsumes('multipart/form-data')
@@ -186,7 +188,7 @@ export class PropertyListingController {
 
   @Post(':property_id/availability')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Save availability details for a listing' })
   @ApiParam({ name: 'property_id', description: 'The ID of the property' })
   saveAvailability(
@@ -209,7 +211,7 @@ export class PropertyListingController {
 
   @Post(':property_id/ai-review')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Generate AI review for listing' })
   triggerAIReview(
     @Param('property_id') propertyId: string,
@@ -220,7 +222,7 @@ export class PropertyListingController {
 
   @Get(':property_id/ai-review')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Get saved AI review' })
   getAIReview(
     @Param('property_id') propertyId: string,
@@ -231,7 +233,7 @@ export class PropertyListingController {
 
   @Post(':property_id/verification')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Save verification info' })
   saveVerification(
     @Param('property_id') propertyId: string,
@@ -243,7 +245,7 @@ export class PropertyListingController {
 
   @Post(':property_id/submit')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiOperation({ summary: 'Submit listing for admin review' })
   submitListing(
     @Param('property_id') propertyId: string,
@@ -275,7 +277,7 @@ export class PropertyListingController {
 
   @Get('seller/my-listings')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get all listings grouped by status' })
   getSellerListings(@GetUser() user: any) {
@@ -284,7 +286,7 @@ export class PropertyListingController {
 
   @Get('seller/:property_id/analytics')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get analytics for a specific listing' })
   getSellerListingAnalytics(
@@ -296,7 +298,7 @@ export class PropertyListingController {
 
   @Get(':property_id/inquiries')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get all inquiries for listing' })
   getSellerInquiries(
@@ -308,7 +310,7 @@ export class PropertyListingController {
 
   @Patch('inquiries/:inquiry_id/read')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Mark inquiry as read' })
   markInquiryRead(
@@ -320,7 +322,7 @@ export class PropertyListingController {
 
   @Get(':property_id/offers')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Get all offers for listing' })
   getSellerOffers(
@@ -332,7 +334,7 @@ export class PropertyListingController {
 
   @Post(':property_id/offers/:offer_id/accept')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Accept an offer' })
   acceptOffer(
@@ -345,7 +347,7 @@ export class PropertyListingController {
 
   @Post(':property_id/offers/:offer_id/reject')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Reject an offer' })
   rejectOffer(
@@ -358,7 +360,7 @@ export class PropertyListingController {
 
   @Post(':property_id/mark-sold')
   @UseGuards(RolesGuard)
-  @Roles('seller')
+  @Roles('seller', 'buyer')
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Mark listing as sold' })
   markSold(
