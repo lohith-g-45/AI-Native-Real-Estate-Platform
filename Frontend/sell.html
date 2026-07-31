@@ -397,7 +397,7 @@ footer { background: var(--white); border-top: 1px solid var(--line); padding: 4
 <!-- ══════════ HEADER ══════════ -->
 <header>
   <div class="nav-wrap">
-    <div class="logo">
+    <a href="index.html" class="logo" style="text-decoration:none; color:inherit;">
       <div class="logo-box">
         <i data-feather="home" style="width:20px;height:20px;color:#fff;"></i>
       </div>
@@ -405,10 +405,10 @@ footer { background: var(--white); border-top: 1px solid var(--line); padding: 4
         <div class="logo-name">HomeHaven</div>
         <div class="logo-sub">AI Native Real Estate Platform</div>
       </div>
-    </div>
+    </a>
  
     <nav class="top-nav">
-      <a href="dashboard.html">Home</a>
+      <a href="index.html">Home</a>
       <a href="#">Buy</a>
       <a href="sell.html" class="active">Sell</a>
       <a href="#">AI Search</a>
@@ -439,312 +439,298 @@ footer { background: var(--white); border-top: 1px solid var(--line); padding: 4
  
   <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar">
-    <div class="sb-label">Main</div>
-    <div class="sb-item active"><i data-feather="grid" style="width:15px;height:15px;"></i> Seller Dashboard</div>
-    <div class="sb-item"><i data-feather="list" style="width:15px;height:15px;"></i> My Listings</div>
-    <div class="sb-item"><i data-feather="plus-circle" style="width:15px;height:15px;"></i> Add New Listing</div>
- 
-    <div class="sb-label">Deals</div>
-    <div class="sb-item"><i data-feather="users" style="width:15px;height:15px;"></i> Leads &amp; Inquiries <span class="sb-badge">14</span></div>
-    <div class="sb-item"><i data-feather="tag" style="width:15px;height:15px;"></i> Offers <span class="sb-badge">2</span></div>
-    <div class="sb-item"><i data-feather="calendar" style="width:15px;height:15px;"></i> Appointments</div>
- 
-    <div class="sb-label">Tools</div>
-    <div class="sb-item"><i data-feather="zap" style="width:15px;height:15px;"></i> AI Pricing Advisor</div>
-    <div class="sb-item"><i data-feather="radio" style="width:15px;height:15px;"></i> Marketing Tools</div>
-    <div class="sb-item"><i data-feather="bar-chart-2" style="width:15px;height:15px;"></i> Reports &amp; Analytics</div>
-    <div class="sb-item"><i data-feather="file-text" style="width:15px;height:15px;"></i> Documents</div>
-    <div class="sb-item"><i data-feather="message-circle" style="width:15px;height:15px;"></i> Messages</div>
-    <div class="sb-item"><i data-feather="settings" style="width:15px;height:15px;"></i> Settings</div>
+    <div class="sb-item active" style="margin-bottom:12px; margin-top:8px;"><i data-feather="grid" style="width:18px;height:18px; margin-right:8px;"></i> Seller Dashboard</div>
+    
+    <div class="sb-item"><i data-feather="home" style="width:18px;height:18px; margin-right:8px;"></i> My Listing <span class="sb-badge">1</span></div>
+    <div class="sb-item"><i data-feather="plus-circle" style="width:18px;height:18px; margin-right:8px;"></i> Add New Listing</div>
+    
+    <div class="sb-item" style="margin-top:10px;"><i data-feather="users" style="width:18px;height:18px; margin-right:8px;"></i> Leads &amp; Inquiries <span class="sb-badge">3</span></div>
+    <div class="sb-item"><i data-feather="calendar" style="width:18px;height:18px; margin-right:8px;"></i> Appointments</div>
+    <div class="sb-item"><i data-feather="file-text" style="width:18px;height:18px; margin-right:8px;"></i> Documents</div>
+    <div class="sb-item"><i data-feather="message-square" style="width:18px;height:18px; margin-right:8px;"></i> Messages <span class="sb-badge">2</span></div>
+    
+    <div class="sb-item" style="margin-top:10px;"><i data-feather="zap" style="width:18px;height:18px; margin-right:8px;"></i> AI Pricing Advisor</div>
+    <div class="sb-item"><i data-feather="settings" style="width:18px;height:18px; margin-right:8px;"></i> Settings</div>
  
     <div class="sb-spacer"></div>
  
-    <!-- Navy AI promo box -->
-    <div class="sb-ai-box">
-      <div class="sb-ai-title">Sell faster with AI</div>
-      <div class="sb-ai-sub">Get AI recommendations to maximise your sale price.</div>
-      <button class="sb-ai-btn">
-        <i data-feather="zap" style="width:13px;height:13px;"></i> Ask HomeHaven AI
+    <!-- Help promo box -->
+    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:18px; text-align:center; margin-top:16px;">
+      <div style="font-size:13.5px; font-weight:800; color:#0f172a; margin-bottom:6px;">Need help selling your home?</div>
+      <div style="font-size:12px; color:#64748b; margin-bottom:14px; line-height:1.5;">Get expert guidance and reach more buyers.</div>
+      <button style="display:flex; align-items:center; justify-content:center; gap:6px; background:#fff; border:1px solid #e2e8f0; color:var(--blue); font-size:12.5px; font-weight:700; border-radius:8px; padding:10px; cursor:pointer; width:100%; box-shadow:var(--shadow-sm); margin-bottom: 12px; font-family:'Inter', sans-serif;">
+        <i data-feather="zap" style="width:14px;height:14px;"></i> Ask HomeHaven AI
       </button>
-      <!-- robot SVG -->
-      <svg style="width:56px;margin:14px auto 0;display:block;" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="16" y="22" width="32" height="28" rx="8" fill="rgba(255,255,255,.15)"/>
-        <circle cx="26" cy="36" r="4" fill="rgba(255,255,255,.9)"/>
-        <circle cx="38" cy="36" r="4" fill="rgba(255,255,255,.9)"/>
-        <circle cx="26" cy="36" r="1.6" fill="#4f8cff"/>
-        <circle cx="38" cy="36" r="1.6" fill="#4f8cff"/>
-        <rect x="24" y="44" width="16" height="3" rx="1.5" fill="rgba(255,255,255,.2)"/>
-        <rect x="30" y="12" width="4" height="10" rx="2" fill="rgba(255,255,255,.15)"/>
-        <circle cx="32" cy="10" r="3.5" fill="#fbbf24"/>
-        <rect x="10" y="30" width="6" height="14" rx="3" fill="rgba(255,255,255,.12)"/>
-        <rect x="48" y="30" width="6" height="14" rx="3" fill="rgba(255,255,255,.12)"/>
-      </svg>
+      <img src="https://cdn-icons-png.flaticon.com/512/4712/4712010.png" style="width:90px; margin:0 auto; display:block;" alt="AI Robot">
     </div>
   </aside>
  
   <!-- ══ MAIN CONTENT ══ -->
-  <main class="main">
+  <main class="main" style="background:#f8fafc; padding:32px 40px; padding-bottom:60px;">
  
-    <!-- ══ HERO BANNER — navy photo overlay ══ -->
-    <div class="dash-banner">
-      <div class="banner-blob bb1"></div>
-      <div class="banner-blob bb2"></div>
- 
-      <!-- Left: greeting + stats -->
-      <div class="banner-left">
-        <div class="banner-greeting">Good Evening, Lohith! 👋</div>
-        <div class="banner-sub">AI has analyzed your listings — here's your snapshot for today.</div>
- 
-        <div class="banner-stats">
-          <div class="bstat">
-            <div class="bstat-icon" style="background:rgba(255,255,255,.12);">
-              <i data-feather="eye" style="width:22px;height:22px;color:#fff;"></i>
+    <!-- ══ HERO BANNER ══ -->
+    <div style="background: var(--navy); border-radius:20px; display:flex; position:relative; overflow:hidden; margin-bottom: 30px; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+      <!-- The house image on the right -->
+      <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1800&auto=format&fit=crop" style="position:absolute; right:0; top:0; width:100%; height:100%; object-fit:cover; z-index:0;" alt="House Background" />
+      <div style="position:absolute; right:0; top:0; width:100%; height:100%; background:linear-gradient(90deg, var(--navy) 0%, rgba(10,18,45,.95) 25%, rgba(10,18,45,.7) 50%, rgba(10,18,45,0) 100%); z-index:1;"></div>
+      
+      <div style="padding: 40px; padding-bottom:48px; position:relative; z-index:2; flex:1;">
+        <h1 style="font-size:30px; font-weight:800; color:#fff; margin-bottom:10px; letter-spacing:-0.5px;">Good evening, <span class="user-name-display">Lohith</span>! <span style="font-size:26px;">👋</span></h1>
+        <p style="font-size:15px; color:#94a3b8; margin-bottom: 36px; font-weight:600;">Here's how your listing is performing.</p>
+        
+        <div style="display:flex; align-items:center; margin-top:10px;">
+          <!-- Stat 1 -->
+          <div>
+            <div style="width:42px; height:42px; border-radius:50%; background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+              <i data-feather="eye" style="width:20px;height:20px;"></i>
             </div>
-            <div class="bstat-num">4,665</div>
-            <div class="bstat-lbl">Total Views</div>
-            <div class="bstat-trend">↑ 18.6%</div>
-            <div class="bstat-vs">vs last 7 days</div>
+            <div style="font-size:26px; font-weight:800; color:#fff; line-height:1; letter-spacing:-0.5px;">1,245</div>
+            <div style="font-size:14px; color:#cbd5e1; margin-top:8px; margin-bottom:14px; font-weight:600;">Views</div>
+            <div style="font-size:12px; color:#4ade80; font-weight:800;">↑ 18.6%</div>
+            <div style="font-size:11px; color:#94a3b8; margin-top:4px;">vs last 7 days</div>
           </div>
-          <div class="bstat">
-            <div class="bstat-icon" style="background:rgba(124,58,237,.35);">
-              <i data-feather="heart" style="width:22px;height:22px;color:#fff;"></i>
+          
+          <div style="width:1px; height:110px; background:rgba(255,255,255,0.12); margin:0 36px;"></div>
+          
+          <!-- Stat 2 -->
+          <div>
+            <div style="width:42px; height:42px; border-radius:50%; background:#9333ea; color:#fff; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+              <i data-feather="heart" style="width:20px;height:20px;"></i>
             </div>
-            <div class="bstat-num">162</div>
-            <div class="bstat-lbl">Total Saves</div>
-            <div class="bstat-trend">↑ 12.4%</div>
-            <div class="bstat-vs">vs last 7 days</div>
+            <div style="font-size:26px; font-weight:800; color:#fff; line-height:1; letter-spacing:-0.5px;">34</div>
+            <div style="font-size:14px; color:#cbd5e1; margin-top:8px; margin-bottom:14px; font-weight:600;">Saves</div>
+            <div style="font-size:12px; color:#4ade80; font-weight:800;">↑ 12.4%</div>
+            <div style="font-size:11px; color:#94a3b8; margin-top:4px;">vs last 7 days</div>
           </div>
-          <div class="bstat">
-            <div class="bstat-icon" style="background:rgba(79,140,255,.35);">
-              <i data-feather="message-square" style="width:22px;height:22px;color:#fff;"></i>
+          
+          <div style="width:1px; height:110px; background:rgba(255,255,255,0.12); margin:0 36px;"></div>
+          
+          <!-- Stat 3 -->
+          <div>
+            <div style="width:42px; height:42px; border-radius:50%; background:#3b82f6; color:#fff; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+              <i data-feather="message-square" style="width:20px;height:20px;"></i>
             </div>
-            <div class="bstat-num">14</div>
-            <div class="bstat-lbl">New Inquiries</div>
-            <div class="bstat-trend">↑ 40%</div>
-            <div class="bstat-vs">vs last 7 days</div>
+            <div style="font-size:26px; font-weight:800; color:#fff; line-height:1; letter-spacing:-0.5px;">3</div>
+            <div style="font-size:14px; color:#cbd5e1; margin-top:8px; margin-bottom:14px; font-weight:600;">Inquiries</div>
+            <div style="font-size:12px; color:#4ade80; font-weight:800;">↑ 40%</div>
+            <div style="font-size:11px; color:#94a3b8; margin-top:4px;">vs last 7 days</div>
           </div>
-          <div class="bstat">
-            <div class="bstat-icon" style="background:rgba(22,163,74,.35);">
-              <i data-feather="tag" style="width:22px;height:22px;color:#fff;"></i>
+          
+          <div style="width:1px; height:110px; background:rgba(255,255,255,0.12); margin:0 36px;"></div>
+          
+          <!-- Stat 4 -->
+          <div>
+            <div style="width:42px; height:42px; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+              <i data-feather="tag" style="width:20px;height:20px;"></i>
             </div>
-            <div class="bstat-num">2</div>
-            <div class="bstat-lbl">Active Offers</div>
-            <div class="bstat-trend">↑ 100%</div>
-            <div class="bstat-vs">vs last 7 days</div>
+            <div style="font-size:26px; font-weight:800; color:#fff; line-height:1; letter-spacing:-0.5px;">1</div>
+            <div style="font-size:14px; color:#cbd5e1; margin-top:8px; margin-bottom:14px; font-weight:600;">Offer Received</div>
+            <div style="font-size:12px; color:#4ade80; font-weight:800;">↑ 100%</div>
+            <div style="font-size:11px; color:#94a3b8; margin-top:4px;">vs last 7 days</div>
           </div>
-        </div>
-      </div>
- 
-      <!-- Middle: AI Market Summary card -->
-      <div class="ai-card-wrap">
-        <div class="ai-card">
-          <div class="ai-card-title">
-            <i data-feather="zap" style="width:16px;height:16px;color:var(--blue);"></i>
-            AI Market Summary
-          </div>
-          <div class="ai-row"><span class="dot dot-blue"></span> Buyer activity in your area is <span class="clr-green">&nbsp;High</span></div>
-          <div class="ai-row"><span class="dot dot-green"></span> 2 of your listings are <span class="clr-blue">&nbsp;trending</span></div>
-          <div class="ai-row"><span class="dot dot-orange"></span> 1 property value increased by <span class="clr-green">&nbsp;$18,000</span></div>
-          <div class="ai-row"><span class="dot dot-purple"></span> <span class="clr-purple">14 buyers</span>&nbsp;searching in your area</div>
-          <button class="ai-insights-btn">View Full Insights</button>
-        </div>
-      </div>
- 
-      <!-- Right: property photo -->
-      <div class="banner-img-wrap">
-        <img class="banner-house"
-             src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=700&auto=format&fit=crop"
-             alt="Property at dusk"/>
-        <div class="trend-badge">
-          <div class="trend-lbl">Market Trend</div>
-          <div class="trend-val">↑ 5.4%</div>
         </div>
       </div>
     </div>
  
-    <!-- ══ QUICK STATS ROW ══ -->
-    <div class="quick-stats">
-      <div class="qs-card">
-        <div class="qs-icon" style="background:#eaf1ff;">
-          <i data-feather="home" style="color:var(--blue);width:20px;height:20px;"></i>
-        </div>
-        <div>
-          <div class="qs-val">3</div>
-          <div class="qs-label">Active Listings</div>
-          <div class="qs-trend trend-up">↑ 1 this month</div>
+    <!-- ══ MY LISTING ══ -->
+    <div style="margin-bottom:16px;">
+      <h2 style="font-size:18px; font-weight:800; color:#0f172a;">My Listing</h2>
+    </div>
+    <div style="background:#fff; border-radius:16px; border:1px solid #e2e8f0; display:flex; padding:20px; gap:24px; margin-bottom:30px; box-shadow:0 2px 8px rgba(0,0,0,0.03);">
+      <!-- Listing Image -->
+      <div style="position:relative; width:340px; height:220px; border-radius:12px; overflow:hidden; flex-shrink:0;">
+        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop" style="width:100%; height:100%; object-fit:cover;" alt="Property Image"/>
+        <div style="position:absolute; top:12px; left:12px; background:var(--green); color:#fff; font-size:12px; font-weight:700; padding:4px 10px; border-radius:6px;">Active</div>
+      </div>
+      
+      <!-- Listing Info -->
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <h3 style="font-size:19px; font-weight:800; color:#0f172a; margin-bottom:8px; letter-spacing:-0.2px;">Modern Detached Home</h3>
+            <div style="font-size:13px; color:#64748b; display:flex; align-items:center; gap:6px; margin-bottom:20px;">
+              <i data-feather="map-pin" style="width:14px;height:14px;"></i> Downtown Toronto
+            </div>
+            <div style="font-size:24px; font-weight:800; color:var(--blue); margin-bottom:24px;">$1,250,000</div>
+            
+            <div style="display:flex; gap:24px; color:#475569; font-size:13px; font-weight:600; margin-bottom:24px;">
+              <span style="display:flex; align-items:center; gap:6px;"><i data-feather="eye" style="width:16px;height:16px;"></i> 1,245</span>
+              <span style="display:flex; align-items:center; gap:6px;"><i data-feather="heart" style="width:16px;height:16px;"></i> 34</span>
+              <span style="display:flex; align-items:center; gap:6px;"><i data-feather="message-square" style="width:16px;height:16px;"></i> 3</span>
+              <span style="display:flex; align-items:center; gap:6px;"><i data-feather="tag" style="width:16px;height:16px;"></i> 1</span>
+            </div>
+            
+            <div style="font-size:12.5px; color:#94a3b8; font-weight:500;">Listed on May 15, 2026</div>
+          </div>
+          <div>
+             <i data-feather="more-vertical" style="width:20px;height:20px;color:#94a3b8;cursor:pointer;"></i>
+          </div>
         </div>
       </div>
-      <div class="qs-card">
-        <div class="qs-icon" style="background:var(--green-50);">
-          <i data-feather="trending-up" style="color:var(--green);width:20px;height:20px;"></i>
-        </div>
-        <div>
-          <div class="qs-val">$4.55M</div>
-          <div class="qs-label">Total Listed Value</div>
-          <div class="qs-trend trend-up">↑ 5.4% avg growth</div>
-        </div>
-      </div>
-      <div class="qs-card">
-        <div class="qs-icon" style="background:var(--purple-50);">
-          <i data-feather="calendar" style="color:var(--purple);width:20px;height:20px;"></i>
-        </div>
-        <div>
-          <div class="qs-val">5</div>
-          <div class="qs-label">Upcoming Showings</div>
-          <div class="qs-trend trend-up">↑ 2 new this week</div>
-        </div>
-      </div>
-      <div class="qs-card">
-        <div class="qs-icon" style="background:var(--orange-50);">
-          <i data-feather="percent" style="color:var(--orange);width:20px;height:20px;"></i>
-        </div>
-        <div>
-          <div class="qs-val">5.29%</div>
-          <div class="qs-label">Current Mortgage Rate</div>
-          <div class="qs-trend trend-up">↓ 0.15% this month</div>
-        </div>
+      
+      <!-- Right Action Box -->
+      <div style="width:310px; display:flex; flex-direction:column; justify-content:center; padding-left:24px; border-left:1px solid #e2e8f0;">
+         <div style="background:#f8fafc; padding:20px; border-radius:12px; margin-bottom:20px;">
+           <div style="font-size:13px; color:#475569; font-weight:600; margin-bottom:8px;">Listing Status</div>
+           <div style="display:flex; align-items:center; gap:6px; color:var(--green); font-weight:700; font-size:14.5px; margin-bottom:8px;">
+             <i data-feather="check-circle" style="width:16px;height:16px;"></i> Active
+           </div>
+           <div style="font-size:12px; color:#64748b; line-height:1.5;">Your listing is live and visible to potential buyers.</div>
+         </div>
+         <div style="display:flex; gap:12px;">
+           <button style="flex:1; background:#fff; border:1px solid var(--blue); color:var(--blue); font-weight:700; font-size:13.5px; padding:11px 0; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif;">View Listing</button>
+           <button style="flex:1; background:var(--blue); border:1px solid var(--blue); color:#fff; font-weight:700; font-size:13.5px; padding:11px 0; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif;">Edit Listing</button>
+         </div>
       </div>
     </div>
  
-    <!-- ══ ACTIVE LISTINGS ══ -->
-    <div class="sec-hd">
-      <div class="sec-title">Active Listings</div>
-      <a href="#" class="view-all">View All <i data-feather="arrow-right" style="width:14px;height:14px;"></i></a>
-    </div>
+    <!-- ══ BOTTOM GRID ══ -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px;">
+      <!-- Recent Inquiries -->
+      <div style="background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:24px; box-shadow:0 2px 8px rgba(0,0,0,0.03); display:flex; flex-direction:column;">
+         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+           <div style="font-size:15px; font-weight:800; color:#0f172a;">Recent Inquiries</div>
+           <a href="#" style="font-size:13px; font-weight:700; color:var(--blue);">View All</a>
+         </div>
+         
+         <div style="display:flex; flex-direction:column; gap:24px; flex:1;">
+           <div style="display:flex; align-items:center; gap:12px;">
+             <div style="width:40px; height:40px; border-radius:50%; background:#f3e8ff; color:#9333ea; font-size:13.5px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">JD</div>
+             <div style="flex:1;">
+               <div style="font-size:14px; font-weight:700; color:#0f172a;">John D.</div>
+               <div style="font-size:12.5px; color:#64748b; margin-top:2px;">Interested in your property</div>
+             </div>
+             <div style="text-align:right;">
+               <div style="font-size:11px; color:#94a3b8; margin-bottom:6px; font-weight:500;">2m ago</div>
+               <div style="font-size:10px; font-weight:700; color:var(--blue); background:#eff6ff; padding:3px 8px; border-radius:4px; display:inline-block;">New</div>
+             </div>
+           </div>
+           
+           <div style="display:flex; align-items:center; gap:12px;">
+             <div style="width:40px; height:40px; border-radius:50%; background:#ffedd5; color:#ea580c; font-size:13.5px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">SM</div>
+             <div style="flex:1;">
+               <div style="font-size:14px; font-weight:700; color:#0f172a;">Sarah M.</div>
+               <div style="font-size:12.5px; color:#64748b; margin-top:2px;">Asked about viewing schedule</div>
+             </div>
+             <div style="text-align:right;">
+               <div style="font-size:11px; color:#94a3b8; font-weight:500;">15h ago</div>
+             </div>
+           </div>
  
-    <div class="listings-grid">
-      <!-- Card 1 -->
-      <div class="lcard">
-        <div class="lcard-img">
-          <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop" alt="Modern Detached Home"/>
-          <span class="badge-active">Active</span>
-          <button class="lcard-menu-btn"><span></span><span></span><span></span></button>
-        </div>
-        <div class="lcard-body">
-          <div class="lcard-top">
-            <div class="lcard-name">Modern Detached Home</div>
-            <i data-feather="more-vertical" style="width:16px;height:16px;color:var(--text-400);cursor:pointer;flex-shrink:0;"></i>
-          </div>
-          <div class="lcard-loc"><i data-feather="map-pin" style="width:13px;height:13px;"></i> Downtown Toronto</div>
-          <div class="lcard-price">$1,250,000</div>
-          <div class="lcard-meta">
-            <span><i data-feather="eye" style="width:13px;height:13px;"></i> 1,245</span>
-            <span><i data-feather="heart" style="width:13px;height:13px;"></i> 34</span>
-            <span><i data-feather="message-square" style="width:13px;height:13px;"></i> 8</span>
-          </div>
-          <button class="edit-btn"><i data-feather="edit-2" style="width:14px;height:14px;"></i> Edit Listing</button>
-        </div>
-      </div>
+           <div style="display:flex; align-items:center; gap:12px;">
+             <div style="width:40px; height:40px; border-radius:50%; background:#dcfce7; color:#16a34a; font-size:13.5px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">MT</div>
+             <div style="flex:1;">
+               <div style="font-size:14px; font-weight:700; color:#0f172a;">Michael T.</div>
+               <div style="font-size:12.5px; color:#64748b; margin-top:2px;">Requested more information</div>
+             </div>
+             <div style="text-align:right;">
+               <div style="font-size:11px; color:#94a3b8; font-weight:500;">1d ago</div>
+             </div>
+           </div>
+         </div>
  
-      <!-- Card 2 -->
-      <div class="lcard">
-        <div class="lcard-img">
-          <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800&auto=format&fit=crop" alt="Luxury Villa"/>
-          <span class="badge-active">Active</span>
-          <button class="lcard-menu-btn"><span></span><span></span><span></span></button>
-        </div>
-        <div class="lcard-body">
-          <div class="lcard-top">
-            <div class="lcard-name">Luxury Villa</div>
-            <i data-feather="more-vertical" style="width:16px;height:16px;color:var(--text-400);cursor:pointer;flex-shrink:0;"></i>
-          </div>
-          <div class="lcard-loc"><i data-feather="map-pin" style="width:13px;height:13px;"></i> Mississauga</div>
-          <div class="lcard-price">$2,450,000</div>
-          <div class="lcard-meta">
-            <span><i data-feather="eye" style="width:13px;height:13px;"></i> 2,340</span>
-            <span><i data-feather="heart" style="width:13px;height:13px;"></i> 56</span>
-            <span><i data-feather="message-square" style="width:13px;height:13px;"></i> 12</span>
-          </div>
-          <button class="edit-btn"><i data-feather="edit-2" style="width:14px;height:14px;"></i> Edit Listing</button>
-        </div>
+         <button style="width:100%; margin-top:24px; padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; font-size:13.5px; font-weight:700; color:var(--blue); cursor:pointer; font-family:'Inter',sans-serif;">Go to Inquiries</button>
       </div>
  
-      <!-- Card 3 -->
-      <div class="lcard">
-        <div class="lcard-img">
-          <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=800&auto=format&fit=crop" alt="Condo Apartment"/>
-          <span class="badge-active">Active</span>
-          <button class="lcard-menu-btn"><span></span><span></span><span></span></button>
-        </div>
-        <div class="lcard-body">
-          <div class="lcard-top">
-            <div class="lcard-name">Condo Apartment</div>
-            <i data-feather="more-vertical" style="width:16px;height:16px;color:var(--text-400);cursor:pointer;flex-shrink:0;"></i>
-          </div>
-          <div class="lcard-loc"><i data-feather="map-pin" style="width:13px;height:13px;"></i> Vaughan</div>
-          <div class="lcard-price">$850,000</div>
-          <div class="lcard-meta">
-            <span><i data-feather="eye" style="width:13px;height:13px;"></i> 1,080</span>
-            <span><i data-feather="heart" style="width:13px;height:13px;"></i> 22</span>
-            <span><i data-feather="message-square" style="width:13px;height:13px;"></i> 5</span>
-          </div>
-          <button class="edit-btn"><i data-feather="edit-2" style="width:14px;height:14px;"></i> Edit Listing</button>
-        </div>
-      </div>
-    </div>
+      <!-- Upcoming Appointments -->
+      <div style="background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:24px; box-shadow:0 2px 8px rgba(0,0,0,0.03); display:flex; flex-direction:column;">
+         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+           <div style="font-size:15px; font-weight:800; color:#0f172a;">Upcoming Appointments</div>
+           <a href="#" style="font-size:13px; font-weight:700; color:var(--blue);">View All</a>
+         </div>
  
-    <!-- ══ MARKET INSIGHTS ══ -->
-    <div class="sec-hd">
-      <div class="sec-title">Market Insights</div>
-    </div>
+         <div style="display:flex; flex-direction:column; gap:24px; flex:1;">
+           <div style="display:flex; align-items:center; gap:14px;">
+             <div style="width:38px; height:38px; border-radius:10px; background:#f1f5f9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i data-feather="calendar" style="width:16px;height:16px;color:var(--blue);"></i>
+             </div>
+             <div style="flex:1;">
+               <div style="font-size:14px; font-weight:700; color:#0f172a;">Property Viewing</div>
+               <div style="font-size:12px; color:#64748b; margin-top:2px;">Tomorrow, May 30 • 2:00 PM</div>
+             </div>
+             <div style="font-size:10.5px; font-weight:700; color:#9333ea; background:#f3e8ff; padding:4px 10px; border-radius:6px;">Upcoming</div>
+           </div>
  
-    <div class="insights-grid">
-      <div class="icard">
-        <div class="icard-icon" style="background:var(--blue-50);">
-          <i data-feather="home" style="color:var(--blue);width:21px;height:21px;"></i>
-        </div>
-        <div>
-          <div class="icard-val">$1.12M</div>
-          <div class="icard-label">Average Selling Price</div>
-          <div class="icard-trend trend-up">↑ 5.4% vs last month</div>
-        </div>
-      </div>
-      <div class="icard">
-        <div class="icard-icon" style="background:var(--purple-50);">
-          <i data-feather="layers" style="color:var(--purple);width:21px;height:21px;"></i>
-        </div>
-        <div>
-          <div class="icard-val">2,340</div>
-          <div class="icard-label">Inventory</div>
-          <div class="icard-trend trend-down">↓ 3.2% vs last month</div>
-        </div>
-      </div>
-      <div class="icard">
-        <div class="icard-icon" style="background:var(--green-50);">
-          <i data-feather="users" style="color:var(--green);width:21px;height:21px;"></i>
-        </div>
-        <div>
-          <div class="icard-val" style="color:var(--green);">High</div>
-          <div class="icard-label">Buyer Demand</div>
-          <div class="icard-trend trend-up">↑ 12.6% vs last month</div>
-        </div>
-      </div>
-      <div class="icard">
-        <div class="icard-icon" style="background:var(--orange-50);">
-          <i data-feather="percent" style="color:var(--orange);width:21px;height:21px;"></i>
-        </div>
-        <div>
-          <div class="icard-val">5.29%</div>
-          <div class="icard-label">Mortgage Rate</div>
-          <div class="icard-trend trend-up">↓ 0.15% vs last month</div>
-        </div>
-      </div>
-    </div>
+           <div style="display:flex; align-items:center; gap:14px;">
+             <div style="width:38px; height:38px; border-radius:10px; background:#f1f5f9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i data-feather="calendar" style="width:16px;height:16px;color:var(--blue);"></i>
+             </div>
+             <div style="flex:1;">
+               <div style="font-size:14px; font-weight:700; color:#0f172a;">Open House</div>
+               <div style="font-size:12px; color:#64748b; margin-top:2px;">Jun 1, 2026 • 1:00 PM - 4:00 PM</div>
+             </div>
+             <div style="font-size:10.5px; font-weight:700; color:#9333ea; background:#f3e8ff; padding:4px 10px; border-radius:6px;">Upcoming</div>
+           </div>
  
-    <!-- ══ NEWSLETTER CTA STRIP ══ -->
-    <div class="cta-strip">
-      <div class="cta-strip-left">
-        <div class="cta-strip-icon">
-          <i data-feather="mail" style="width:20px;height:20px;color:#fff;"></i>
-        </div>
-        <div>
-          <h4>Stay Updated</h4>
-          <p>Subscribe to market alerts and get the latest listing insights delivered to you.</p>
-        </div>
+           <div style="display:flex; align-items:center; gap:14px;">
+             <div style="width:38px; height:38px; border-radius:10px; background:#f1f5f9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i data-feather="calendar" style="width:16px;height:16px;color:var(--blue);"></i>
+             </div>
+             <div style="flex:1;">
+               <div style="font-size:14px; font-weight:700; color:#0f172a;">Photo Session</div>
+               <div style="font-size:12px; color:#64748b; margin-top:2px;">Jun 2, 2026 • 10:00 AM</div>
+             </div>
+             <div style="font-size:10.5px; font-weight:700; color:#16a34a; background:#dcfce7; padding:4px 10px; border-radius:6px;">Scheduled</div>
+           </div>
+         </div>
+ 
+         <button style="width:100%; margin-top:24px; padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; font-size:13.5px; font-weight:700; color:var(--blue); cursor:pointer; font-family:'Inter',sans-serif;">Manage Appointments</button>
       </div>
-      <div class="cta-strip-right">
-        <input class="cta-input" type="email" placeholder="Enter your email address"/>
-        <button class="btn-primary">Subscribe</button>
+ 
+      <!-- Quick Actions -->
+      <div style="background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:24px; box-shadow:0 2px 8px rgba(0,0,0,0.03); display:flex; flex-direction:column;">
+         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+           <div style="font-size:15px; font-weight:800; color:#0f172a;">Quick Actions</div>
+         </div>
+ 
+         <div style="display:flex; flex-direction:column; gap:20px;">
+           <div style="display:flex; align-items:center; gap:14px; cursor:pointer;">
+             <div style="width:34px; height:34px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+               <i data-feather="share" style="width:18px;height:18px;color:var(--blue);"></i>
+             </div>
+             <div style="flex:1;">
+               <div style="font-size:13.5px; font-weight:700; color:#0f172a;">Share your listing</div>
+               <div style="font-size:12px; color:#64748b; margin-top:1px;">Get more views by sharing</div>
+             </div>
+             <i data-feather="chevron-right" style="width:18px;height:18px;color:#94a3b8;"></i>
+           </div>
+           <div style="width:100%; height:1px; background:#f1f5f9;"></div>
+ 
+           <div style="display:flex; align-items:center; gap:14px; cursor:pointer;">
+             <div style="width:34px; height:34px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+               <i data-feather="edit" style="width:18px;height:18px;color:var(--blue);"></i>
+             </div>
+             <div style="flex:1;">
+               <div style="font-size:13.5px; font-weight:700; color:#0f172a;">Update listing details</div>
+               <div style="font-size:12px; color:#64748b; margin-top:1px;">Edit price, description, or photos</div>
+             </div>
+             <i data-feather="chevron-right" style="width:18px;height:18px;color:#94a3b8;"></i>
+           </div>
+           <div style="width:100%; height:1px; background:#f1f5f9;"></div>
+ 
+           <div style="display:flex; align-items:center; gap:14px; cursor:pointer;">
+             <div style="width:34px; height:34px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+               <i data-feather="camera" style="width:18px;height:18px;color:var(--blue);"></i>
+             </div>
+             <div style="flex:1;">
+               <div style="font-size:13.5px; font-weight:700; color:#0f172a;">Upload new photos</div>
+               <div style="font-size:12px; color:#64748b; margin-top:1px;">Show your home in the best light</div>
+             </div>
+             <i data-feather="chevron-right" style="width:18px;height:18px;color:#94a3b8;"></i>
+           </div>
+           <div style="width:100%; height:1px; background:#f1f5f9;"></div>
+ 
+           <div style="display:flex; align-items:center; gap:14px; cursor:pointer;">
+             <div style="width:34px; height:34px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+               <i data-feather="download" style="width:18px;height:18px;color:var(--blue);"></i>
+             </div>
+             <div style="flex:1;">
+               <div style="font-size:13.5px; font-weight:700; color:#0f172a;">Download listing report</div>
+               <div style="font-size:12px; color:#64748b; margin-top:1px;">See how your listing is performing</div>
+             </div>
+             <i data-feather="chevron-right" style="width:18px;height:18px;color:#94a3b8;"></i>
+           </div>
+         </div>
       </div>
     </div>
  
@@ -807,6 +793,7 @@ footer { background: var(--white); border-top: 1px solid var(--line); padding: 4
 </footer>
  
 <script>feather.replace();</script>
+<script src="js/auth-guard.js"></script>
 </body>
 </html>
  

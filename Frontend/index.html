@@ -9,59 +9,103 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
 <link rel="stylesheet" href="css/dash.css" />
-</head>
+<style>
+  /* ══ RIGID HEADER TEMPLATE ══ */
+  header {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-wrap {
+    max-width: 1440px; margin: 0 auto;
+    padding: 0 32px; height: 68px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration:none; color:inherit; }
+  .logo-box {
+    width: 36px; height: 36px; background: #2563eb;
+    border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  }
+  .logo-name { font-size: 17px; font-weight: 800; color: #0f172a; }
+  .logo-sub  { font-size: 11px; color: #64748b; }
+  
+  .top-nav { display: flex; gap: 28px; }
+  .top-nav a {
+    font-size: 14px; font-weight: 500; color: #334155;
+    padding-bottom: 4px; border-bottom: 2px solid transparent;
+    transition: color .15s, border-color .15s;
+    text-decoration: none;
+  }
+  .top-nav a:hover { color: #2563eb; }
+  .top-nav a.active { color: #2563eb; border-bottom-color: #2563eb; }
+  
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-icon-btn {
+    position: relative; cursor: pointer;
+    color: #334155; background: none; border: none;
+    display: flex; align-items: center;
+  }
+  .notif-dot {
+    position: absolute; top: -4px; right: -5px;
+    background: #dc2626; width: 8px; height: 8px; border-radius: 50%;
+  }
+  .nav-saved {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 14px; font-weight: 500; color: #334155; cursor: pointer;
+  }
+  .avatar-btn {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: #e2e8f0; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; text-decoration: none;
+  }
+</style>
 <body>
 
 <!-- ============ HEADER ============ -->
-<header style="background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:50;">
-  <div class="container" style="display:flex; align-items:center; justify-content:space-between; height:72px;">
-    <div style="display:flex; align-items:center; gap:10px;">
-      <div style="width:38px;height:38px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+<header>
+  <div class="nav-wrap">
+    <a href="index.html" class="logo">
+      <div class="logo-box">
         <i data-feather="home" style="width:20px;height:20px;color:#fff;"></i>
       </div>
       <div>
-        <div style="font-size:11px; color:var(--muted);">AI Native Real Estate Platform</div>
+        <div class="logo-name">HomeHaven</div>
+        <div class="logo-sub">AI Native Real Estate Platform</div>
       </div>
-    </div>
-
-    <nav style="display:flex; gap:30px;">
-      <a class="nav-link active" href="index.html">Home</a>
-      <a class="nav-link" href="buy.html">Buy</a>
-      <a class="nav-link" href="sell.html">Sell</a>
-      <a class="nav-link" href="#">AI Search</a>
-      <a class="nav-link" href="#">Mortgage</a>
-      <a class="nav-link" href="#">Market Trends</a>
+    </a>
+ 
+    <nav class="top-nav">
+      <a href="index.html" class="active">Home</a>
+      <a href="buy.html">Buy</a>
+      <a href="sell.html">Sell</a>
+      <a href="#">AI Search</a>
+      <a href="#">Mortgage</a>
+      <a href="#">Market Trends</a>
     </nav>
+ 
+    <div class="nav-right">
+      <div class="nav-saved">
+        <i data-feather="heart" style="width:17px;height:17px;"></i> Saved
+      </div>
+      <button class="nav-icon-btn">
+        <div class="notif-dot"></div>
+        <i data-feather="bell" style="width:19px;height:19px;"></i>
+      </button>
+      <button class="nav-icon-btn">
+        <i data-feather="message-square" style="width:19px;height:19px;"></i>
+      </button>
 
-    <div style="display:flex; align-items:center; gap:22px;">
-      <a style="display:flex; align-items:center; gap:6px; font-size:14px; color:#334155; font-weight:500;" href="#">
-        <i data-feather="heart" style="width:18px;height:18px;"></i> Saved
-      </a>
-      <span style="position:relative; cursor:pointer;">
-        <i data-feather="bell" style="width:19px;height:19px; color:#334155;"></i>
-        <span style="position:absolute; top:-3px; right:-3px; width:8px;height:8px;background:#dc2626;border-radius:50%;"></span>
-      </span>
-      <i data-feather="message-square" style="width:19px;height:19px; color:#334155; cursor:pointer;"></i>
-      <div id="auth-buttons" style="display: none; gap: 15px; align-items: center;">
+      <div id="auth-buttons" style="display: none; gap: 15px; align-items: center; margin-left: 10px;">
           <a href="login.html" style="font-size: 14px; font-weight: 600; color: white; background: #2563eb; padding: 8px 16px; border-radius: 8px; text-decoration: none;">Sign In</a>
       </div>
 
-      <div id="user-menu" style="display: flex; align-items: center; gap: 15px;">
-          <a href="profile.html"
-             style="width:34px;
-                    height:34px;
-                    border-radius:50%;
-                    background:#e2e8f0;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    cursor:pointer;
-                    text-decoration:none;">
-            <i data-feather="user" style="width:17px;height:17px;color:#475569;"></i>
-          </a>
-          <a href="#" onclick="localStorage.removeItem('accessToken'); sessionStorage.removeItem('loginIntent'); window.location.reload();" style="color: #dc2626; text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 5px;" title="Sign Out">
-              <i data-feather="log-out" style="width:17px;height:17px;"></i>
-          </a>
+      <div id="user-menu" style="display: flex; align-items: center; gap: 20px;">
+        <a class="avatar-btn" href="profile.html">
+          <i data-feather="user" style="width:17px;height:17px;color:#475569;"></i>
+        </a>
+        <a href="#" onclick="localStorage.removeItem('accessToken'); sessionStorage.removeItem('loginIntent'); window.location.reload();" style="color: #dc2626; text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 5px;" title="Sign Out">
+            <i data-feather="log-out" style="width:17px;height:17px;"></i>
+        </a>
       </div>
     </div>
   </div>
