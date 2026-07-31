@@ -1,308 +1,989 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buy | Real Estate</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="css/dashboard.css">
-    <style>
-        .buyer-feature-card {
-            background: #fff;
-            border: 1px solid #E5E7EB;
-            border-radius: 16px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: 0.3s;
-            cursor: pointer;
-            flex: 1;
-        }
-        .buyer-feature-card:hover {
-            box-shadow: 0 10px 25px rgba(37,99,235,.1);
-            border-color: #2563EB;
-        }
-        .buyer-feature-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            background: #EEF4FF;
-            color: #2563EB;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Buy Properties – HomeHaven</title>
+<meta name="description" content="Search thousands of properties with AI-powered recommendations."/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+<style>
+/* ── Tokens ── */
+:root {
+  --blue:     #2563eb;
+  --blue-lt:  #eff6ff;
+  --blue-hover:#1d4ed8;
+  --text:     #0f172a;
+  --text-2:   #334155;
+  --muted:    #64748b;
+  --soft:     #94a3b8;
+  --line:     #e2e8f0;
+  --bg:       #f8fafc;
+  --white:    #fff;
+  --green:    #16a34a;
+  --green-bg: #f0fdf4;
+  --orange:   #d97706;
+  --orange-bg:#fff7ed;
+  --red:      #dc2626;
+  --navy:     #0a122d;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,.05);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.08),0 2px 6px rgba(0,0,0,.04);
+  --shadow-lg: 0 10px 32px rgba(0,0,0,.10),0 4px 12px rgba(0,0,0,.05);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+a{text-decoration:none;color:inherit;}
+button{font-family:'Inter',sans-serif;}
+
+/* ══ NAVBAR ══ */
+header{
+  background:var(--white);
+  border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:200;
+  backdrop-filter:blur(12px);
+}
+.nav-wrap{
+  max-width:1440px;margin:0 auto;
+  padding:0 32px;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.logo-box{
+  width:34px;height:34px;background:var(--blue);
+  border-radius:9px;display:flex;align-items:center;justify-content:center;
+}
+.logo-name{font-size:16px;font-weight:800;color:var(--text);}
+.logo-sub{font-size:10.5px;color:var(--muted);}
+.top-nav{display:flex;gap:4px;}
+.top-nav a{
+  font-size:13.5px;font-weight:500;color:var(--muted);
+  padding:6px 12px;border-radius:8px;
+  transition:color .15s,background .15s;
+}
+.top-nav a:hover{color:var(--text);background:var(--bg);}
+.top-nav a.active{color:var(--blue);font-weight:700;}
+.nav-right{display:flex;align-items:center;gap:8px;}
+.nav-icon{
+  width:36px;height:36px;border-radius:9px;
+  background:none;border:none;cursor:pointer;
+  color:var(--muted);display:flex;align-items:center;justify-content:center;
+  transition:background .15s,color .15s;position:relative;
+}
+.nav-icon:hover{background:var(--bg);color:var(--text);}
+.nav-saved{
+  display:flex;align-items:center;gap:6px;padding:6px 12px;
+  border-radius:9px;font-size:13.5px;font-weight:500;color:var(--muted);
+  cursor:pointer;border:none;background:none;
+  transition:background .15s,color .15s;
+}
+.nav-saved:hover{background:var(--bg);color:var(--text);}
+.notif-dot{
+  position:absolute;top:6px;right:6px;
+  width:7px;height:7px;border-radius:50%;
+  background:var(--red);border:1.5px solid var(--white);
+}
+.nav-avatar{
+  display:flex;align-items:center;gap:6px;
+  padding:4px 8px 4px 4px;border-radius:24px;
+  border:1.5px solid var(--line);cursor:pointer;
+  transition:border-color .15s,background .15s;background:var(--white);
+}
+.nav-avatar:hover{border-color:var(--blue);background:var(--blue-lt);}
+.av-circle{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--blue);color:#fff;
+  font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.av-name{font-size:13px;font-weight:600;color:var(--text-2);}
+
+/* ══ SEARCH HERO ══ */
+.search-hero{
+  background:var(--white);
+  padding:36px 32px 0;
+  text-align:center;
+}
+.search-hero-inner{
+  max-width:700px;margin:0 auto;
+}
+.hero-label{
+  font-size:12px;font-weight:700;color:var(--blue);
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;
+}
+.hero-title{
+  font-size:28px;font-weight:800;color:var(--text);
+  margin-bottom:18px;letter-spacing:-.02em;
+}
+/* Search row */
+.search-row{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-bottom:18px;
+}
+.search-box{
+  flex:1;max-width:640px;
+  display:flex;align-items:center;
+  background:var(--bg);
+  border:1.5px solid var(--line);border-radius:12px;
+  transition:border-color .15s,box-shadow .15s;
+  overflow:hidden;
+}
+.search-box:focus-within{
+  border-color:var(--blue);
+  box-shadow:0 0 0 3px rgba(37,99,235,.1);
+  background:var(--white);
+}
+.search-box svg{margin:0 12px;color:var(--soft);flex-shrink:0;}
+.search-input{
+  flex:1;padding:12px 4px;
+  border:none;background:transparent;
+  font-size:14px;font-family:'Inter',sans-serif;color:var(--text);
+  outline:none;
+}
+.search-input::placeholder{color:var(--soft);}
+.btn-search{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--blue);color:#fff;border:none;border-radius:10px;
+  padding:12px 22px;font-size:14px;font-weight:600;cursor:pointer;
+  transition:background .15s,transform .1s,box-shadow .15s;
+  box-shadow:0 2px 8px rgba(37,99,235,.3);
+}
+.btn-search:hover{background:var(--blue-hover);box-shadow:0 4px 14px rgba(37,99,235,.4);transform:translateY(-1px);}
+.btn-search:active{transform:translateY(0);}
+
+/* Type tabs */
+.type-tabs{display:flex;justify-content:center;gap:4px;flex-wrap:wrap;}
+.ttab{
+  padding:8px 16px;border-radius:10px 10px 0 0;
+  font-size:13px;font-weight:500;color:var(--muted);
+  background:transparent;border:none;cursor:pointer;
+  transition:color .15s,background .15s;
+  position:relative;
+}
+.ttab::after{
+  content:'';position:absolute;
+  bottom:0;left:50%;right:50%;height:2px;
+  background:var(--blue);border-radius:2px;
+  transition:left .2s,right .2s;
+}
+.ttab:hover{color:var(--text);background:var(--bg);}
+.ttab.active{color:var(--blue);font-weight:700;}
+.ttab.active::after{left:16px;right:16px;}
+
+/* ══ 3-COL LAYOUT ══ */
+.page-layout{
+  display:grid;
+  grid-template-columns:260px 1fr 350px;
+  gap:0;
+  max-width:1440px;margin:0 auto;
+  min-height:calc(100vh - 64px - 145px);
+}
+
+/* ══ FILTER PANEL ══ */
+.filter-panel{
+  background:var(--white);
+  border-right:1px solid var(--line);
+  padding:20px 18px;
+  position:sticky;
+  top:64px;
+  height:calc(100vh - 64px);
+  overflow-y:auto;
+}
+.filter-panel::-webkit-scrollbar{width:4px;}
+.filter-panel::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
+.filter-top{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.filter-title{font-size:14px;font-weight:700;color:var(--text);}
+.reset-btn{
+  font-size:12px;font-weight:600;color:var(--blue);
+  background:none;border:none;cursor:pointer;
+  padding:4px 8px;border-radius:6px;
+  transition:background .15s;
+}
+.reset-btn:hover{background:var(--blue-lt);}
+
+.f-group{margin-bottom:20px;}
+.f-lbl{
+  font-size:11.5px;font-weight:700;color:var(--text);
+  letter-spacing:.04em;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.f-input{
+  width:100%;padding:9px 12px;
+  border:1.5px solid var(--line);border-radius:9px;
+  font-size:13px;font-family:'Inter',sans-serif;color:var(--text);
+  background:var(--bg);outline:none;
+  transition:border-color .15s,background .15s;
+}
+.f-input:focus{border-color:var(--blue);background:var(--white);}
+.f-input::placeholder{color:var(--soft);}
+
+/* Range track */
+.range-labels{
+  display:flex;justify-content:space-between;
+  font-size:11.5px;color:var(--muted);margin-bottom:8px;
+}
+.f-range{
+  width:100%;height:4px;
+  -webkit-appearance:none;appearance:none;
+  background:linear-gradient(to right,var(--blue) 58%,var(--line) 58%);
+  border-radius:4px;outline:none;cursor:pointer;
+}
+.f-range::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--white);border:2px solid var(--blue);
+  box-shadow:0 1px 4px rgba(37,99,235,.35);cursor:pointer;
+}
+.f-select{
+  width:100%;padding:9px 12px;
+  border:1.5px solid var(--line);border-radius:9px;
+  font-size:13px;font-family:'Inter',sans-serif;
+  color:var(--text);background:var(--bg);outline:none;cursor:pointer;
+  transition:border-color .15s;
+}
+.f-select:focus{border-color:var(--blue);}
+
+.pill-row{display:flex;flex-wrap:wrap;gap:5px;}
+.f-pill{
+  padding:5px 11px;border-radius:20px;
+  font-size:12.5px;font-weight:500;color:var(--muted);
+  border:1.5px solid var(--line);background:var(--white);
+  cursor:pointer;transition:all .15s;
+}
+.f-pill:hover{border-color:var(--blue);color:var(--blue);}
+.f-pill.on{border-color:var(--blue);background:var(--blue-lt);color:var(--blue);font-weight:600;}
+
+.f-checks{display:flex;flex-direction:column;gap:9px;}
+.f-check{
+  display:flex;align-items:center;gap:9px;
+  font-size:13px;color:var(--text-2);cursor:pointer;
+}
+.f-check input{width:15px;height:15px;accent-color:var(--blue);cursor:pointer;border-radius:4px;}
+
+.f-hr{border:none;border-top:1px solid var(--line);margin:16px 0;}
+
+.collap-row{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:12.5px;font-weight:600;color:var(--text-2);
+  padding:8px 0;cursor:pointer;border-top:1px solid var(--line);
+  transition:color .15s;
+}
+.collap-row:hover{color:var(--blue);}
+.collap-row svg{transition:transform .2s;color:var(--soft);}
+.collap-row.open svg{transform:rotate(180deg);}
+
+.save-search-btn{
+  width:100%;margin-top:8px;
+  padding:10px;border-radius:10px;
+  border:1.5px solid var(--line);background:var(--white);
+  font-size:13px;font-weight:600;color:var(--text-2);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;
+  transition:border-color .15s,color .15s,background .15s;
+}
+.save-search-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-lt);}
+
+/* ══ LISTINGS ══ */
+.listings-col{
+  padding:20px 20px 40px;
+  overflow-y:auto;
+  height:calc(100vh - 64px);
+}
+.listings-col::-webkit-scrollbar{width:4px;}
+.listings-col::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
+
+.results-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;gap:8px;flex-wrap:wrap;
+}
+.results-count{font-size:15px;font-weight:700;color:var(--text);}
+.results-count em{color:var(--blue);font-style:normal;}
+.results-right{display:flex;align-items:center;gap:8px;}
+.sort-sel{
+  padding:7px 12px;border-radius:9px;
+  border:1.5px solid var(--line);background:var(--white);
+  font-size:13px;font-family:'Inter',sans-serif;color:var(--text);
+  outline:none;cursor:pointer;transition:border-color .15s;
+}
+.sort-sel:focus{border-color:var(--blue);}
+.vt-group{display:flex;gap:3px;}
+.vt-btn{
+  width:32px;height:32px;border-radius:8px;
+  border:1.5px solid var(--line);background:var(--white);
+  color:var(--soft);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.vt-btn:hover{border-color:var(--blue);color:var(--blue);}
+.vt-btn.on{border-color:var(--blue);background:var(--blue-lt);color:var(--blue);}
+
+/* Property cards */
+.prop-list{display:flex;flex-direction:column;gap:12px;}
+
+.prop-card{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:14px;overflow:hidden;
+  display:flex;
+  transition:box-shadow .2s,border-color .2s,transform .15s;
+  cursor:pointer;
+  animation:slideUp .3s ease both;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.prop-card:hover{
+  box-shadow:var(--shadow-lg);
+  border-color:#bfcfe8;
+  transform:translateY(-1px);
+}
+
+.prop-img{
+  position:relative;flex-shrink:0;
+  width:192px;height:160px;overflow:hidden;
+}
+.prop-img img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .4s ease;
+}
+.prop-card:hover .prop-img img{transform:scale(1.06);}
+
+.match-pill{
+  position:absolute;bottom:8px;left:8px;
+  font-size:10.5px;font-weight:700;
+  padding:3px 8px;border-radius:6px;
+  backdrop-filter:blur(8px);
+}
+.match-pill.a{background:rgba(22,163,74,.85);color:#fff;}
+.match-pill.b{background:rgba(37,99,235,.85);color:#fff;}
+.match-pill.c{background:rgba(100,116,139,.82);color:#fff;}
+
+.photo-pill{
+  position:absolute;bottom:8px;right:8px;
+  font-size:10px;font-weight:600;color:#fff;
+  background:rgba(0,0,0,.5);backdrop-filter:blur(6px);
+  padding:2px 7px;border-radius:5px;
+  display:flex;align-items:center;gap:4px;
+}
+
+.fav{
+  position:absolute;top:8px;right:8px;
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,.88);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+  transition:background .15s,transform .15s;
+}
+.fav:hover{background:#fff;transform:scale(1.1);}
+.fav.liked svg{fill:#ef4444;stroke:#ef4444;}
+
+.prop-body{
+  flex:1;padding:14px 16px;min-width:0;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.price-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:4px;
+}
+.prop-price{font-size:18px;font-weight:800;color:var(--text);}
+.price-badges{display:flex;align-items:center;gap:6px;}
+.badge{
+  font-size:10.5px;font-weight:700;
+  padding:2px 7px;border-radius:10px;
+}
+.badge.new{background:#dcfce7;color:var(--green);}
+.badge.reduced{background:#fff7ed;color:var(--orange);}
+.badge.open{background:#eff6ff;color:var(--blue);}
+.badge.featured{background:#f5f3ff;color:#7c3aed;}
+
+.more-btn{
+  background:none;border:none;cursor:pointer;color:var(--soft);
+  width:26px;height:26px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,color .15s;flex-shrink:0;
+}
+.more-btn:hover{background:var(--bg);color:var(--text);}
+
+.prop-addr{font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.prop-city{font-size:12px;color:var(--soft);margin-bottom:8px;}
+
+.specs-row{
+  display:flex;align-items:center;gap:12px;
+  font-size:12px;color:var(--text-2);margin-bottom:6px;
+}
+.spec{display:flex;align-items:center;gap:4px;}
+.spec svg{color:var(--soft);}
+
+.meta-row{
+  font-size:11.5px;color:var(--soft);
+  display:flex;align-items:center;gap:5px;margin-bottom:10px;
+}
+.dot-sep{width:3px;height:3px;border-radius:50%;background:var(--line);}
+
+.card-footer{display:flex;align-items:center;justify-content:space-between;}
+.listed-by{font-size:11px;color:var(--soft);}
+.btn-details{
+  padding:7px 16px;border-radius:8px;
+  border:1.5px solid var(--line);background:var(--white);
+  font-size:12.5px;font-weight:600;color:var(--text-2);
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.btn-details:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-lt);}
+
+/* Pagination */
+.pagination{
+  display:flex;align-items:center;justify-content:center;
+  gap:5px;margin-top:24px;
+}
+.pg{
+  width:34px;height:34px;border-radius:8px;
+  border:1.5px solid var(--line);background:var(--white);
+  font-size:13px;font-weight:600;color:var(--text-2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .15s;
+}
+.pg:hover:not(.on):not([disabled]){border-color:var(--blue);color:var(--blue);}
+.pg.on{background:var(--blue);border-color:var(--blue);color:#fff;}
+.pg[disabled]{opacity:.35;cursor:not-allowed;}
+.pg-dots{font-size:13px;color:var(--soft);padding:0 2px;}
+
+/* ══ MAP COL ══ */
+.map-col{
+  position:sticky;top:64px;
+  height:calc(100vh - 64px);
+  border-left:1px solid var(--line);
+  display:flex;flex-direction:column;
+  background:var(--white);overflow:hidden;
+}
+.map-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;border-bottom:1px solid var(--line);
+  background:var(--white);flex-shrink:0;
+}
+.map-tabs{display:flex;background:var(--bg);border-radius:9px;padding:3px;gap:2px;}
+.mtab{
+  padding:5px 14px;border-radius:7px;
+  font-size:12.5px;font-weight:600;color:var(--muted);
+  background:transparent;border:none;cursor:pointer;
+  transition:background .15s,color .15s;
+}
+.mtab.on{background:var(--white);color:var(--text);box-shadow:var(--shadow-xs);}
+.map-controls{display:flex;gap:4px;}
+.map-ctrl{
+  width:28px;height:28px;border-radius:7px;
+  border:1.5px solid var(--line);background:var(--white);
+  font-size:15px;font-weight:700;color:var(--text-2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:border-color .15s,color .15s;
+}
+.map-ctrl:hover{border-color:var(--blue);color:var(--blue);}
+
+.map-view{
+  flex:1;position:relative;overflow:hidden;
+  background:#dce8f0;
+}
+.map-bg{
+  width:100%;height:100%;object-fit:cover;display:block;
+  filter:saturate(0.7) brightness(1.05);
+}
+.bubble{
+  position:absolute;
+  background:var(--navy);color:#fff;
+  font-size:11px;font-weight:700;
+  padding:5px 10px;border-radius:20px;
+  cursor:pointer;white-space:nowrap;
+  box-shadow:0 2px 8px rgba(0,0,0,.2);
+  transition:background .15s,transform .15s,box-shadow .15s;
+  z-index:2;
+}
+.bubble:hover,.bubble.hi{background:var(--blue);transform:scale(1.07);box-shadow:0 4px 14px rgba(37,99,235,.4);}
+.bubble.cluster{
+  width:36px;height:36px;padding:0;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--blue);font-size:13px;
+}
+.map-expand{
+  position:absolute;top:10px;right:10px;z-index:3;
+  width:30px;height:30px;border-radius:7px;
+  background:rgba(255,255,255,.9);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text-2);box-shadow:var(--shadow-sm);
+  transition:background .15s;
+}
+.map-expand:hover{background:#fff;}
+
+.map-foot{
+  padding:10px 14px;border-top:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--white);flex-shrink:0;
+}
+.map-foot-label{font-size:12px;font-weight:500;color:var(--muted);}
+/* Toggle */
+.toggle{position:relative;display:inline-block;width:36px;height:20px;}
+.toggle input{opacity:0;width:0;height:0;}
+.tslider{
+  position:absolute;inset:0;cursor:pointer;
+  background:#cbd5e1;border-radius:20px;transition:background .2s;
+}
+.tslider::before{
+  content:'';position:absolute;
+  width:14px;height:14px;left:3px;bottom:3px;
+  background:#fff;border-radius:50%;transition:transform .2s;
+}
+.toggle input:checked+.tslider{background:var(--blue);}
+.toggle input:checked+.tslider::before{transform:translateX(16px);}
+
+/* Responsive */
+@media(max-width:1200px){
+  .page-layout{grid-template-columns:240px 1fr;}
+  .map-col{display:none;}
+}
+@media(max-width:860px){
+  .page-layout{grid-template-columns:1fr;}
+  .filter-panel{display:none;}
+  .listings-col{height:auto;padding:14px;}
+}
+</style>
 </head>
 <body>
-    <header class="navbar">
-        <div class="nav-container">
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="dashboard.html">Home</a></li>
-                    <li><a href="buy.html" class="active">Buy</a></li>
-                    <li><a href="sell.html">Sell</a></li>
-                </ul>
-            </nav>
-            <div class="nav-right">
-                <a href="buy.html" class="saved-link">
-                    <i class="fa-regular fa-heart"></i>
-                    <span>Saved</span>
-                </a>
-                <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
-                <button class="icon-btn"><i class="fa-regular fa-message"></i></button>
-                <a href="profile.html">
-                    <button class="profile-btn"><img src="images/profile.png" alt="Profile"></button>
-                </a>
-            </div>
-        </div>
-    </header>
 
-    <div class="dashboard-content" style="display: block; width: 90%; max-width: 1400px; margin: 100px auto 60px;">
-        
-        <!-- Saved Properties -->
-        <section class="featured-properties">
-            <div class="section-header">
-                <div>
-                    <h2>Saved Properties</h2>
-                    <p>Properties you have bookmarked.</p>
-                </div>
-                <a href="#" class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-            
-            <div class="property-slider">
-                <div class="property-grid">
-                    
-                    <div class="property-card">
-                        <div class="property-image">
-                            <img src="images/condo_img.png" alt="Property">
-                            <button class="favorite-btn" style="color: #ff3b30; opacity: 1;"><i class="fa-solid fa-heart"></i></button>
-                        </div>
-                        <div class="property-content">
-                            <h3>Luxury Condo</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> North York</p>
-                            <div class="property-meta">
-                                <span><i class="fa-solid fa-star"></i> 4.8</span>
-                                <span>2 Beds</span>
-                                <span>2 Baths</span>
-                            </div>
-                            <div class="property-footer">
-                                <h4>$845,000</h4>
-                                <a href="#" class="details-btn">View Details</a>
-                            </div>
-                        </div>
-                    </div>
+<!-- ══ NAVBAR ══ -->
+<header>
+  <div class="nav-wrap">
+    <a class="logo" href="dashboard.html">
+      <div class="logo-box">
+        <i data-feather="home" style="width:18px;height:18px;color:#fff;"></i>
+      </div>
+      <div>
+        <div class="logo-name">HomeHaven</div>
+        <div class="logo-sub">AI Native Real Estate Platform</div>
+      </div>
+    </a>
 
-                    <div class="property-card">
-                        <div class="property-image">
-                            <img src="images/duplex_img.png" alt="Property">
-                            <button class="favorite-btn" style="color: #ff3b30; opacity: 1;"><i class="fa-solid fa-heart"></i></button>
-                        </div>
-                        <div class="property-content">
-                            <h3>Spacious Duplex</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Downtown Toronto</p>
-                            <div class="property-meta">
-                                <span><i class="fa-solid fa-star"></i> 4.6</span>
-                                <span>3 Beds</span>
-                                <span>2 Baths</span>
-                            </div>
-                            <div class="property-footer">
-                                <h4>$910,000</h4>
-                                <a href="#" class="details-btn">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="property-card">
-                        <div class="property-image">
-                            <img src="images/detached_img.png" alt="Property">
-                            <button class="favorite-btn" style="color: #ff3b30; opacity: 1;"><i class="fa-solid fa-heart"></i></button>
-                        </div>
-                        <div class="property-content">
-                            <h3>Detached Home</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Etobicoke</p>
-                            <div class="property-meta">
-                                <span><i class="fa-solid fa-star"></i> 4.9</span>
-                                <span>4 Beds</span>
-                                <span>3 Baths</span>
-                            </div>
-                            <div class="property-footer">
-                                <h4>$1,120,000</h4>
-                                <a href="#" class="details-btn">View Details</a>
-                            </div>
-                        </div>
-                    </div>
+    <nav class="top-nav">
+      <a href="dashboard.html">Home</a>
+      <a href="buy.html" class="active">Buy</a>
+      <a href="sell.html">Sell</a>
+      <a href="#">AI Search</a>
+      <a href="#">Mortgage</a>
+      <a href="#">Market Trends</a>
+    </nav>
 
-                    <div class="property-card">
-                        <div class="property-image">
-                            <img src="images/townhouse_img.png" alt="Property">
-                            <button class="favorite-btn" style="color: #ff3b30; opacity: 1;"><i class="fa-solid fa-heart"></i></button>
-                        </div>
-                        <div class="property-content">
-                            <h3>Cozy Townhouse</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Scarborough</p>
-                            <div class="property-meta">
-                                <span><i class="fa-solid fa-star"></i> 4.7</span>
-                                <span>3 Beds</span>
-                                <span>2 Baths</span>
-                            </div>
-                            <div class="property-footer">
-                                <h4>$780,000</h4>
-                                <a href="#" class="details-btn">View Details</a>
-                            </div>
-                        </div>
-                    </div>
+    <div class="nav-right">
+      <button class="nav-saved">
+        <i data-feather="heart" style="width:16px;height:16px;"></i> Saved
+      </button>
+      <button class="nav-icon">
+        <div class="notif-dot"></div>
+        <i data-feather="bell" style="width:17px;height:17px;"></i>
+      </button>
+      <button class="nav-icon">
+        <i data-feather="message-square" style="width:17px;height:17px;"></i>
+      </button>
+      <div class="nav-avatar" onclick="window.location.href='profile.html'">
+        <div class="av-circle">LG</div>
+        <span class="av-name">Lohith G</span>
+        <i data-feather="chevron-down" style="width:13px;height:13px;color:var(--soft);"></i>
+      </div>
+    </div>
+  </div>
+</header>
 
-                </div>
-            </div>
-        </section>
+<!-- ══ SEARCH HERO ══ -->
+<div class="search-hero">
+  <div class="search-hero-inner">
+    <div class="hero-label">AI-Powered Search</div>
+    <h1 class="hero-title">Find Your Dream Home</h1>
+    <div class="search-row">
+      <div class="search-box">
+        <i data-feather="search" style="width:16px;height:16px;"></i>
+        <input class="search-input" type="text" placeholder="Search by City, Neighborhood, Address or MLS®"/>
+      </div>
+      <button class="btn-search">
+        <i data-feather="search" style="width:14px;height:14px;"></i>
+        Search
+      </button>
+    </div>
+    <div class="type-tabs">
+      <button class="ttab active" onclick="setTab(this)">Buy</button>
+      <button class="ttab" onclick="setTab(this)">Condo</button>
+      <button class="ttab" onclick="setTab(this)">House</button>
+      <button class="ttab" onclick="setTab(this)">Townhouse</button>
+      <button class="ttab" onclick="setTab(this)">Detached</button>
+      <button class="ttab" onclick="setTab(this)">New Listings</button>
+      <button class="ttab" onclick="setTab(this)">Open House</button>
+    </div>
+  </div>
+</div>
 
-        <!-- AI Suggested Properties -->
-        <section class="featured-properties" style="margin-top: 60px;">
-            <div class="section-header">
-                <div>
-                    <h2>AI Suggested</h2>
-                    <p>Matches based on your preferences.</p>
-                </div>
-                <a href="#" class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-            
-            <div class="property-slider">
-                <div class="property-grid">
-                    
-                    <div class="property-card">
-                        <div class="property-image">
-                            <img src="images/villa_img.png" alt="Property">
-                            <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
-                        </div>
-                        <div class="property-content">
-                            <h3>Luxury Villa</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Mississauga</p>
-                            <div class="property-meta">
-                                <span><i class="fa-solid fa-star"></i> 5.0</span>
-                                <span>5 Beds</span>
-                                <span>4 Baths</span>
-                            </div>
-                            <div class="property-footer">
-                                <h4>$2,150,000</h4>
-                                <a href="#" class="details-btn">View Details</a>
-                            </div>
-                        </div>
-                    </div>
+<!-- ══ 3-COL LAYOUT ══ -->
+<div class="page-layout">
 
-                    <div class="property-card">
-                        <div class="property-image">
-                            <img src="images/condo_img.png" alt="Property">
-                            <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
-                        </div>
-                        <div class="property-content">
-                            <h3>High-rise Condo</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Downtown Toronto</p>
-                            <div class="property-meta">
-                                <span><i class="fa-solid fa-star"></i> 4.9</span>
-                                <span>1 Beds</span>
-                                <span>1 Baths</span>
-                            </div>
-                            <div class="property-footer">
-                                <h4>$620,000</h4>
-                                <a href="#" class="details-btn">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="property-card">
-                        <div class="property-image">
-                            <img src="images/detached_img.png" alt="Property">
-                            <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
-                        </div>
-                        <div class="property-content">
-                            <h3>Modern Family Home</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Vaughan</p>
-                            <div class="property-meta">
-                                <span><i class="fa-solid fa-star"></i> 4.8</span>
-                                <span>3 Beds</span>
-                                <span>2 Baths</span>
-                            </div>
-                            <div class="property-footer">
-                                <h4>$1,050,000</h4>
-                                <a href="#" class="details-btn">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="property-card">
-                        <div class="property-image">
-                            <img src="images/townhouse_img.png" alt="Property">
-                            <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
-                        </div>
-                        <div class="property-content">
-                            <h3>Elegant Townhouse</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> North York</p>
-                            <div class="property-meta">
-                                <span><i class="fa-solid fa-star"></i> 4.7</span>
-                                <span>3 Beds</span>
-                                <span>3 Baths</span>
-                            </div>
-                            <div class="property-footer">
-                                <h4>$935,000</h4>
-                                <a href="#" class="details-btn">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Buyer Tools -->
-        <section style="margin-top: 60px;">
-            <div class="section-header">
-                <div>
-                    <h2>Buyer Tools</h2>
-                    <p>Resources to help you find your dream home.</p>
-                </div>
-            </div>
-            
-            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                <div class="buyer-feature-card">
-                    <div class="buyer-feature-icon"><i class="fa-solid fa-bell"></i></div>
-                    <div>
-                        <h4 style="font-size: 16px; margin-bottom: 4px;">Market Alerts</h4>
-                        <p style="font-size: 13px; color: #6B7280;">Get notified when prices drop on saved homes.</p>
-                    </div>
-                </div>
-                
-                <div class="buyer-feature-card">
-                    <div class="buyer-feature-icon" style="background: #FFF3E0; color: #FF9800;"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
-                    <div>
-                        <h4 style="font-size: 16px; margin-bottom: 4px;">Saved Searches</h4>
-                        <p style="font-size: 13px; color: #6B7280;">2 Active Searches (e.g., "Toronto Condos").</p>
-                    </div>
-                </div>
-
-                <div class="buyer-feature-card">
-                    <div class="buyer-feature-icon" style="background: #E8F5E9; color: #4CAF50;"><i class="fa-solid fa-calculator"></i></div>
-                    <div>
-                        <h4 style="font-size: 16px; margin-bottom: 4px;">Pre-Approval Calculator</h4>
-                        <p style="font-size: 13px; color: #6B7280;">Check how much home you can afford.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+  <!-- ── FILTER PANEL ── -->
+  <aside class="filter-panel">
+    <div class="filter-top">
+      <span class="filter-title">Filters</span>
+      <button class="reset-btn" onclick="resetAll()">Reset All</button>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (!localStorage.getItem('accessToken')) {
-                window.location.href = 'login.html';
-            }
-        });
-    </script>
+    <div class="f-group">
+      <div class="f-lbl">Location</div>
+      <input class="f-input" type="text" placeholder="City, Neighborhood or Postal Code"/>
+    </div>
+
+    <div class="f-group">
+      <div class="f-lbl">Price Range</div>
+      <div class="range-labels"><span>$100K</span><span id="range-val">$1.2M</span><span>$2M+</span></div>
+      <input class="f-range" type="range" min="100000" max="2000000" value="1200000"
+        oninput="updateRange(this.value)"/>
+    </div>
+
+    <div class="f-group">
+      <div class="f-lbl">Property Type</div>
+      <select class="f-select">
+        <option>All Types</option>
+        <option>Condo</option>
+        <option>Detached</option>
+        <option>Townhouse</option>
+        <option>Semi-Detached</option>
+        <option>Duplex</option>
+      </select>
+    </div>
+
+    <div class="f-group">
+      <div class="f-lbl">Bedrooms</div>
+      <div class="pill-row">
+        <button class="f-pill on" onclick="solo(this)">Any</button>
+        <button class="f-pill" onclick="solo(this)">1+</button>
+        <button class="f-pill" onclick="solo(this)">2+</button>
+        <button class="f-pill" onclick="solo(this)">3+</button>
+        <button class="f-pill" onclick="solo(this)">4+</button>
+        <button class="f-pill" onclick="solo(this)">5+</button>
+      </div>
+    </div>
+
+    <div class="f-group">
+      <div class="f-lbl">Bathrooms</div>
+      <div class="pill-row">
+        <button class="f-pill on" onclick="solo(this)">Any</button>
+        <button class="f-pill" onclick="solo(this)">1+</button>
+        <button class="f-pill" onclick="solo(this)">2+</button>
+        <button class="f-pill" onclick="solo(this)">3+</button>
+        <button class="f-pill" onclick="solo(this)">4+</button>
+      </div>
+    </div>
+
+    <hr class="f-hr"/>
+
+    <div class="f-group">
+      <div class="f-lbl">Features</div>
+      <div class="f-checks">
+        <label class="f-check"><input type="checkbox"/> Parking / Garage</label>
+        <label class="f-check"><input type="checkbox"/> Backyard</label>
+        <label class="f-check"><input type="checkbox"/> Fireplace</label>
+        <label class="f-check"><input type="checkbox"/> Pool</label>
+        <label class="f-check"><input type="checkbox"/> EV Charger</label>
+      </div>
+    </div>
+
+    <hr class="f-hr"/>
+    <div class="f-lbl" style="margin-bottom:4px;">More Filters</div>
+    <div class="collap-row" onclick="this.classList.toggle('open')">
+      Square Feet <i data-feather="chevron-down" style="width:13px;height:13px;"></i>
+    </div>
+    <div class="collap-row" onclick="this.classList.toggle('open')">
+      Year Built <i data-feather="chevron-down" style="width:13px;height:13px;"></i>
+    </div>
+    <div class="collap-row" onclick="this.classList.toggle('open')">
+      Lot Size <i data-feather="chevron-down" style="width:13px;height:13px;"></i>
+    </div>
+    <div class="collap-row" onclick="this.classList.toggle('open')">
+      Other Features <i data-feather="chevron-down" style="width:13px;height:13px;"></i>
+    </div>
+
+    <button class="save-search-btn" style="margin-top:16px;">
+      <i data-feather="bookmark" style="width:14px;height:14px;"></i>
+      Save Search
+    </button>
+  </aside>
+
+  <!-- ── LISTINGS ── -->
+  <div class="listings-col">
+    <div class="results-bar">
+      <div class="results-count"><em>352</em> Properties Found</div>
+      <div class="results-right">
+        <select class="sort-sel">
+          <option>Sort by: AI Recommended</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+          <option>Newest First</option>
+          <option>Most Views</option>
+        </select>
+        <div class="vt-group">
+          <button class="vt-btn" onclick="setView(this)" title="List">
+            <i data-feather="list" style="width:14px;height:14px;"></i>
+          </button>
+          <button class="vt-btn on" onclick="setView(this)" title="Grid">
+            <i data-feather="grid" style="width:14px;height:14px;"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="prop-list">
+
+      <!-- ── Card 1 ── -->
+      <div class="prop-card" style="animation-delay:.05s">
+        <div class="prop-img">
+          <img src="images/condo_img.png" alt="55 Bremner Blvd"
+            onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500&auto=format&fit=crop'"/>
+          <span class="match-pill a">94% Match</span>
+          <span class="photo-pill"><i data-feather="camera" style="width:9px;height:9px;"></i> 18</span>
+          <button class="fav" onclick="toggleFav(this)">
+            <i data-feather="heart" style="width:12px;height:12px;color:#ef4444;"></i>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div>
+            <div class="price-row">
+              <div class="prop-price">$845,000</div>
+              <div class="price-badges">
+                <span class="badge new">New Listing</span>
+                <button class="more-btn"><i data-feather="more-vertical" style="width:14px;height:14px;"></i></button>
+              </div>
+            </div>
+            <div class="prop-addr">55 Bremner Blvd, Unit 3502</div>
+            <div class="prop-city">Toronto, ON M5J 0A6</div>
+            <div class="specs-row">
+              <span class="spec"><i data-feather="home" style="width:12px;height:12px;"></i> 2 Beds</span>
+              <span class="spec"><i data-feather="droplet" style="width:12px;height:12px;"></i> 2 Baths</span>
+              <span class="spec"><i data-feather="maximize-2" style="width:12px;height:12px;"></i> 875 ft²</span>
+            </div>
+            <div class="meta-row">
+              Condo Apartment <span class="dot-sep"></span> MLS® C1234567
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="listed-by">RE/MAX Hallmark Realty Ltd.</span>
+            <button class="btn-details">View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Card 2 ── -->
+      <div class="prop-card" style="animation-delay:.1s">
+        <div class="prop-img">
+          <img src="images/detached_img.png" alt="128 Maple Leaf Dr"
+            onerror="this.src='https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=500&auto=format&fit=crop'"/>
+          <span class="match-pill a">92% Match</span>
+          <span class="photo-pill"><i data-feather="camera" style="width:9px;height:9px;"></i> 24</span>
+          <button class="fav" onclick="toggleFav(this)">
+            <i data-feather="heart" style="width:12px;height:12px;color:#ef4444;"></i>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div>
+            <div class="price-row">
+              <div class="prop-price">$1,250,000</div>
+              <div class="price-badges">
+                <span class="badge new">New Listing</span>
+                <button class="more-btn"><i data-feather="more-vertical" style="width:14px;height:14px;"></i></button>
+              </div>
+            </div>
+            <div class="prop-addr">128 Maple Leaf Dr</div>
+            <div class="prop-city">Vaughan, ON L6A 1G8</div>
+            <div class="specs-row">
+              <span class="spec"><i data-feather="home" style="width:12px;height:12px;"></i> 4 Beds</span>
+              <span class="spec"><i data-feather="droplet" style="width:12px;height:12px;"></i> 3 Baths</span>
+              <span class="spec"><i data-feather="maximize-2" style="width:12px;height:12px;"></i> 2,350 ft²</span>
+            </div>
+            <div class="meta-row">
+              Detached <span class="dot-sep"></span> MLS® N1234567
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="listed-by">Right At Home Realty Inc.</span>
+            <button class="btn-details">View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Card 3 ── -->
+      <div class="prop-card" style="animation-delay:.15s">
+        <div class="prop-img">
+          <img src="images/townhouse_img.png" alt="68 William Duncan Rd"
+            onerror="this.src='https://images.unsplash.com/photo-1605146769289-440113cc3d00?w=500&auto=format&fit=crop'"/>
+          <span class="match-pill b">90% Match</span>
+          <span class="photo-pill"><i data-feather="camera" style="width:9px;height:9px;"></i> 16</span>
+          <button class="fav" onclick="toggleFav(this)">
+            <i data-feather="heart" style="width:12px;height:12px;color:#ef4444;"></i>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div>
+            <div class="price-row">
+              <div class="prop-price">$789,900</div>
+              <div class="price-badges">
+                <span class="badge reduced">Price Reduced</span>
+                <button class="more-btn"><i data-feather="more-vertical" style="width:14px;height:14px;"></i></button>
+              </div>
+            </div>
+            <div class="prop-addr">68 William Duncan Rd, Unit 12</div>
+            <div class="prop-city">Toronto, ON M3K 0C8</div>
+            <div class="specs-row">
+              <span class="spec"><i data-feather="home" style="width:12px;height:12px;"></i> 3 Beds</span>
+              <span class="spec"><i data-feather="droplet" style="width:12px;height:12px;"></i> 2 Baths</span>
+              <span class="spec"><i data-feather="maximize-2" style="width:12px;height:12px;"></i> 1,350 ft²</span>
+            </div>
+            <div class="meta-row">
+              Townhouse <span class="dot-sep"></span> MLS® W1234567
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="listed-by">Royal LePage Signature Realty</span>
+            <button class="btn-details">View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Card 4 ── -->
+      <div class="prop-card" style="animation-delay:.2s">
+        <div class="prop-img">
+          <img src="images/villa_img.png" alt="15 Lower Jarvis St"
+            onerror="this.src='https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500&auto=format&fit=crop'"/>
+          <span class="match-pill b">80% Match</span>
+          <span class="photo-pill"><i data-feather="camera" style="width:9px;height:9px;"></i> 20</span>
+          <button class="fav" onclick="toggleFav(this)">
+            <i data-feather="heart" style="width:12px;height:12px;color:#ef4444;"></i>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div>
+            <div class="price-row">
+              <div class="prop-price">$620,000</div>
+              <div class="price-badges">
+                <span class="badge open">Open House</span>
+                <button class="more-btn"><i data-feather="more-vertical" style="width:14px;height:14px;"></i></button>
+              </div>
+            </div>
+            <div class="prop-addr">15 Lower Jarvis St, Unit 1806</div>
+            <div class="prop-city">Toronto, ON M5E 0C4</div>
+            <div class="specs-row">
+              <span class="spec"><i data-feather="home" style="width:12px;height:12px;"></i> 1 Bed</span>
+              <span class="spec"><i data-feather="droplet" style="width:12px;height:12px;"></i> 1 Bath</span>
+              <span class="spec"><i data-feather="maximize-2" style="width:12px;height:12px;"></i> 650 ft²</span>
+            </div>
+            <div class="meta-row">
+              Condo Apartment <span class="dot-sep"></span> MLS® C1231234
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="listed-by">Keller Williams Advantage</span>
+            <button class="btn-details">View Details</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /prop-list -->
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button class="pg" disabled><i data-feather="chevron-left" style="width:13px;height:13px;"></i></button>
+      <button class="pg on">1</button>
+      <button class="pg" onclick="goPage(this)">2</button>
+      <button class="pg" onclick="goPage(this)">3</button>
+      <button class="pg" onclick="goPage(this)">4</button>
+      <button class="pg" onclick="goPage(this)">5</button>
+      <span class="pg-dots">…</span>
+      <button class="pg" onclick="goPage(this)">18</button>
+      <button class="pg" onclick="goPage(this)"><i data-feather="chevron-right" style="width:13px;height:13px;"></i></button>
+    </div>
+  </div>
+
+  <!-- ── MAP COL ── -->
+  <div class="map-col">
+    <div class="map-bar">
+      <div class="map-tabs">
+        <button class="mtab on" onclick="setMapTab(this)">Map</button>
+        <button class="mtab" onclick="setMapTab(this)">Satellite</button>
+      </div>
+      <div class="map-controls">
+        <button class="map-ctrl" title="Zoom in">+</button>
+        <button class="map-ctrl" title="Zoom out">−</button>
+        <button class="map-ctrl" title="Expand"><i data-feather="maximize-2" style="width:12px;height:12px;"></i></button>
+      </div>
+    </div>
+
+    <div class="map-view">
+      <img class="map-bg"
+        src="https://images.unsplash.com/photo-1569152811536-fb47aced8409?q=60&w=800&auto=format&fit=crop"
+        alt="Toronto map"
+        onerror="this.style.background='#dce8f0';this.style.display='block';"/>
+
+      <!-- Price bubbles -->
+      <div class="bubble" style="top:14%;left:48%;">$1.25M</div>
+      <div class="bubble hi" style="top:40%;left:14%;">$845K</div>
+      <div class="bubble" style="top:38%;left:68%;">$780K</div>
+      <div class="bubble" style="top:62%;left:10%;">$620K</div>
+      <div class="bubble" style="top:28%;left:58%;">$1.10M</div>
+      <div class="bubble cluster" style="top:36%;left:38%;">12</div>
+    </div>
+
+    <div class="map-foot">
+      <span class="map-foot-label">Search as I move the map</span>
+      <label class="toggle">
+        <input type="checkbox" checked/>
+        <span class="tslider"></span>
+      </label>
+    </div>
+  </div>
+
+</div><!-- /page-layout -->
+
+<script>
+  feather.replace();
+
+  function setTab(el){
+    document.querySelectorAll('.ttab').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function setView(el){
+    document.querySelectorAll('.vt-btn').forEach(b=>b.classList.remove('on'));
+    el.classList.add('on');
+  }
+  function setMapTab(el){
+    document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('on'));
+    el.classList.add('on');
+  }
+  function solo(el){
+    const g=el.closest('.pill-row');
+    g.querySelectorAll('.f-pill').forEach(p=>p.classList.remove('on'));
+    el.classList.add('on');
+  }
+  function goPage(el){
+    document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+    el.classList.add('on');
+  }
+  function toggleFav(btn){
+    btn.classList.toggle('liked');
+  }
+  function updateRange(v){
+    const m=Math.round(v/1000);
+    document.getElementById('range-val').textContent=
+      m>=1000?'$'+(m/1000).toFixed(1)+'M':'$'+m+'K';
+    // update gradient
+    const pct=((v-100000)/(2000000-100000))*100;
+    this.event?.target?.style?.setProperty?.('--pct',pct+'%');
+  }
+  function resetAll(){
+    document.querySelectorAll('.f-input').forEach(i=>i.value='');
+    document.querySelectorAll('.f-select').forEach(s=>s.selectedIndex=0);
+    document.querySelectorAll('.pill-row').forEach(g=>{
+      g.querySelectorAll('.f-pill').forEach((p,i)=>p.classList.toggle('on',i===0));
+    });
+    document.querySelectorAll('.f-checks input').forEach(c=>c.checked=false);
+    document.getElementById('range-val').textContent='$1.2M';
+  }
+</script>
 </body>
 </html>
