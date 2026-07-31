@@ -327,14 +327,15 @@ function initStep3() {
     if (!address || !city || !country) return;
     
     const query = `${address}, ${city}, ${province}, ${country}`;
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
+    const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=1`;
     
     try {
       const res = await fetch(url);
       const data = await res.json();
-      if (data && data.length > 0) {
-        els.latitude.value = parseFloat(data[0].lat).toFixed(6);
-        els.longitude.value = parseFloat(data[0].lon).toFixed(6);
+      if (data && data.features && data.features.length > 0) {
+        const coords = data.features[0].geometry.coordinates; // [lon, lat]
+        els.latitude.value = parseFloat(coords[1]).toFixed(6);
+        els.longitude.value = parseFloat(coords[0]).toFixed(6);
       }
     } catch (e) {
       console.warn("Geocoding failed", e);
@@ -361,6 +362,10 @@ function initStep3() {
   document.getElementById('nextBtn').addEventListener('click', async () => {
     const errorDiv = document.getElementById('step3Error');
     errorDiv.textContent = '';
+
+    if (!els.latitude.value || !els.longitude.value) {
+      await geocodeAddress();
+    }
 
     const latVal = els.latitude.value;
     const lngVal = els.longitude.value;
