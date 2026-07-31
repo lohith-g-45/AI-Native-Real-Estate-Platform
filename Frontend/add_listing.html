@@ -129,10 +129,14 @@ header {
       <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 24px;">Create New Listing</h2>
       
       <div class="step-indicator">
-        <div class="step active" id="indicator-1"><div class="step-num">1</div><div class="step-label">Initialize</div></div>
-        <div class="step" id="indicator-2"><div class="step-num">2</div><div class="step-label">Basic Details</div></div>
+        <div class="step active" id="indicator-1"><div class="step-num">1</div><div class="step-label">Init</div></div>
+        <div class="step" id="indicator-2"><div class="step-num">2</div><div class="step-label">Basic</div></div>
         <div class="step" id="indicator-3"><div class="step-num">3</div><div class="step-label">Location</div></div>
-        <div class="step" id="indicator-4"><div class="step-num">4</div><div class="step-label">Features</div></div>
+        <div class="step" id="indicator-4"><div class="step-num">4</div><div class="step-label">Details</div></div>
+        <div class="step" id="indicator-5"><div class="step-num">5</div><div class="step-label">Media</div></div>
+        <div class="step" id="indicator-6"><div class="step-num">6</div><div class="step-label">Avail</div></div>
+        <div class="step" id="indicator-7"><div class="step-num">7</div><div class="step-label">Verify</div></div>
+        <div class="step" id="indicator-8"><div class="step-num">8</div><div class="step-label">Submit</div></div>
       </div>
 
       <!-- Step 1: Initialize -->
@@ -256,6 +260,83 @@ header {
         </div>
         <div class="btn-group">
           <button class="btn-secondary" onclick="prevStep(4)">Back</button>
+          <button class="btn-primary" onclick="nextStep(4)">Save & Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 5: Media Upload -->
+      <div class="step-content" id="step-5">
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Step 5: Media Upload</h3>
+        <p style="color: var(--muted); font-size: 14px; margin-bottom: 16px;">Select all the photos and videos for your property. The first file you select will automatically be used as the primary cover photo!</p>
+        <div class="form-group">
+          <label>Upload Files (Multiple)</label>
+          <input type="file" id="media_file" accept="image/*,video/*" multiple>
+        </div>
+        <div class="btn-group">
+          <button class="btn-secondary" onclick="prevStep(5)">Back</button>
+          <button class="btn-primary" onclick="nextStep(5)" id="media-upload-btn">Upload & Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 6: Availability -->
+      <div class="step-content" id="step-6">
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Step 6: Availability Settings</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Available From</label>
+            <input type="date" id="available_from">
+          </div>
+          <div class="form-group">
+            <label>Contact Phone</label>
+            <input type="text" id="contact_phone" placeholder="+1 555-0198">
+          </div>
+        </div>
+        <div class="form-group">
+          <label style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="instant_booking" style="width:auto; margin:0;">
+            Allow Instant Booking
+          </label>
+        </div>
+        <div class="btn-group">
+          <button class="btn-secondary" onclick="prevStep(6)">Back</button>
+          <button class="btn-primary" onclick="nextStep(6)">Save & Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 7: Verification -->
+      <div class="step-content" id="step-7">
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Step 7: Seller Verification</h3>
+        <p style="color: var(--muted); font-size: 14px; margin-bottom: 24px;">Your listing requires account verification. We've automatically checked your profile credentials.</p>
+        
+        <div style="background: var(--blue-50); border: 1px solid #bfdbfe; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+           <div style="display:flex; align-items:center; gap: 12px; margin-bottom: 12px;">
+             <i data-feather="check-circle" style="color: var(--green);"></i> 
+             <span style="font-weight: 600;">Government ID (Verified via Profile)</span>
+           </div>
+           <div style="display:flex; align-items:center; gap: 12px; margin-bottom: 12px;">
+             <i data-feather="check-circle" style="color: var(--green);"></i> 
+             <span style="font-weight: 600;">Phone Number (Verified via Profile)</span>
+           </div>
+           <div style="display:flex; align-items:center; gap: 12px;">
+             <i data-feather="check-circle" style="color: var(--green);"></i> 
+             <span style="font-weight: 600;">Email Address (Verified via Profile)</span>
+           </div>
+        </div>
+
+        <p style="font-size: 13px; color: var(--muted); margin-bottom: 24px;">* If you need to update your identity documents, please visit your Seller Profile settings.</p>
+
+        <div class="btn-group">
+          <button class="btn-secondary" onclick="prevStep(7)">Back</button>
+          <button class="btn-primary" onclick="nextStep(7)">Confirm & Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 8: Final Review & Submit -->
+      <div class="step-content" id="step-8">
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Step 8: Review & Submit</h3>
+        <p style="color: var(--text-700); font-size: 15px; margin-bottom: 24px;">Your listing is fully prepared. Click the button below to submit your property for review by our agents.</p>
+        <div class="btn-group" style="justify-content: flex-end;">
+          <button class="btn-secondary" onclick="prevStep(8)" style="margin-right:16px;">Back</button>
           <button class="btn-primary" onclick="submitListing()">Submit Listing</button>
         </div>
       </div>
