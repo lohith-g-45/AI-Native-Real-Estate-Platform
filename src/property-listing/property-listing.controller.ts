@@ -381,5 +381,17 @@ export class PropertyListingController {
     return this.propertyListingService.refreshAnalytics(body.property_id);
   }
 
+  @Delete(':property_id')
+  @UseGuards(RolesGuard)
+  @Roles('seller', 'buyer', 'admin')
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Delete a listing entirely' })
+  deleteListing(
+    @Param('property_id') propertyId: string,
+    @GetUser() user: any,
+  ) {
+    return this.propertyListingService.deleteListing(propertyId, user.sub || user.userId);
+  }
+
 }
 

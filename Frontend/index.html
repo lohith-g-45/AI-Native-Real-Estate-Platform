@@ -213,89 +213,70 @@
     <a href="#" style="color:var(--blue); font-weight:600; font-size:14.5px; display:flex; align-items:center; gap:6px;">View All Properties <i data-feather="arrow-right" style="width:15px;height:15px;"></i></a>
   </div>
 
-  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px;">
-
-    <!-- Card 1 -->
-    <div class="card">
-      <div style="position:relative; height:170px;">
-        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
-        <span class="badge-match">AI MATCH 96%</span>
-        <span class="heart-btn"><i data-feather="heart" style="width:15px;height:15px;color:#334155;"></i></span>
-      </div>
-      <div style="padding:16px;">
-        <div style="font-weight:700; font-size:16px;">Modern Detached Home</div>
-        <div style="display:flex; align-items:center; gap:5px; color:var(--muted); font-size:13px; margin:5px 0 10px;"><i data-feather="map-pin" style="width:13px;height:13px;"></i> Downtown Toronto</div>
-        <div style="display:flex; gap:12px; font-size:12.5px; color:var(--muted); margin-bottom:12px;">
-          <span>4 Beds</span><span>3 Baths</span><span>2,450 sqft</span>
-        </div>
-        <div style="font-size:20px; font-weight:800; margin-bottom:6px;">$1,250,000</div>
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span class="trend-up">↑ 5.2% Price Trend</span>
-        </div>
-        <button class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;">View Details</button>
-      </div>
+  <div id="featured-properties-container" style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px;">
+    <!-- Cards will be populated here dynamically -->
+    <div style="text-align:center; padding: 40px; grid-column: span 4; color: var(--muted);">
+      Loading featured properties... <i class="spin"></i>
     </div>
-
-    <!-- Card 2 -->
-    <div class="card">
-      <div style="position:relative; height:170px;">
-        <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
-        <span class="badge-match">AI MATCH 94%</span>
-        <span class="badge-featured">FEATURED</span>
-        <span class="heart-btn"><i data-feather="heart" style="width:15px;height:15px;color:#334155;"></i></span>
-      </div>
-      <div style="padding:16px;">
-        <div style="font-weight:700; font-size:16px;">Luxury Condo</div>
-        <div style="display:flex; align-items:center; gap:5px; color:var(--muted); font-size:13px; margin:5px 0 10px;"><i data-feather="map-pin" style="width:13px;height:13px;"></i> North York</div>
-        <div style="display:flex; gap:12px; font-size:12.5px; color:var(--muted); margin-bottom:12px;">
-          <span>2 Beds</span><span>2 Baths</span><span>1,150 sqft</span>
-        </div>
-        <div style="font-size:20px; font-weight:800; margin-bottom:6px;">$845,000</div>
-        <span class="trend-up">↑ 3.1% Price Trend</span>
-        <button class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;">View Details</button>
-      </div>
-    </div>
-
-    <!-- Card 3 -->
-    <div class="card">
-      <div style="position:relative; height:170px;">
-        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
-        <span class="badge-match">AI MATCH 92%</span>
-        <span class="heart-btn"><i data-feather="heart" style="width:15px;height:15px;color:#334155;"></i></span>
-      </div>
-      <div style="padding:16px;">
-        <div style="font-weight:700; font-size:16px;">Elegant Townhouse</div>
-        <div style="display:flex; align-items:center; gap:5px; color:var(--muted); font-size:13px; margin:5px 0 10px;"><i data-feather="map-pin" style="width:13px;height:13px;"></i> Scarborough</div>
-        <div style="display:flex; gap:12px; font-size:12.5px; color:var(--muted); margin-bottom:12px;">
-          <span>3 Beds</span><span>3 Baths</span><span>1,800 sqft</span>
-        </div>
-        <div style="font-size:20px; font-weight:800; margin-bottom:6px;">$935,000</div>
-        <span class="trend-up">↑ 4.8% Price Trend</span>
-        <button class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;">View Details</button>
-      </div>
-    </div>
-
-    <!-- Card 4 -->
-    <div class="card">
-      <div style="position:relative; height:170px;">
-        <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=800&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
-        <span class="badge-match">AI MATCH 91%</span>
-        <span class="heart-btn"><i data-feather="heart" style="width:15px;height:15px;color:#334155;"></i></span>
-      </div>
-      <div style="padding:16px;">
-        <div style="font-weight:700; font-size:16px;">Luxury Apartment</div>
-        <div style="display:flex; align-items:center; gap:5px; color:var(--muted); font-size:13px; margin:5px 0 10px;"><i data-feather="map-pin" style="width:13px;height:13px;"></i> Etobicoke</div>
-        <div style="display:flex; gap:12px; font-size:12.5px; color:var(--muted); margin-bottom:12px;">
-          <span>1 Bed</span><span>1 Baths</span><span>750 sqft</span>
-        </div>
-        <div style="font-size:20px; font-weight:800; margin-bottom:6px;">$620,000</div>
-        <span class="trend-up">↑ 2.7% Price Trend</span>
-        <button class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;">View Details</button>
-      </div>
-    </div>
-
   </div>
 </section>
+
+<script>
+  async function loadFeaturedProperties() {
+    try {
+      const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.hostname.startsWith('192.168.') || window.location.hostname.startsWith('10.');
+      const API_BASE = isLocal
+          ? `http://${window.location.hostname}:3000/api/properties` 
+          : 'https://ai-native-real-estate-platform.onrender.com/api/properties';
+          
+      const res = await fetch(`${API_BASE}/featured`);
+      const data = await res.json();
+      
+      const container = document.getElementById('featured-properties-container');
+      container.innerHTML = '';
+      
+      if (!data.data || data.data.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:40px; grid-column: span 4; color: var(--muted);">No featured properties available at the moment.</div>';
+        return;
+      }
+      
+      data.data.forEach(p => {
+        let imgUrl = p.cover_photo_url || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop';
+        if (imgUrl && !/^https?:\/\//.test(imgUrl)) {
+          imgUrl = `${API_BASE.replace('/api/properties', '')}${imgUrl}`;
+        }
+        
+        const price = p.asking_price ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(p.asking_price) : 'Price TBD';
+        
+        const html = `
+        <div class="card">
+          <div style="position:relative; height:170px;">
+            <img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop'" />
+            <span class="badge-featured">FEATURED</span>
+            <span class="heart-btn" onclick="window.location.href='property_details.html?id=${p.property_id}'"><i data-feather="heart" style="width:15px;height:15px;color:#334155;"></i></span>
+          </div>
+          <div style="padding:16px;">
+            <div style="font-weight:700; font-size:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${p.title}">${p.title || 'Untitled Property'}</div>
+            <div style="display:flex; align-items:center; gap:5px; color:var(--muted); font-size:13px; margin:5px 0 10px;"><i data-feather="map-pin" style="width:13px;height:13px;"></i> ${p.city || 'Location Pending'}</div>
+            <div style="display:flex; gap:12px; font-size:12.5px; color:var(--muted); margin-bottom:12px;">
+              <span>${p.bedrooms || 0} Beds</span><span>${p.bathrooms || 0} Baths</span><span>${p.square_feet ? p.square_feet + ' sqft' : ''}</span>
+            </div>
+            <div style="font-size:20px; font-weight:800; margin-bottom:6px;">${price}</div>
+            <button class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;" onclick="window.location.href='property_details.html?id=${p.property_id}'">View Details</button>
+          </div>
+        </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+      });
+      if (window.feather) feather.replace();
+    } catch (e) {
+      console.error(e);
+      document.getElementById('featured-properties-container').innerHTML = '<div style="text-align:center; padding:40px; grid-column: span 4; color: red;">Failed to load featured properties.</div>';
+    }
+  }
+  
+  document.addEventListener('DOMContentLoaded', loadFeaturedProperties);
+</script>
 
 <!-- ============ WHY CHOOSE ============ -->
 <section class="container" style="padding:52px 24px 10px;">

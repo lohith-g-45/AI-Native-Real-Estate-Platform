@@ -71,7 +71,12 @@ function renderListings(groupedListings) {
 
     const priceFormatted = listing.asking_price ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(listing.asking_price) : 'Price TBD';
     const dateFormatted = new Date(listing.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    const imgUrl = listing.cover_photo_url || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop';
+    
+    let imgUrl = listing.cover_photo_url;
+    if (imgUrl && !/^https?:\/\//.test(imgUrl)) {
+      imgUrl = `${API_BASE.replace('/api/listings', '')}${imgUrl}`;
+    }
+    imgUrl = imgUrl || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop';
     
     // Default analytics to 0 since our getSellerListings doesn't populate analytics deeply by default
     const views = 0;
@@ -104,8 +109,11 @@ function renderListings(groupedListings) {
             
             <div style="font-size:12.5px; color:#94a3b8; font-weight:500;">Listed on ${dateFormatted}</div>
           </div>
-          <div>
-             <i data-feather="more-vertical" style="width:20px;height:20px;color:#94a3b8;cursor:pointer;"></i>
+          <div style="position:relative;">
+             <i data-feather="more-vertical" style="width:20px;height:20px;color:#94a3b8;cursor:pointer;" onclick="toggleDropdown('${listing.property_id}')"></i>
+             <div id="dropdown-${listing.property_id}" style="display:none; position:absolute; right:0; top:24px; background:#fff; border:1px solid #e2e8f0; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); width:120px; z-index:10; overflow:hidden;">
+               <div style="padding:10px 16px; font-size:13px; color:#ef4444; cursor:pointer; font-weight:600; transition: background 0.15s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='#fff'" onclick="deleteListing('${listing.property_id}')">Delete</div>
+             </div>
           </div>
         </div>
       </div>
@@ -120,8 +128,8 @@ function renderListings(groupedListings) {
            <div style="font-size:12px; color:#64748b; line-height:1.5;">${statusDesc}</div>
          </div>
          <div style="display:flex; gap:12px;">
-           <button style="flex:1; background:#fff; border:1px solid var(--blue); color:var(--blue); font-weight:700; font-size:13.5px; padding:11px 0; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif;">View</button>
-           <button style="flex:1; background:var(--blue); border:1px solid var(--blue); color:#fff; font-weight:700; font-size:13.5px; padding:11px 0; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif;">Edit</button>
+           <button style="flex:1; background:#fff; border:1px solid var(--blue); color:var(--blue); font-weight:700; font-size:13.5px; padding:11px 0; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif;" onclick="viewListing('${listing.property_id}')">View</button>
+           <button style="flex:1; background:var(--blue); border:1px solid var(--blue); color:#fff; font-weight:700; font-size:13.5px; padding:11px 0; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif;" onclick="editListing('${listing.property_id}', ${listing.completion_percentage})">Edit</button>
          </div>
       </div>
     </div>
@@ -138,3 +146,50 @@ function renderListings(groupedListings) {
 document.addEventListener('DOMContentLoaded', () => {
   fetchMyListings();
 });
+
+// Helper Functions for Listing Actions
+window.toggleDropdown = function(id) {
+  const el = document.getElementById(`dropdown-${id}`);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+};
+
+// Close dropdown if clicked outside
+document.addEventListener('click', function(e) {
+  if (!e.target.matches('[data-feather="more-vertical"]')) {
+    document.querySelectorAll('[id^="dropdown-"]').forEach(el => {
+      el.style.display = 'none';
+    });
+  }
+});
+
+window.deleteListing = async function(id) {
+  if (!confirm('Are you sure you want to delete this listing? This action cannot be undone.')) return;
+  const token = localStorage.getItem('accessToken');
+  try {
+    const res = await fetch(`${API_BASE}/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.ok) {
+      fetchMyListings(); // Refresh the list
+    } else {
+      const data = await res.json();
+      alert('Failed to delete: ' + (data.message || 'Unknown error'));
+    }
+  } catch (err) {
+    alert('Failed to delete listing. Please check your connection.');
+  }
+};
+
+window.editListing = function(id) {
+  // Clear any existing partial state
+  sessionStorage.removeItem('hh_add_listing_state');
+  // Navigate to init step with editId, which will fetch data and route automatically
+  window.location.href = `add_listing_init.html?editId=${id}`;
+};
+
+window.viewListing = function(id) {
+  // If we had a dedicated page, we'd navigate there.
+  // For now, we can redirect to a property details page (which we will build)
+  window.location.href = `property_details.html?id=${id}`;
+};

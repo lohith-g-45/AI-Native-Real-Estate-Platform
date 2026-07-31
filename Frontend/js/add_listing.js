@@ -183,6 +183,45 @@ function initStep1() {
   const btn = document.getElementById('initBtn');
   if (!btn) return;
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const editId = urlParams.get('editId');
+  if (editId) {
+    btn.innerHTML = 'Loading Listing Data <i class="spin"></i>';
+    btn.disabled = true;
+    
+    // Fetch all data and populate session storage
+    Promise.all([
+      apiRequest(`/${editId}/basic-details`),
+      apiRequest(`/${editId}/location`),
+      apiRequest(`/${editId}/details`),
+      apiRequest(`/${editId}/progress`)
+    ]).then(([basicRes, locRes, detRes, progRes]) => {
+      const state = {
+        propertyId: editId,
+        currentStep: 2,
+        completion: progRes.data.completion_percentage || 0,
+        basic: basicRes.data || {},
+        location: locRes.data || {},
+        features: detRes.data || {}
+      };
+      
+      // We don't fetch media fully here because it's fetched dynamically in step 4 anyway
+      sessionStorage.setItem(WIZ_KEY, JSON.stringify(state));
+      
+      let step = 'add_listing_basic.html';
+      if (state.completion >= 30) step = 'add_listing_features.html';
+      else if (state.completion >= 15) step = 'add_listing_location.html';
+      
+      window.location.href = step;
+    }).catch(err => {
+      alert('Failed to load listing data: ' + err.message);
+      btn.innerHTML = 'Initialize Listing <i data-feather="arrow-right" style="width:16px;height:16px;"></i>';
+      btn.disabled = false;
+      if (window.feather) feather.replace();
+    });
+    return;
+  }
+
   const existing = getWizardState();
   if (existing.propertyId) {
     btn.innerHTML = 'Continue Listing <i data-feather="arrow-right" style="width:16px;height:16px;"></i>';
@@ -201,7 +240,7 @@ function initStep1() {
     btn.textContent = 'Initializing…';
     try {
       const result = await apiRequest('/create', 'POST', {});
-      setWizardState({ propertyId: result.data.property_id, currentStep: 2 });
+      setWizardState({ propertyId: result.data.property_id, currentStep: 2, completion: 0 });
       window.location.href = 'add_listing_basic.html';
     } catch (err) {
       alert('Error: ' + err.message);

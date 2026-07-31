@@ -1295,5 +1295,14 @@ export class PropertyListingService {
     };
   }
 
+  async deleteListing(propertyId: string, sellerId: string) {
+    const listing = await this.getListingAndVerifyOwnership(propertyId, { sub: sellerId });
+    await this.listingRepo.remove(listing);
+    return {
+      success: true,
+      message: 'Listing deleted successfully'
+    };
+  }
+
 }
 

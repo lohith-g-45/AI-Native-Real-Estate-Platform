@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Details - HomeHaven</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+<link rel="stylesheet" href="css/dash.css" />
+<style>
+  body { background: #f8fafc; font-family: 'Inter', sans-serif; }
+  header { background: #ffffff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; }
+  .nav-wrap { max-width: 1440px; margin: 0 auto; padding: 0 32px; height: 68px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration:none; color:inherit; }
+  .logo-box { width: 36px; height: 36px; background: #2563eb; border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+  .logo-name { font-size: 17px; font-weight: 800; color: #0f172a; }
+  .logo-sub  { font-size: 11px; color: #64748b; }
+  .gallery-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; height: 480px; border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+  .gallery-main { width: 100%; height: 100%; object-fit: cover; }
+  .gallery-side { display: flex; flex-direction: column; gap: 16px; height: 100%; }
+  .gallery-side img { width: 100%; height: calc(50% - 8px); object-fit: cover; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <a href="index.html" class="logo">
+      <div class="logo-box"><i data-feather="home" style="width:20px;height:20px;color:#fff;"></i></div>
+      <div><div class="logo-name">HomeHaven</div><div class="logo-sub">AI Native Real Estate Platform</div></div>
+    </a>
+    <div style="display:flex; gap:15px;">
+        <a href="index.html" class="btn-primary" style="background:#f1f5f9; color:#0f172a; border:none;">Back to Home</a>
+    </div>
+  </div>
+</header>
+
+<div class="container" style="max-width:1200px; margin: 40px auto; padding: 0 24px;" id="main-content">
+  <div style="text-align:center; padding:100px; color:var(--muted);">Loading property details... <i class="spin"></i></div>
+</div>
+
+<script>
+feather.replace();
+
+async function loadPropertyDetails() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get('id');
+  if (!id) {
+    document.getElementById('main-content').innerHTML = '<div style="color:red;text-align:center;padding:50px;">Property ID is missing.</div>';
+    return;
+  }
+
+  const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.hostname.startsWith('192.168.') || window.location.hostname.startsWith('10.');
+  const API_BASE = isLocal
+      ? `http://${window.location.hostname}:3000/api/properties` 
+      : 'https://ai-native-real-estate-platform.onrender.com/api/properties';
+  
+  try {
+    const res = await fetch(`${API_BASE}/${id}`);
+    const data = await res.json();
+    
+    if (!data.success || !data.data) {
+      document.getElementById('main-content').innerHTML = `<div style="color:red;text-align:center;padding:50px;">${data.message || 'Property not found.'}</div>`;
+      return;
+    }
+    
+    const p = data.data;
+    const media = p.media || [];
+    const getMediaUrl = (m) => {
+        if (!m || !m.url) return 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop';
+        return /^https?:\/\//.test(m.url) ? m.url : `${API_BASE.replace('/api/properties', '')}${m.url}`;
+    };
+    
+    const cover = media.find(m => m.is_cover) || media[0] || {};
+    const others = media.filter(m => m.media_id !== cover.media_id);
+    const img1 = others[0] || {};
+    const img2 = others[1] || {};
+    
+    const price = p.asking_price ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(p.asking_price) : 'Price TBD';
+    
+    document.getElementById('main-content').innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 24px;">
+        <div>
+          <h1 style="font-size:32px; font-weight:800; color:#0f172a; margin-bottom:8px;">${p.title || 'Untitled Property'}</h1>
+          <div style="font-size:16px; color:#64748b; display:flex; align-items:center; gap:8px;">
+            <i data-feather="map-pin" style="width:16px;height:16px;"></i>
+            ${p.address || ''} ${p.city || ''}, ${p.state || ''} ${p.postal_code || ''}
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:36px; font-weight:800; color:var(--blue);">${price}</div>
+          <div style="font-size:14px; color:#64748b; margin-top:4px;">${p.listing_type === 'for_rent' ? 'For Rent' : 'For Sale'}</div>
+        </div>
+      </div>
+      
+      <div class="gallery-grid">
+        <img src="${getMediaUrl(cover)}" class="gallery-main" onerror="this.src='https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop'">
+        <div class="gallery-side">
+          <img src="${getMediaUrl(img1)}" onerror="this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800&auto=format&fit=crop'">
+          <img src="${getMediaUrl(img2)}" onerror="this.src='https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop'">
+        </div>
+      </div>
+      
+      <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 40px;">
+        <div>
+          <div style="background:#fff; border-radius:16px; border:1px solid #e2e8f0; padding:32px; margin-bottom:32px;">
+            <h2 style="font-size:20px; font-weight:800; margin-bottom:16px;">Description</h2>
+            <p style="color:#475569; font-size:15px; line-height:1.7;">${p.description || 'No description provided.'}</p>
+          </div>
+          
+          <div style="background:#fff; border-radius:16px; border:1px solid #e2e8f0; padding:32px;">
+            <h2 style="font-size:20px; font-weight:800; margin-bottom:24px;">Key Features</h2>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+              <div style="display:flex; align-items:center; gap:12px; font-size:15px; color:#334155;">
+                <div style="width:40px;height:40px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;"><i data-feather="home" style="color:#2563eb;width:20px;"></i></div>
+                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Type</div><div style="font-weight:700;">${p.property_type || 'Unknown'}</div></div>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px; font-size:15px; color:#334155;">
+                <div style="width:40px;height:40px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;"><i data-feather="square" style="color:#2563eb;width:20px;"></i></div>
+                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Size</div><div style="font-weight:700;">${p.square_feet ? p.square_feet + ' sqft' : 'Unknown'}</div></div>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px; font-size:15px; color:#334155;">
+                <div style="width:40px;height:40px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;"><i data-feather="users" style="color:#2563eb;width:20px;"></i></div>
+                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Bedrooms</div><div style="font-weight:700;">${p.bedrooms || 0}</div></div>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px; font-size:15px; color:#334155;">
+                <div style="width:40px;height:40px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;"><i data-feather="droplet" style="color:#2563eb;width:20px;"></i></div>
+                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Bathrooms</div><div style="font-weight:700;">${p.bathrooms || 0}</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <div style="background:#fff; border-radius:16px; border:1px solid #e2e8f0; padding:32px; position:sticky; top:100px;">
+            <div style="font-size:18px; font-weight:800; margin-bottom:16px;">Interested in this property?</div>
+            <p style="font-size:14px; color:#64748b; margin-bottom:24px;">Contact the seller directly to schedule a viewing or ask any questions.</p>
+            <button class="btn-primary" style="width:100%; justify-content:center; padding:14px; font-size:15px;" onclick="alert('Inquiry feature coming soon!')">Contact Seller</button>
+            <button style="width:100%; margin-top:12px; padding:14px; border-radius:8px; background:#fff; border:1px solid var(--blue); color:var(--blue); font-weight:700; font-size:15px; cursor:pointer;" onclick="alert('Offer feature coming soon!')">Make an Offer</button>
+          </div>
+        </div>
+      </div>
+    `;
+    feather.replace();
+  } catch (err) {
+    document.getElementById('main-content').innerHTML = `<div style="color:red;text-align:center;padding:50px;">Failed to load details: ${err.message}</div>`;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadPropertyDetails);
+</script>
+</body>
+</html>
