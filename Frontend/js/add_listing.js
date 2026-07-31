@@ -318,6 +318,33 @@ function initStep3() {
   els.city.addEventListener('input', updateMapLabel);
   updateMapLabel();
 
+  async function geocodeAddress() {
+    const address = els.address.value.trim();
+    const city = els.city.value.trim();
+    const province = els.province.value.trim();
+    const country = els.country.value.trim();
+    
+    if (!address || !city || !country) return;
+    
+    const query = `${address}, ${city}, ${province}, ${country}`;
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
+    
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data && data.length > 0) {
+        els.latitude.value = parseFloat(data[0].lat).toFixed(6);
+        els.longitude.value = parseFloat(data[0].lon).toFixed(6);
+      }
+    } catch (e) {
+      console.warn("Geocoding failed", e);
+    }
+  }
+
+  ['address', 'city', 'province', 'country'].forEach(k => {
+    els[k].addEventListener('blur', geocodeAddress);
+  });
+
   function showVerified() {
     const v = document.getElementById('locVerified');
     if (v) v.classList.add('show');
@@ -335,16 +362,20 @@ function initStep3() {
     const errorDiv = document.getElementById('step3Error');
     errorDiv.textContent = '';
 
-    const lat = parseFloat(els.latitude.value);
-    const lng = parseFloat(els.longitude.value);
+    const latVal = els.latitude.value;
+    const lngVal = els.longitude.value;
+    const lat = latVal ? parseFloat(latVal) : 0;
+    const lng = lngVal ? parseFloat(lngVal) : 0;
+    
     const errors = [];
     if (!els.address.value.trim()) errors.push('Address is required.');
     if (!els.city.value.trim()) errors.push('City is required.');
     if (!els.province.value.trim()) errors.push('Province is required.');
     if (!els.zip_code.value.trim()) errors.push('Postal code is required.');
     if (!els.country.value.trim()) errors.push('Country is required.');
-    if (isNaN(lat) || lat < -90 || lat > 90) errors.push('Latitude must be between -90 and 90.');
-    if (isNaN(lng) || lng < -180 || lng > 180) errors.push('Longitude must be between -180 and 180.');
+    
+    if (latVal && (isNaN(lat) || lat < -90 || lat > 90)) errors.push('Latitude must be between -90 and 90.');
+    if (lngVal && (isNaN(lng) || lng < -180 || lng > 180)) errors.push('Longitude must be between -180 and 180.');
     if (errors.length) { errorDiv.textContent = errors.join(' '); return; }
 
     const payload = {
