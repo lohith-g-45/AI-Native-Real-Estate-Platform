@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>HomeHaven – Edit Profile</title>
+<meta name="description" content="Update your HomeHaven profile, personal information and account preferences."/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+<style>
+  /* ── Design Tokens ── */
+  :root {
+    --blue:    #2563eb;
+    --blue-lt: #4f8cff;
+    --line:    #e2e8f0;
+    --muted:   #64748b;
+    --text:    #0f172a;
+    --bg:      #f1f5f9;
+    --white:   #ffffff;
+    --red:     #dc2626;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ══════════════ PAGE WRAPPER ══════════════ */
+  .page-wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 36px 24px 60px;
+  }
+
+  /* ── Back Link ── */
+  .back-link {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 13.5px; font-weight: 500; color: var(--muted);
+    text-decoration: none; margin-bottom: 22px;
+    transition: color .15s;
+  }
+  .back-link:hover { color: var(--blue); }
+  .back-link svg { flex-shrink: 0; }
+
+  /* ── Page Title ── */
+  .page-title { font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+  .page-sub   { font-size: 13.5px; color: var(--muted); margin-bottom: 28px; }
+
+  /* ══════════════ TWO-COLUMN GRID ══════════════ */
+  .edit-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  /* ── Left card (avatar) ── */
+  .avatar-card {
+    background: var(--white);
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .avatar-banner {
+    height: 110px;
+    background: linear-gradient(135deg, #c7d7f5 0%, #dde8ff 100%);
+  }
+
+  .avatar-body {
+    padding: 0 24px 28px;
+    text-align: center;
+  }
+
+  .avatar-wrap {
+    position: relative;
+    width: 90px; height: 90px;
+    margin: -45px auto 14px;
+  }
+
+  .avatar-circle {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: linear-gradient(135deg, #c7d7f5, #dde8ff);
+    border: 4px solid var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 800; color: var(--blue);
+    box-shadow: 0 2px 12px rgba(37,99,235,.15);
+  }
+
+  .avatar-cam {
+    position: absolute; bottom: 2px; right: 2px;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--white); border: 2px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: border-color .15s, background .15s;
+    box-shadow: 0 1px 4px rgba(0,0,0,.1);
+  }
+  .avatar-cam:hover { border-color: var(--blue); background: #eef3ff; }
+  .avatar-cam svg { color: #475569; }
+
+  .avatar-name  { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .avatar-email { font-size: 12.5px; color: var(--muted); margin-bottom: 20px; }
+
+  .avatar-divider { border: none; border-top: 1px solid var(--line); margin-bottom: 18px; }
+
+  .avatar-meta {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px; color: var(--muted); text-align: left;
+  }
+  .avatar-meta svg { color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+  .avatar-meta-lbl { font-size: 11px; color: #94a3b8; margin-bottom: 2px; }
+  .avatar-meta-val { font-size: 13px; color: var(--text); font-weight: 600; }
+
+  /* ── Right card (form) ── */
+  .form-card {
+    background: var(--white);
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    padding: 32px 36px;
+  }
+
+  .form-section-title {
+    font-size: 16px; font-weight: 700; color: var(--text);
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* ── Field grid ── */
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  .field-row.full { grid-template-columns: 1fr; }
+
+  .field-group { display: flex; flex-direction: column; gap: 7px; }
+
+  .field-label {
+    font-size: 13px; font-weight: 600; color: var(--text);
+  }
+
+  .field-input-wrap {
+    position: relative; display: flex; align-items: center;
+  }
+  .field-input-wrap svg {
+    position: absolute; left: 13px;
+    color: #94a3b8; pointer-events: none;
+    flex-shrink: 0;
+  }
+
+  .field-input {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    font-size: 14px; font-weight: 500;
+    color: var(--text); background: var(--white);
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .field-input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+  }
+  .field-input.has-icon { padding-left: 38px; }
+  .field-input.readonly {
+    background: #f8fafc; color: var(--muted);
+    cursor: not-allowed;
+  }
+  .field-hint {
+    font-size: 11.5px; color: #94a3b8; margin-top: 2px;
+  }
+
+  textarea.field-input {
+    resize: vertical; min-height: 110px;
+    padding-top: 11px; line-height: 1.55;
+  }
+
+  .char-counter {
+    text-align: right; font-size: 11.5px; color: #94a3b8; margin-top: 4px;
+  }
+
+  /* ── Form actions ── */
+  .form-actions {
+    display: flex; justify-content: flex-end; gap: 12px;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+
+  .btn-cancel {
+    padding: 11px 28px;
+    border: 1.5px solid var(--line);
+    background: var(--white); color: var(--text);
+    border-radius: 10px; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: 'Inter', sans-serif;
+    transition: border-color .15s, color .15s;
+  }
+  .btn-cancel:hover { border-color: #94a3b8; color: var(--muted); }
+
+  .btn-save {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 28px;
+    background: var(--blue); color: var(--white);
+    border: none; border-radius: 10px;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: 'Inter', sans-serif;
+    transition: background .15s, transform .1s, box-shadow .15s;
+    box-shadow: 0 2px 10px rgba(37,99,235,.25);
+  }
+  .btn-save:hover {
+    background: #1d4ed8;
+    box-shadow: 0 4px 16px rgba(37,99,235,.35);
+    transform: translateY(-1px);
+  }
+  .btn-save:active { transform: translateY(0); }
+
+  /* ══════════════ TRUST STRIP ══════════════ */
+  .trust-strip {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    margin-top: 28px;
+    padding: 16px 24px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    font-size: 13.5px; color: var(--muted);
+  }
+  .trust-strip svg { color: var(--blue); flex-shrink: 0; }
+  .trust-strip strong { color: var(--blue); }
+
+  /* ══════════════ RESPONSIVE ══════════════ */
+  @media (max-width: 760px) {
+    .edit-grid { grid-template-columns: 1fr; }
+    .field-row { grid-template-columns: 1fr; }
+    .form-card { padding: 22px 18px; }
+    .form-actions { flex-direction: column-reverse; }
+    .btn-cancel, .btn-save { width: 100%; justify-content: center; }
+  }
+
+  /* ── Success toast (hidden by default) ── */
+  .toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: #16a34a; color: #fff;
+    padding: 14px 24px; border-radius: 12px;
+    font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.18);
+    opacity: 0; transition: opacity .3s, transform .3s;
+    z-index: 999; pointer-events: none;
+  }
+  .toast.show {
+    opacity: 1; transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- ── Back to Profile ── -->
+  <a class="back-link" href="profile.html">
+    <i data-feather="arrow-left" style="width:15px;height:15px;"></i>
+    Back to Profile
+  </a>
+
+  <!-- ── Page Heading ── -->
+  <h1 class="page-title">Edit Profile</h1>
+  <p class="page-sub">Update your personal information and profile details.</p>
+
+  <!-- ══════ TWO-COLUMN LAYOUT ══════ -->
+  <div class="edit-grid">
+
+    <!-- ── LEFT: Avatar card ── -->
+    <div class="avatar-card">
+      <div class="avatar-banner"></div>
+      <div class="avatar-body">
+        <div class="avatar-wrap">
+          <div class="avatar-circle">LG</div>
+          <button class="avatar-cam" title="Change photo" onclick="document.getElementById('photo-upload').click()">
+            <i data-feather="camera" style="width:13px;height:13px;"></i>
+          </button>
+          <input type="file" id="photo-upload" accept="image/*" style="display:none"/>
+        </div>
+        <div class="avatar-name">Lohith G</div>
+        <div class="avatar-email">lohithg@example.com</div>
+        <hr class="avatar-divider"/>
+        <div class="avatar-meta">
+          <i data-feather="calendar" style="width:15px;height:15px;"></i>
+          <div>
+            <div class="avatar-meta-lbl">Member Since</div>
+            <div class="avatar-meta-val">May 2025</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RIGHT: Form card ── -->
+    <div class="form-card">
+      <div class="form-section-title">Personal Information</div>
+
+      <form id="edit-form" novalidate>
+
+        <!-- Row 1: Full Name + Email -->
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="full-name">Full Name</label>
+            <div class="field-input-wrap">
+              <input class="field-input" type="text" id="full-name" name="fullName" value="Lohith G" placeholder="Your full name"/>
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="email">Email Address</label>
+            <div class="field-input-wrap">
+              <input class="field-input readonly" type="email" id="email" name="email" value="lohithg@example.com" readonly/>
+            </div>
+            <span class="field-hint">Email cannot be changed</span>
+          </div>
+        </div>
+
+        <!-- Row 2: Phone + DOB -->
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="phone">Phone Number</label>
+            <div class="field-input-wrap">
+              <i data-feather="phone" style="width:15px;height:15px;"></i>
+              <input class="field-input has-icon" type="tel" id="phone" name="phone" value="+91 98765 43210" placeholder="+1 (416) 000-0000"/>
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="dob">Date of Birth</label>
+            <div class="field-input-wrap">
+              <i data-feather="calendar" style="width:15px;height:15px;"></i>
+              <input class="field-input has-icon" type="date" id="dob" name="dob" value="2002-08-15"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3: Location (full-width) -->
+        <div class="field-row full">
+          <div class="field-group">
+            <label class="field-label" for="location">Location</label>
+            <div class="field-input-wrap">
+              <i data-feather="map-pin" style="width:15px;height:15px;"></i>
+              <input class="field-input has-icon" type="text" id="location" name="location" value="Bengaluru, Karnataka, India" placeholder="City, Province, Country"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 4: Bio (full-width) -->
+        <div class="field-row full">
+          <div class="field-group">
+            <label class="field-label" for="bio">Bio <span style="font-weight:400;color:#94a3b8;">(Optional)</span></label>
+            <textarea class="field-input" id="bio" name="bio" maxlength="160"
+              placeholder="Tell us a little about yourself..."
+              oninput="document.getElementById('char-count').textContent = this.value.length">Enthusiastic individual with a passion for real estate and technology.</textarea>
+            <div class="char-counter"><span id="char-count">66</span>/160</div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" onclick="window.location.href='profile.html'">Cancel</button>
+          <button type="submit" class="btn-save" id="save-btn">
+            <i data-feather="save" style="width:15px;height:15px;"></i>
+            Save Changes
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+
+  <!-- ── Trust strip ── -->
+  <div class="trust-strip">
+    <span><strong>Your information is secure and private.</strong> We never share your details with anyone.</span>
+  </div>
+
+</div>
+
+<!-- ── Success toast ── -->
+<div class="toast" id="toast">
+  <i data-feather="check-circle" style="width:16px;height:16px;"></i>
+  Profile updated successfully!
+</div>
+
+<script>
+  feather.replace();
+
+  /* ── Save form ── */
+  document.getElementById('edit-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const btn = document.getElementById('save-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i data-feather="loader" style="width:15px;height:15px;"></i> Saving…';
+    feather.replace();
+
+    // Simulate save delay
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = '<i data-feather="save" style="width:15px;height:15px;"></i> Save Changes';
+      feather.replace();
+
+      // Show toast
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }, 900);
+  });
+
+  /* ── Live char counter init ── */
+  const bioEl = document.getElementById('bio');
+  document.getElementById('char-count').textContent = bioEl.value.length;
+</script>
+</body>
+</html>
