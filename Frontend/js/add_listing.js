@@ -228,17 +228,4 @@ function showStep(stepNum) {
       el.classList.remove('active', 'completed');
     }
   });
-  
-  saveFormState();
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  restoreFormState();
-  const savedStep = parseInt(sessionStorage.getItem('currentStep')) || 1;
-  showStep(savedStep);
-  
-  const inputs = document.querySelectorAll('input, select, textarea');
-  inputs.forEach(input => {
-    input.addEventListener('change', saveFormState);
-  });
-});
