@@ -11,8 +11,11 @@
    - rendering the shared step indicator
    ============================================================ */
 
-const API_BASE = 'http://localhost:3000/api/listings';
-const MEDIA_ORIGIN = API_BASE.replace(/\/api\/listings$/, '');
+const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.hostname.startsWith('192.168.') || window.location.hostname.startsWith('10.');
+const API_BASE = isLocal
+    ? `http://${window.location.hostname}:3000/api/listings` 
+    : 'https://ai-native-real-estate-platform.onrender.com/api/listings';
+const MEDIA_ORIGIN = isLocal ? `http://${window.location.hostname}:3000` : 'https://ai-native-real-estate-platform.onrender.com';
 const WIZ_KEY = 'hh_add_listing_state';
 
 const WIZ_STEPS = [
