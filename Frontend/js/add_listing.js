@@ -414,9 +414,10 @@ function initStep4() {
   }
 
   function collectFeaturesPayload() {
+    const feat = getWizardState().features || {};
     return {
-      bedrooms: getCounter('bedrooms'),
-      bathrooms: getCounter('bathrooms'),
+      bedrooms: feat.bedrooms ?? 3,
+      bathrooms: feat.bathrooms ?? 2,
       square_feet: parseFloat(document.getElementById('square_feet').value) || undefined,
       year_built: parseInt(document.getElementById('year_built').value, 10) || undefined,
       basement_type: document.getElementById('basement_type').value,
