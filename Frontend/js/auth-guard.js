@@ -28,6 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.textContent = displayName;
             });
         }
+        
+        // Check expiration
+        if (payload.exp && (payload.exp * 1000) < Date.now()) {
+            console.warn("Token expired. Redirecting to login.");
+            localStorage.removeItem('accessToken');
+            window.location.href = 'login.html';
+            return;
+        }
     } catch (e) {
         console.error("Invalid token format", e);
         localStorage.removeItem('accessToken');

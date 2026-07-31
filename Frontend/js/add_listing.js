@@ -79,6 +79,14 @@ async function apiRequest(endpoint, method, body = null, isMultipart = false) {
   }
 
   const response = await fetch(`${API_BASE}${endpoint}`, options);
+  
+  if (response.status === 401) {
+    localStorage.removeItem('accessToken');
+    window.location.href = 'login.html';
+    // Return a never-resolving promise to stop the caller from continuing
+    return new Promise(() => {});
+  }
+
   if (!response.ok) {
     let errorData = {};
     try { errorData = await response.json(); } catch (e) { /* no body */ }
