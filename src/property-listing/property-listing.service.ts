@@ -572,13 +572,9 @@ export class PropertyListingService {
     ]);
 
     const errors = [];
-    if (listing.completion_percentage < 85) errors.push("Listing completion must be at least 85%");
     if (!basic_details) errors.push("Basic details are incomplete");
     if (!location) errors.push("Location information is missing");
-    if (!details) errors.push("Property details are incomplete");
     if (!media.some(m => m.media_type === MediaType.IMAGE)) errors.push("At least one property image is required");
-    if (!availability) errors.push("Availability and contact info is missing");
-    if (!verification || verification.fraud_flagged) errors.push("Verification is incomplete or flagged");
 
     if (errors.length > 0) {
       this.throwError("Listing is not ready for submission", HttpStatus.BAD_REQUEST, errors);
