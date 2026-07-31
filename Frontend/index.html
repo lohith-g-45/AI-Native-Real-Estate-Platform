@@ -1,392 +1,569 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>AI Native Real Estate Platform</title>
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-
-    <link rel="stylesheet" href="css/style.css">
-
-</head>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Native Real Estate Platform</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+<link rel="stylesheet" href="css/dash.css" />
+<style>
+  /* ══ RIGID HEADER TEMPLATE ══ */
+  header {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-wrap {
+    max-width: 1440px; margin: 0 auto;
+    padding: 0 32px; height: 68px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration:none; color:inherit; }
+  .logo-box {
+    width: 36px; height: 36px; background: #2563eb;
+    border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  }
+  .logo-name { font-size: 17px; font-weight: 800; color: #0f172a; }
+  .logo-sub  { font-size: 11px; color: #64748b; }
+  
+  .top-nav { display: flex; gap: 28px; }
+  .top-nav a {
+    font-size: 14px; font-weight: 500; color: #334155;
+    padding-bottom: 4px; border-bottom: 2px solid transparent;
+    transition: color .15s, border-color .15s;
+    text-decoration: none;
+  }
+  .top-nav a:hover { color: #2563eb; }
+  .top-nav a.active { color: #2563eb; border-bottom-color: #2563eb; }
+  
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-icon-btn {
+    position: relative; cursor: pointer;
+    color: #334155; background: none; border: none;
+    display: flex; align-items: center;
+  }
+  .notif-dot {
+    position: absolute; top: -4px; right: -5px;
+    background: #dc2626; width: 8px; height: 8px; border-radius: 50%;
+  }
+  .nav-saved {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 14px; font-weight: 500; color: #334155; cursor: pointer;
+  }
+  .avatar-btn {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: #e2e8f0; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; text-decoration: none;
+  }
+</style>
 <body>
 
-    <!-- =====================================
-                HERO SECTION
-    ====================================== -->
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="nav-wrap">
+    <a href="index.html" class="logo">
+      <div class="logo-box">
+        <i data-feather="home" style="width:20px;height:20px;color:#fff;"></i>
+      </div>
+      <div>
+        <div class="logo-name">HomeHaven</div>
+        <div class="logo-sub">AI Native Real Estate Platform</div>
+      </div>
+    </a>
+ 
+    <nav class="top-nav">
+      <a href="index.html" class="active">Home</a>
+      <a href="buy.html">Buy</a>
+      <a href="sell.html">Sell</a>
+      <a href="#">AI Search</a>
+      <a href="#">Mortgage</a>
+      <a href="#">Market Trends</a>
+    </nav>
+ 
+    <div class="nav-right">
+      <div class="nav-saved">
+        <i data-feather="heart" style="width:17px;height:17px;"></i> Saved
+      </div>
+      <button class="nav-icon-btn">
+        <div class="notif-dot"></div>
+        <i data-feather="bell" style="width:19px;height:19px;"></i>
+      </button>
+      <button class="nav-icon-btn">
+        <i data-feather="message-square" style="width:19px;height:19px;"></i>
+      </button>
 
-    <section class="hero">
+      <div id="auth-buttons" style="display: none; gap: 15px; align-items: center; margin-left: 10px;">
+          <a href="login.html" style="font-size: 14px; font-weight: 600; color: white; background: #2563eb; padding: 8px 16px; border-radius: 8px; text-decoration: none;">Sign In</a>
+      </div>
 
-        <div class="dark-overlay"></div>
+      <div id="user-menu" style="display: flex; align-items: center; gap: 20px;">
+        <a class="avatar-btn" href="profile.html">
+          <i data-feather="user" style="width:17px;height:17px;color:#475569;"></i>
+        </a>
+        <a href="#" onclick="localStorage.removeItem('accessToken'); sessionStorage.removeItem('loginIntent'); window.location.reload();" style="color: #dc2626; text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 5px;" title="Sign Out">
+            <i data-feather="log-out" style="width:17px;height:17px;"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
 
-        <div class="gradient-overlay"></div>
+<!-- ============ HERO ============ -->
+<section style="position:relative; overflow:hidden;">
+  <div style="position:absolute; inset:0;">
+    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1800&auto=format&fit=crop"
+         style="width:100%; height:100%; object-fit:cover;" alt="Modern home at dusk" />
+    <div style="position:absolute; inset:0; background:linear-gradient(90deg, rgba(10,18,45,.92) 5%, rgba(10,18,45,.72) 45%, rgba(10,18,45,.35) 80%);"></div>
+  </div>
 
-        <div class="hero-content">
+  <div class="container" style="position:relative; padding-top:64px; padding-bottom:60px;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:40px;">
+      <div style="max-width:600px;">
+       
 
-            <h1>
-                Your Gateway to Smart Property Deals
-            </h1>
+        <h1 style="color:#fff; font-size:48px; font-weight:800; line-height:1.12; margin:22px 0 16px; letter-spacing:-.02em;">
+          Find Your Perfect<br/>Home with <span style="color:#4f8cff;">US</span>
+        </h1>
 
-           <a href="login.html" class="hero-btn">
-    Get Started
-</a>
+        <p style="color:#cbd5e1; font-size:16.5px; line-height:1.6; margin-bottom:28px; max-width:500px;">
+          Discover personalised property recommended for you
+        </p>
 
-
+        <div class="search-bar-wrap" style="max-width:560px;">
+          <i data-feather="search" style="width:18px;height:18px; color:#94a3b8; margin-left:10px;"></i>
+          <input type="text" placeholder='Ask AI to find your perfect home... "Find me a 3 bedroom detached home under $900k in Toronto"'
+                 style="flex:1; border:none; outline:none; font-size:14px; color:#1e293b; padding:10px 4px;" />
+          <button class="btn-primary">Search  <i data-feather="zap" style="width:15px;height:15px;"></i></button>
         </div>
 
-    </section>
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:18px;">
+          <button class="pill">Detached</button>
+          <button class="pill">Condo</button>
+          <button class="pill">Under $1M</button>
+          <button class="pill">Toronto</button>
+          <button class="pill" style="display:inline-flex; align-items:center; gap:6px;">More Filters <i data-feather="sliders" style="width:13px;height:13px;"></i></button>
+        </div>
+      </div>
 
-    <!-- =====================================
-            FEATURED PROPERTIES
-    ====================================== -->
-
-    <section class="featured-properties">
-
-        <div class="section-heading">
-
-            <h2>Featured Properties</h2>
-
-            <p>
-                Explore some of our latest verified properties across Canada.
-            </p>
-
+      <div class="snapshot-card">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:18px; font-weight:600; font-size:14.5px;">
+          <i data-feather="bar-chart-2" style="width:16px;height:16px; color:#60a5fa;"></i> Market Snapshot
         </div>
 
-        <div class="property-slider">
-
-            <div class="property-track">
-
-                <!-- ================= Card 1 ================= -->
-
-                <div class="property-card">
-
-                    <img src="images/villa_img.png" alt="Modern Villa">
-
-                    <span class="badge">
-                        ✔ Verified
-                    </span>
-
-                    <div class="property-info">
-
-                        <h3>Modern Villa</h3>
-
-                        <p>📍 Toronto, ON</p>
-
-                        <h4>$1,250,000</h4>
-
-                        <div class="property-details">
-
-                            <span>4 Bed</span>
-
-                            <span>3 Bath</span>
-
-                            <span>2400 sqft</span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <!-- ================= Card 2 ================= -->
-
-                <div class="property-card">
-
-                    <img src="images/condo_img.png" alt="Luxury Condo">
-
-                    <span class="badge">
-                        ✔ Verified
-                    </span>
-
-                    <div class="property-info">
-
-                        <h3>Luxury Condo</h3>
-
-                        <p>📍 Mississauga</p>
-
-                        <h4>$780,000</h4>
-
-                        <div class="property-details">
-
-                            <span>2 Bed</span>
-
-                            <span>2 Bath</span>
-
-                            <span>1100 sqft</span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <!-- ================= Card 3 ================= -->
-
-                <div class="property-card">
-
-                    <img src="images/detached_img.png" alt="Detached House">
-
-                    <span class="badge">
-                        ✔ Verified
-                    </span>
-
-                    <div class="property-info">
-
-                        <h3>Detached Home</h3>
-
-                        <p>📍 Vaughan</p>
-
-                        <h4>$985,000</h4>
-
-                        <div class="property-details">
-
-                            <span>5 Bed</span>
-
-                            <span>4 Bath</span>
-
-                            <span>2950 sqft</span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <!-- ================= Card 4 ================= -->
-
-                <div class="property-card">
-
-                    <img src="images/duplex_img.png" alt="Duplex">
-
-                    <span class="badge">
-                        ✔ Verified
-                    </span>
-
-                    <div class="property-info">
-
-                        <h3>Modern Duplex</h3>
-
-                        <p>📍 Brampton</p>
-
-                        <h4>$845,000</h4>
-
-                        <div class="property-details">
-
-                            <span>4 Bed</span>
-
-                            <span>3 Bath</span>
-
-                            <span>2100 sqft</span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <!-- ================= Card 5 ================= -->
-
-                <div class="property-card">
-
-                    <img src="images/townhouse_img.png" alt="Townhouse">
-
-                    <span class="badge">
-                        ✔ Verified
-                    </span>
-
-                    <div class="property-info">
-
-                        <h3>Townhouse</h3>
-
-                        <p>📍 Markham</p>
-
-                        <h4>$720,000</h4>
-
-                        <div class="property-details">
-
-                            <span>3 Bed</span>
-
-                            <span>3 Bath</span>
-
-                            <span>1750 sqft</span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <!-- ==========================================
-                     Duplicate Cards for Infinite Scrolling
-                =========================================== -->
-
-                <div class="property-card">
-
-                    <img src="images/villa_img.png" alt="Modern Villa">
-
-                    <span class="badge">✔ Verified</span>
-
-                    <div class="property-info">
-
-                        <h3>Modern Villa</h3>
-
-                        <p>📍 Toronto, ON</p>
-
-                        <h4>$1,250,000</h4>
-
-                        <div class="property-details">
-
-                            <span>4 Bed</span>
-
-                            <span>3 Bath</span>
-
-                            <span>2400 sqft</span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="property-card">
-
-                    <img src="images/condo_img.png" alt="Luxury Condo">
-
-                    <span class="badge">✔ Verified</span>
-
-                    <div class="property-info">
-
-                        <h3>Luxury Condo</h3>
-
-                        <p>📍 Mississauga</p>
-
-                        <h4>$780,000</h4>
-
-                        <div class="property-details">
-
-                            <span>2 Bed</span>
-
-                            <span>2 Bath</span>
-
-                            <span>1100 sqft</span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="property-card">
-
-                    <img src="images/detached_img.png" alt="Detached House">
-
-                    <span class="badge">✔ Verified</span>
-
-                    <div class="property-info">
-
-                        <h3>Detached Home</h3>
-
-                        <p>📍 Vaughan</p>
-
-                        <h4>$985,000</h4>
-
-                        <div class="property-details">
-
-                            <span>5 Bed</span>
-
-                            <span>4 Bath</span>
-
-                            <span>2950 sqft</span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="property-card">
-
-                    <img src="images/duplex_img.png" alt="Duplex">
-
-                    <span class="badge">✔ Verified</span>
-
-                    <div class="property-info">
-
-                        <h3>Modern Duplex</h3>
-
-                        <p>📍 Brampton</p>
-
-                        <h4>$845,000</h4>
-
-                        <div class="property-details">
-
-                            <span>4 Bed</span>
-
-                            <span>3 Bath</span>
-
-                            <span>2100 sqft</span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="property-card">
-
-                    <img src="images/townhouse_img.png" alt="Townhouse">
-
-                    <span class="badge">✔ Verified</span>
-
-                    <div class="property-info">
-
-                        <h3>Townhouse</h3>
-
-                        <p>📍 Markham</p>
-
-                        <h4>$720,000</h4>
-
-                        <div class="property-details">
-
-                            <span>3 Bed</span>
-
-                            <span>3 Bath</span>
-
-                            <span>1750 sqft</span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px; color:#94a3b8;">Avg. Price (Toronto)</div>
+          <div style="display:flex; align-items:baseline; gap:8px;">
+            <span style="font-size:24px; font-weight:800;">$1.12M</span>
+            <span style="color:#4ade80; font-size:12.5px; font-weight:600;">↑ 4.3%</span>
+          </div>
+          <div style="font-size:11.5px; color:#94a3b8;">vs last month</div>
         </div>
 
-    </section>
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px; color:#94a3b8;">New Listings</div>
+          <div style="display:flex; align-items:baseline; gap:8px;">
+            <span style="font-size:24px; font-weight:800;">2,458</span>
+            <span style="color:#4ade80; font-size:12.5px; font-weight:600;">↑ 12.5%</span>
+          </div>
+          <div style="font-size:11.5px; color:#94a3b8;">vs last month</div>
+        </div>
 
-    <!-- =====================================
-                FOOTER
-    ====================================== -->
+        <div>
+          <div style="font-size:12px; color:#94a3b8;">Market Status</div>
+          <div style="font-size:17px; font-weight:800; color:#f59e0b; margin-top:2px;">Seller's Market</div>
+          <div style="font-size:11.5px; color:#94a3b8;">High Demand</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <footer>
+<!-- ============ STATS BAR ============ -->
+<section style="background:#fff; border-bottom:1px solid var(--line);">
+  <div class="container" style="display:flex; justify-content:space-between; padding:34px 0;">
+    <div style="display:flex; align-items:center; gap:14px; flex:1;">
+      <div class="icon-circle" style="background:#eaf1ff;"><i data-feather="home" style="color:#2563eb;width:20px;height:20px;"></i></div>
+      <div><div style="font-size:22px; font-weight:800;">50,000+</div><div style="font-size:13px; color:var(--muted);">Properties<br/>Verified listings</div></div>
+    </div>
+    <div class="stat-divider" style="display:flex; align-items:center; gap:14px; flex:1; padding-left:30px;">
+      <div class="icon-circle" style="background:#f2ecff;"><i data-feather="map-pin" style="color:#7c3aed;width:20px;height:20px;"></i></div>
+      <div><div style="font-size:22px; font-weight:800;">25+</div><div style="font-size:13px; color:var(--muted);">Cities<br/>Across Canada</div></div>
+    </div>
+    <div class="stat-divider" style="display:flex; align-items:center; gap:14px; flex:1; padding-left:30px;">
+      <div class="icon-circle" style="background:#e6f7ec;"><i data-feather="users" style="color:#16a34a;width:20px;height:20px;"></i></div>
+      <div><div style="font-size:22px; font-weight:800;">12,500+</div><div style="font-size:13px; color:var(--muted);">Happy Buyers<br/>Found their home</div></div>
+    </div>
+    <div class="stat-divider" style="display:flex; align-items:center; gap:14px; flex:1; padding-left:30px;">
+      <div class="icon-circle" style="background:#fdf0e4;"><i data-feather="trending-up" style="color:#d97706;width:20px;height:20px;"></i></div>
+      <div><div style="font-size:22px; font-weight:800;">98%</div><div style="font-size:13px; color:var(--muted);">AI Accuracy<br/>Prediction rate</div></div>
+    </div>
+  </div>
+</section>
 
-        <a href="#">Privacy Policy</a>
+<!-- ============ FEATURED PROPERTIES ============ -->
+<section class="container" style="padding:52px 24px 10px;">
+  <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:22px;">
+    <div>
+      <div class="section-title">Featured Properties</div>
+      <div style="color:var(--muted); font-size:14.5px; margin-top:4px;">Handpicked properties recommended by AI.</div>
+    </div>
+    <a href="#" style="color:var(--blue); font-weight:600; font-size:14.5px; display:flex; align-items:center; gap:6px;">View All Properties <i data-feather="arrow-right" style="width:15px;height:15px;"></i></a>
+  </div>
 
-        <span>|</span>
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px;">
 
-        <a href="#">Terms of Service</a>
+    <!-- Card 1 -->
+    <div class="card">
+      <div style="position:relative; height:170px;">
+        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
+        <span class="badge-match">AI MATCH 96%</span>
+        <span class="heart-btn"><i data-feather="heart" style="width:15px;height:15px;color:#334155;"></i></span>
+      </div>
+      <div style="padding:16px;">
+        <div style="font-weight:700; font-size:16px;">Modern Detached Home</div>
+        <div style="display:flex; align-items:center; gap:5px; color:var(--muted); font-size:13px; margin:5px 0 10px;"><i data-feather="map-pin" style="width:13px;height:13px;"></i> Downtown Toronto</div>
+        <div style="display:flex; gap:12px; font-size:12.5px; color:var(--muted); margin-bottom:12px;">
+          <span>4 Beds</span><span>3 Baths</span><span>2,450 sqft</span>
+        </div>
+        <div style="font-size:20px; font-weight:800; margin-bottom:6px;">$1,250,000</div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="trend-up">↑ 5.2% Price Trend</span>
+        </div>
+        <button class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;">View Details</button>
+      </div>
+    </div>
 
-    </footer>
+    <!-- Card 2 -->
+    <div class="card">
+      <div style="position:relative; height:170px;">
+        <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
+        <span class="badge-match">AI MATCH 94%</span>
+        <span class="badge-featured">FEATURED</span>
+        <span class="heart-btn"><i data-feather="heart" style="width:15px;height:15px;color:#334155;"></i></span>
+      </div>
+      <div style="padding:16px;">
+        <div style="font-weight:700; font-size:16px;">Luxury Condo</div>
+        <div style="display:flex; align-items:center; gap:5px; color:var(--muted); font-size:13px; margin:5px 0 10px;"><i data-feather="map-pin" style="width:13px;height:13px;"></i> North York</div>
+        <div style="display:flex; gap:12px; font-size:12.5px; color:var(--muted); margin-bottom:12px;">
+          <span>2 Beds</span><span>2 Baths</span><span>1,150 sqft</span>
+        </div>
+        <div style="font-size:20px; font-weight:800; margin-bottom:6px;">$845,000</div>
+        <span class="trend-up">↑ 3.1% Price Trend</span>
+        <button class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;">View Details</button>
+      </div>
+    </div>
 
+    <!-- Card 3 -->
+    <div class="card">
+      <div style="position:relative; height:170px;">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
+        <span class="badge-match">AI MATCH 92%</span>
+        <span class="heart-btn"><i data-feather="heart" style="width:15px;height:15px;color:#334155;"></i></span>
+      </div>
+      <div style="padding:16px;">
+        <div style="font-weight:700; font-size:16px;">Elegant Townhouse</div>
+        <div style="display:flex; align-items:center; gap:5px; color:var(--muted); font-size:13px; margin:5px 0 10px;"><i data-feather="map-pin" style="width:13px;height:13px;"></i> Scarborough</div>
+        <div style="display:flex; gap:12px; font-size:12.5px; color:var(--muted); margin-bottom:12px;">
+          <span>3 Beds</span><span>3 Baths</span><span>1,800 sqft</span>
+        </div>
+        <div style="font-size:20px; font-weight:800; margin-bottom:6px;">$935,000</div>
+        <span class="trend-up">↑ 4.8% Price Trend</span>
+        <button class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;">View Details</button>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="card">
+      <div style="position:relative; height:170px;">
+        <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=800&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
+        <span class="badge-match">AI MATCH 91%</span>
+        <span class="heart-btn"><i data-feather="heart" style="width:15px;height:15px;color:#334155;"></i></span>
+      </div>
+      <div style="padding:16px;">
+        <div style="font-weight:700; font-size:16px;">Luxury Apartment</div>
+        <div style="display:flex; align-items:center; gap:5px; color:var(--muted); font-size:13px; margin:5px 0 10px;"><i data-feather="map-pin" style="width:13px;height:13px;"></i> Etobicoke</div>
+        <div style="display:flex; gap:12px; font-size:12.5px; color:var(--muted); margin-bottom:12px;">
+          <span>1 Bed</span><span>1 Baths</span><span>750 sqft</span>
+        </div>
+        <div style="font-size:20px; font-weight:800; margin-bottom:6px;">$620,000</div>
+        <span class="trend-up">↑ 2.7% Price Trend</span>
+        <button class="btn-primary" style="width:100%; justify-content:center; margin-top:12px;">View Details</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ WHY CHOOSE ============ -->
+<section class="container" style="padding:52px 24px 10px;">
+  <div style="background:#eef1f8; border-radius:18px; padding:40px;">
+    <div style="text-align:center; font-size:24px; font-weight:800; margin-bottom:30px;">Why Choose us?</div>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:30px;">
+      <div style="display:flex; gap:14px;">
+        <div class="icon-circle" style="background:#e4e9fb;"><i data-feather="cpu" style="color:#4338ca;width:20px;height:20px;"></i></div>
+        <div><div style="font-weight:700; font-size:15px; margin-bottom:4px;">AI Recommendations</div><div style="font-size:13px; color:var(--muted); line-height:1.5;">Get personalised property recommendations based on your preferences and behavior.</div></div>
+      </div>
+      <div style="display:flex; gap:14px;">
+        <div class="icon-circle" style="background:#dcf5e3;"><i data-feather="trending-up" style="color:#16a34a;width:20px;height:20px;"></i></div>
+        <div><div style="font-weight:700; font-size:15px; margin-bottom:4px;">AI Price Prediction</div><div style="font-size:13px; color:var(--muted); line-height:1.5;">Our AI predicts future property prices and helps you make smarter investment decisions.</div></div>
+      </div>
+      <div style="display:flex; gap:14px;">
+        <div class="icon-circle" style="background:#ece6fb;"><i data-feather="pocket" style="color:#7c3aed;width:20px;height:20px;"></i></div>
+        <div><div style="font-weight:700; font-size:15px; margin-bottom:4px;">Mortgage Calculator</div><div style="font-size:13px; color:var(--muted); line-height:1.5;">Advanced mortgage calculator to help you plan your budget and monthly payments.</div></div>
+      </div>
+      <div style="display:flex; gap:14px;">
+        <div class="icon-circle" style="background:#fdf0e0;"><i data-feather="shield" style="color:#d97706;width:20px;height:20px;"></i></div>
+        <div><div style="font-weight:700; font-size:15px; margin-bottom:4px;">Verified Listings</div><div style="font-size:13px; color:var(--muted); line-height:1.5;">All properties are verified for accuracy and legitimacy to ensure peace of mind.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BROWSE BY PROPERTY TYPE ============ -->
+<section class="container" style="padding:52px 24px 10px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:22px;">
+    <div class="section-title">Browse by Property Type</div>
+    <a href="#" style="color:var(--blue); font-weight:600; font-size:14.5px; display:flex; align-items:center; gap:6px;">Explore All <i data-feather="arrow-right" style="width:15px;height:15px;"></i></a>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:18px;">
+    <div class="card" style="text-align:center; padding:26px 10px;">
+      <div class="icon-circle" style="background:#eaf1ff; margin:0 auto 12px;"><i data-feather="home" style="color:#2563eb;width:20px;height:20px;"></i></div>
+      <div style="font-weight:700; font-size:14.5px;">Detached Homes</div>
+      <div style="font-size:12.5px; color:var(--muted);">2.4K Properties</div>
+    </div>
+    <div class="card" style="text-align:center; padding:26px 10px;">
+      <div class="icon-circle" style="background:#f2ecff; margin:0 auto 12px;"><i data-feather="grid" style="color:#7c3aed;width:20px;height:20px;"></i></div>
+      <div style="font-weight:700; font-size:14.5px;">Condos</div>
+      <div style="font-size:12.5px; color:var(--muted);">5.9K Properties</div>
+    </div>
+    <div class="card" style="text-align:center; padding:26px 10px;">
+      <div class="icon-circle" style="background:#fdf0e0; margin:0 auto 12px;"><i data-feather="home" style="color:#d97706;width:20px;height:20px;"></i></div>
+      <div style="font-weight:700; font-size:14.5px;">Townhouses</div>
+      <div style="font-size:12.5px; color:var(--muted);">2.1K Properties</div>
+    </div>
+    <div class="card" style="text-align:center; padding:26px 10px;">
+      <div class="icon-circle" style="background:#dbf5ee; margin:0 auto 12px;"><i data-feather="layers" style="color:#0d9488;width:20px;height:20px;"></i></div>
+      <div style="font-weight:700; font-size:14.5px;">Apartments</div>
+      <div style="font-size:12.5px; color:var(--muted);">3.8K Properties</div>
+    </div>
+    <div class="card" style="text-align:center; padding:26px 10px;">
+      <div class="icon-circle" style="background:#e6f7ec; margin:0 auto 12px;"><i data-feather="map" style="color:#16a34a;width:20px;height:20px;"></i></div>
+      <div style="font-weight:700; font-size:14.5px;">Land</div>
+      <div style="font-size:12.5px; color:var(--muted);">824 Properties</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RECENTLY VIEWED + POPULAR LOCATIONS ============ -->
+<section class="container" style="padding:52px 24px 60px;">
+  <div style="display:grid; grid-template-columns:2.1fr 1fr; gap:24px;">
+
+    <div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <div>
+          <div style="font-size:19px; font-weight:800;">Recently Viewed</div>
+          <div style="font-size:13px; color:var(--muted);">Explore properties viewed by most people.</div>
+        </div>
+        <a href="#" style="color:var(--blue); font-weight:600; font-size:13.5px; display:flex; align-items:center; gap:5px;">View All <i data-feather="arrow-right" style="width:14px;height:14px;"></i></a>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+        <div class="card">
+          <div style="position:relative; height:100px;">
+            <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=500&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
+            <span class="heart-btn" style="width:26px;height:26px;top:8px;right:8px;"><i data-feather="heart" style="width:12px;height:12px;color:#334155;"></i></span>
+          </div>
+          <div style="padding:10px 12px;">
+            <div style="font-weight:700; font-size:14px;">$1,420,000</div>
+            <div style="font-size:12px; color:var(--muted);">Luxury Detached Home</div>
+            <div style="font-size:12px; color:var(--muted);">North York</div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="position:relative; height:100px;">
+            <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=500&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
+            <span class="heart-btn" style="width:26px;height:26px;top:8px;right:8px;"><i data-feather="heart" style="width:12px;height:12px;color:#334155;"></i></span>
+          </div>
+          <div style="padding:10px 12px;">
+            <div style="font-weight:700; font-size:14px;">$940,000</div>
+            <div style="font-size:12px; color:var(--muted);">Family Townhouse</div>
+            <div style="font-size:12px; color:var(--muted);">Scarborough</div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="position:relative; height:100px;">
+            <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=500&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
+            <span class="heart-btn" style="width:26px;height:26px;top:8px;right:8px;"><i data-feather="heart" style="width:12px;height:12px;color:#334155;"></i></span>
+          </div>
+          <div style="padding:10px 12px;">
+            <div style="font-weight:700; font-size:14px;">$785,000</div>
+            <div style="font-size:12px; color:var(--muted);">Luxury Apartment</div>
+            <div style="font-size:12px; color:var(--muted);">Etobicoke</div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="position:relative; height:100px;">
+            <img src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?q=80&w=500&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
+            <span class="heart-btn" style="width:26px;height:26px;top:8px;right:8px;"><i data-feather="heart" style="width:12px;height:12px;color:#334155;"></i></span>
+          </div>
+          <div style="padding:10px 12px;">
+            <div style="font-weight:700; font-size:14px;">$620,000</div>
+            <div style="font-size:12px; color:var(--muted);">Modern Condo</div>
+            <div style="font-size:12px; color:var(--muted);">Downtown Toronto</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <div style="font-size:19px; font-weight:800;">Popular Locations</div>
+        <a href="#" style="color:var(--blue); font-weight:600; font-size:13.5px; display:flex; align-items:center; gap:5px;">View All <i data-feather="arrow-right" style="width:14px;height:14px;"></i></a>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div class="location-chip"><i data-feather="map-pin" style="width:15px;height:15px;color:#16a34a;"></i> Downtown Toronto</div>
+        <div class="location-chip"><i data-feather="map-pin" style="width:15px;height:15px;color:#7c3aed;"></i> North York</div>
+        <div class="location-chip"><i data-feather="map-pin" style="width:15px;height:15px;color:#16a34a;"></i> Scarborough</div>
+        <div class="location-chip"><i data-feather="map-pin" style="width:15px;height:15px;color:#7c3aed;"></i> Etobicoke</div>
+        <div class="location-chip"><i data-feather="map-pin" style="width:15px;height:15px;color:#16a34a;"></i> Mississauga</div>
+        <div class="location-chip"><i data-feather="map-pin" style="width:15px;height:15px;color:#7c3aed;"></i> Vaughan</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ NEWSLETTER ============ -->
+<section style="background:linear-gradient(90deg,var(--navy),var(--navy-2)); padding:34px 0;">
+  <div class="container" style="display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap;">
+    <div style="display:flex; align-items:center; gap:16px;">
+      <div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;">
+        <i data-feather="mail" style="width:20px;height:20px;color:#fff;"></i>
+      </div>
+      <div>
+        <div style="color:#fff; font-weight:700; font-size:16px;">Stay Updated</div>
+        <div style="color:#b6c0e0; font-size:13px;">Subscribe to our newsletter and get the latest property listings and market insights.</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <input type="email" placeholder="Enter your email address" style="width:280px; padding:12px 16px; border-radius:8px; border:none; outline:none; font-size:14px;" />
+      <button class="btn-primary">Subscribe</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer style="background:#fff; padding:50px 0 20px;">
+  <div class="container" style="display:grid; grid-template-columns:1.8fr 1fr 1fr 1fr 1.2fr; gap:30px;">
+    <div>
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+        <div style="width:32px;height:32px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+          <i data-feather="home" style="width:16px;height:16px;color:#fff;"></i>
+        </div>
+        <div>
+          <div style="font-size:10.5px; color:var(--muted);">AI Native Real Estate Platform</div>
+        </div>
+      </div>
+      <p style="font-size:13px; color:var(--muted); line-height:1.6; max-width:280px;">Using AI and data to help you find, buy, and sell properties with confidence.</p>
+      <div style="display:flex; gap:14px; margin-top:16px;">
+        <i data-feather="facebook" style="width:17px;height:17px;color:#475569;"></i>
+        <i data-feather="instagram" style="width:17px;height:17px;color:#475569;"></i>
+        <i data-feather="linkedin" style="width:17px;height:17px;color:#475569;"></i>
+        <i data-feather="twitter" style="width:17px;height:17px;color:#475569;"></i>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-weight:700; font-size:14px; margin-bottom:14px;">Support</div>
+      <a class="footer-link" href="#">Contact</a>
+      <a class="footer-link" href="#">FAQs</a>
+      <a class="footer-link" href="#">Privacy Policy</a>
+      <a class="footer-link" href="#">Terms &amp; Conditions</a>
+    </div>
+
+    <div>
+      <div style="font-weight:700; font-size:14px; margin-bottom:14px;">Company</div>
+      <a class="footer-link" href="#">About Us</a>
+      <a class="footer-link" href="#">Careers</a>
+      <a class="footer-link" href="#">Blog</a>
+      <a class="footer-link" href="#">Press</a>
+    </div>
+
+    <div>
+      <div style="font-weight:700; font-size:14px; margin-bottom:14px;">Resources</div>
+      <a class="footer-link" href="#">Market Trends</a>
+      <a class="footer-link" href="#">Buying Guide</a>
+      <a class="footer-link" href="#">Selling Guide</a>
+      <a class="footer-link" href="#">Mortgage Calculator</a>
+    </div>
+
+    <div>
+      <div style="font-weight:700; font-size:14px; margin-bottom:14px;">Download Our App</div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="background:#111827; color:#fff; border-radius:8px; padding:8px 14px; font-size:12px; display:flex; align-items:center; gap:8px;"><i data-feather="smartphone" style="width:15px;height:15px;"></i> App Store</div>
+        <div style="background:#111827; color:#fff; border-radius:8px; padding:8px 14px; font-size:12px; display:flex; align-items:center; gap:8px;"><i data-feather="play" style="width:15px;height:15px;"></i> Google Play</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; color:#94a3b8; font-size:12.5px; margin-top:40px; padding-top:20px; border-top:1px solid var(--line);">
+    © 2026 HomeHaven. All Rights Reserved.
+  </div>
+</footer>
+
+<script>feather.replace();</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check for token in URL hash (from Google Auth redirect)
+        const hash = window.location.hash;
+        let urlToken = null;
+        if (hash.startsWith('#token=')) {
+            urlToken = hash.substring(7); // Remove '#token='
+        }
+        
+        if (urlToken) {
+            localStorage.setItem('accessToken', urlToken);
+            // Clean up URL hash
+            window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
+            
+            const currentIntent = sessionStorage.getItem('loginIntent');
+            if (currentIntent) sessionStorage.removeItem('loginIntent');
+
+            try {
+                const payloadStr = atob(urlToken.split('.')[1]);
+                const payload = JSON.parse(payloadStr);
+                
+                if (currentIntent === 'sell' || payload.role === 'seller') {
+                    window.location.href = 'sell.html';
+                    return;
+                }
+            } catch (e) {
+                console.error("Failed to parse JWT", e);
+            }
+        }
+
+        // Update UI based on auth state
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            document.getElementById('user-menu').style.display = 'none';
+            document.getElementById('auth-buttons').style.display = 'flex';
+        } else {
+            document.getElementById('user-menu').style.display = 'flex';
+            document.getElementById('auth-buttons').style.display = 'none';
+        }
+
+        // Intercept property interactions for unregistered users
+        document.querySelectorAll('.heart-btn, .card .btn-primary').forEach(el => {
+            el.addEventListener('click', (e) => {
+                if (!token) {
+                    e.preventDefault();
+                    window.location.href = 'login.html?redirect=buy';
+                }
+            });
+        });
+    });
+</script>
 </body>
-
 </html>

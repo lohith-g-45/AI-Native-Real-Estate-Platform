@@ -14,6 +14,7 @@ import { MailService } from './mail.service';
 import { SmsService } from './sms.service';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { FacebookStrategy } from './strategies/facebook.strategy';
+import { TwitterStrategy } from './strategies/twitter.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuditObservabilityModule } from '../audit-observability/audit-observability.module';
 
@@ -69,6 +70,22 @@ import { AuditObservabilityModule } from '../audit-observability/audit-observabi
           return null;
         }
         return new FacebookStrategy(clientID, clientSecret, callbackURL);
+      },
+      inject: [ConfigService],
+    },
+    {
+      provide: TwitterStrategy,
+      useFactory: (config: ConfigService) => {
+        const consumerKey = config.get<string>('TWITTER_CONSUMER_KEY');
+        const consumerSecret = config.get<string>('TWITTER_CONSUMER_SECRET');
+        const callbackURL = config.get<string>(
+          'TWITTER_CALLBACK_URL',
+          'http://localhost:3000/v1/auth/twitter/redirect',
+        );
+        if (!consumerKey || !consumerSecret || consumerKey.startsWith('your-')) {
+          return null;
+        }
+        return new TwitterStrategy(consumerKey, consumerSecret, callbackURL);
       },
       inject: [ConfigService],
     },

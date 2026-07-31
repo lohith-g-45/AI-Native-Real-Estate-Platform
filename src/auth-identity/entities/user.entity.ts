@@ -17,6 +17,9 @@ export class User {
   @Column({ nullable: true, unique: true })
   facebookId?: string;
 
+  @Column({ nullable: true, unique: true })
+  twitterId?: string;
+
   @Column({ type: 'varchar', length: 16 })
   role: 'buyer' | 'seller';
 
@@ -43,6 +46,12 @@ export class User {
 
   @Column({ default: false })
   isActive: boolean;
+
+  @Column({ nullable: true })
+  loginOtpCode?: string;
+
+  @Column({ nullable: true, type: 'timestamp' })
+  loginOtpExpires?: Date;
 
   @Column({ nullable: true })
   passwordResetCode?: string;

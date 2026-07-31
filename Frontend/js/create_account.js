@@ -3,6 +3,14 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
     : 'https://ai-native-real-estate-platform.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectIntent = urlParams.get('redirect');
+    if (redirectIntent) {
+        sessionStorage.setItem('loginIntent', redirectIntent);
+    }
+    const intent = redirectIntent || sessionStorage.getItem('loginIntent');
+    const role = intent === 'sell' ? 'seller' : 'buyer';
+
     const signupForm = document.getElementById('signupForm');
     const card = document.querySelector('.signup-card');
     const heading = document.querySelector('.heading');
@@ -64,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     password,
                     fullName,
                     phoneNumber,
-                    role: 'buyer' // Default role
+                    role // Assigned based on intent
                 })
             });
 
