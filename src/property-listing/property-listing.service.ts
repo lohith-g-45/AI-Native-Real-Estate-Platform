@@ -562,13 +562,11 @@ export class PropertyListingService {
   async submitListing(propertyId: string, sellerId: string) {
     const listing = await this.getListingAndVerifyOwnership(propertyId, { sub: sellerId });
 
-    const [basic_details, location, details, media, availability, verification] = await Promise.all([
+    const [basic_details, location, details, media] = await Promise.all([
       this.basicDetailsRepo.findOne({ where: { property_id: propertyId } }),
       this.locationRepo.findOne({ where: { property_id: propertyId } }),
       this.detailsRepo.findOne({ where: { property_id: propertyId } }),
       this.mediaRepo.find({ where: { property_id: propertyId } }),
-      this.availabilityRepo.findOne({ where: { property_id: propertyId } }),
-      this.verificationRepo.findOne({ where: { property_id: propertyId } }),
     ]);
 
     const errors = [];
