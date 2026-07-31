@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>HomeHaven – Profile</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>HomeHaven – My Profile</title>
+<meta name="description" content="Manage your HomeHaven profile, saved properties, buying activity, and documents all in one place."/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
 <style>
-  /* ── Design tokens (mirrors dash.css) ── */
+  /* ── Design tokens ── */
   :root {
-    --navy:    #0a122d;
-    --navy-2:  #121e42;
-    --navy-3:  #1a2a56;
-    --blue:    #2563eb;
-    --blue-lt: #4f8cff;
-    --line:    #e2e8f0;
-    --muted:   #64748b;
-    --text:    #1e293b;
+    --navy:     #0a122d;
+    --navy-2:   #121e42;
+    --blue:     #2563eb;
+    --blue-lt:  #4f8cff;
+    --line:     #e2e8f0;
+    --muted:    #64748b;
+    --text:     #1e293b;
+    --bg:       #f1f5f9;
+    --white:    #ffffff;
+    --text-700: #334155;
+    --red:      #dc2626;
   }
- 
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
   body {
     font-family: 'Inter', sans-serif;
     color: var(--text);
-    background: #f8fafc;
+    background: var(--bg);
+    min-height: 100vh;
   }
- 
+
   .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 24px;
   }
- 
-  /* ── HEADER ── */
+
+  /* ══════════════ HEADER ══════════════ */
   header {
-    background: #ffffff;
-    border-bottom: 1px solid #e2e8f0;
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
     position: sticky; top: 0; z-index: 100;
   }
   .nav-wrap {
@@ -44,351 +49,420 @@
     padding: 0 32px; height: 68px;
     display: flex; align-items: center; justify-content: space-between;
   }
-  .logo { display: flex; align-items: center; gap: 10px; text-decoration:none; color:inherit; }
+  .logo { display: flex; align-items: center; gap: 10px; }
   .logo-box {
-    width: 36px; height: 36px; background: #2563eb;
+    width: 36px; height: 36px; background: var(--blue);
     border-radius: 9px; display: flex; align-items: center; justify-content: center;
   }
-  .logo-name { font-size: 17px; font-weight: 800; color: #0f172a; }
-  .logo-sub  { font-size: 11px; color: #64748b; }
-  
+  .logo-name { font-size: 17px; font-weight: 800; }
+  .logo-sub  { font-size: 11px; color: var(--muted); }
+
   .top-nav { display: flex; gap: 28px; }
   .top-nav a {
-    font-size: 14px; font-weight: 500; color: #334155;
+    font-size: 14px; font-weight: 500; color: var(--text-700);
     padding-bottom: 4px; border-bottom: 2px solid transparent;
     transition: color .15s, border-color .15s;
     text-decoration: none;
   }
-  .top-nav a:hover { color: #2563eb; }
-  .top-nav a.active { color: #2563eb; border-bottom-color: #2563eb; }
-  
+  .top-nav a:hover { color: var(--blue); }
+  .top-nav a.active { color: var(--blue); border-bottom-color: var(--blue); }
+
   .nav-right { display: flex; align-items: center; gap: 20px; }
   .nav-icon-btn {
     position: relative; cursor: pointer;
-    color: #334155; background: none; border: none;
+    color: var(--text-700); background: none; border: none;
     display: flex; align-items: center;
   }
   .notif-dot {
     position: absolute; top: -4px; right: -5px;
-    background: #dc2626; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--red); width: 8px; height: 8px; border-radius: 50%;
   }
   .nav-saved {
     display: flex; align-items: center; gap: 6px;
-    font-size: 14px; font-weight: 500; color: #334155; cursor: pointer;
+    font-size: 14px; font-weight: 500; color: var(--text-700); cursor: pointer;
   }
   .avatar-btn {
     width: 34px; height: 34px; border-radius: 50%;
-    background: #e2e8f0; display: flex; align-items: center; justify-content: center;
-    cursor: pointer; text-decoration: none;
+    background: var(--blue); color: #fff; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; border: none; text-decoration: none;
   }
- 
-  /* ── BUTTONS ── */
-  .btn-primary {
-    display: inline-flex; align-items: center; gap: 7px;
-    background: var(--blue);
-    color: #fff;
-    border: none; border-radius: 9px;
-    padding: 12px 22px;
-    font-size: 14.5px; font-weight: 600;
-    cursor: pointer;
-    transition: background .2s;
+
+  /* ══════════════ PAGE LAYOUT ══════════════ */
+  .page-body {
+    display: flex;
+    min-height: calc(100vh - 68px);
   }
-  .btn-primary:hover { background: #1d4ed8; }
- 
-  /* ── HERO SECTION ── */
-  .hero-section {
-    position: relative;
-    overflow: hidden;
-    /* Same dark navy photo overlay as dashboard hero */
-    background: var(--navy);
+
+  /* ══════════════ SIDEBAR ══════════════ */
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 1px solid var(--line);
+    padding: 28px 0;
+    position: sticky;
+    top: 68px;
+    height: calc(100vh - 68px);
+    overflow-y: auto;
   }
-  .hero-section::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1800&auto=format&fit=crop') center/cover no-repeat;
-    opacity: .18;
+
+  .sidebar-nav { list-style: none; }
+  .sidebar-nav li { padding: 0 12px; margin-bottom: 4px; }
+
+  .sidebar-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; border-radius: 10px;
+    font-size: 13.5px; font-weight: 500; color: #475569;
+    text-decoration: none; cursor: pointer;
+    transition: background .15s, color .15s;
+    border: none; background: none; width: 100%; text-align: left;
   }
-  /* Directional navy fade identical to dashboard */
-  .hero-section::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(90deg,
-      rgba(10,18,45,.97) 0%,
-      rgba(10,18,45,.82) 45%,
-      rgba(10,18,45,.55) 80%,
-      rgba(10,18,45,.30) 100%
-    );
+  .sidebar-link:hover { background: #f1f5f9; color: var(--text); }
+  .sidebar-link.active {
+    background: #eef3ff; color: var(--blue); font-weight: 600;
   }
- 
-  .hero-card {
-    position: relative;
-    z-index: 1;
+  .sidebar-link.logout { color: #dc2626; }
+  .sidebar-link.logout:hover { background: #fef2f2; }
+
+  .sidebar-divider {
+    border: none; border-top: 1px solid var(--line);
+    margin: 12px 24px;
+  }
+
+  /* ══════════════ MAIN CONTENT ══════════════ */
+  .main-content {
+    flex: 1;
+    padding: 32px 36px;
+    overflow-y: auto;
+    max-width: calc(100% - 220px);
+  }
+
+  .page-title {
+    font-size: 22px; font-weight: 800; color: var(--text);
+    margin-bottom: 4px;
+  }
+  .page-sub { font-size: 13.5px; color: var(--muted); margin-bottom: 24px; }
+
+  /* ── Profile Card ── */
+  .profile-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px 32px;
     display: flex;
     align-items: center;
-    gap: 60px;
-    padding: 72px 0 68px;
+    gap: 24px;
+    margin-bottom: 20px;
+    position: relative;
   }
-  .hero-left  { flex: 1; }
-  .hero-right { flex: 0 0 380px; }
- 
-  .hero-left h2 {
-    font-size: 44px; font-weight: 800; line-height: 1.13;
-    letter-spacing: -.02em;
-    color: #fff;
-    margin-bottom: 14px;
-  }
-  .accent { color: var(--blue-lt); }
- 
-  .hero-left .sub {
-    color: #cbd5e1;
-    font-size: 16px; line-height: 1.6;
-    margin-bottom: 28px;
-    max-width: 460px;
-  }
- 
-  /* perks grid */
-  .perks-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 32px;
-  }
-  .perk {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .perk-icon {
-    width: 38px; height: 38px; border-radius: 10px;
+
+  .profile-avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, #c7d7f5, #dde6ff);
     display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 800; color: var(--blue);
     flex-shrink: 0;
   }
-  .c-red    { background: rgba(220,38,38,.18);  color: #f87171; }
-  .c-green  { background: rgba(22,163,74,.18);  color: #4ade80; }
-  .c-purple { background: rgba(124,58,237,.18); color: #a78bfa; }
-  .c-blue   { background: rgba(37,99,235,.22);  color: #60a5fa; }
- 
-  .perk strong { display: block; font-size: 13.5px; font-weight: 700; color: #f1f5f9; margin-bottom: 2px; }
-  .perk span   { font-size: 12.5px; color: #94a3b8; line-height: 1.45; }
- 
-  /* House image */
-  .house-img-wrap {
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 24px 60px rgba(0,0,0,.45);
-    aspect-ratio: 4/3;
+
+  .profile-info { flex: 1; }
+  .profile-name {
+    font-size: 20px; font-weight: 800; color: var(--text);
+    margin-bottom: 8px;
   }
-  .house-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
- 
-  /* Floating AI card */
-  .ai-float-card {
-    display: flex; align-items: center; gap: 12px;
-    background: rgba(255,255,255,.08);
-    backdrop-filter: blur(14px);
-    border: 1px solid rgba(255,255,255,.14);
-    border-radius: 14px;
-    padding: 14px 18px;
-    margin-top: 14px;
+  .profile-meta {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    margin-bottom: 8px;
   }
-  .ai-float-icon {
-    width: 40px; height: 40px; border-radius: 10px;
-    background: var(--blue);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
+  .profile-meta-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--muted);
   }
-  .ai-float-card strong { display: block; font-size: 13.5px; font-weight: 700; color: #f1f5f9; }
-  .ai-float-card span   { font-size: 12px; color: #94a3b8; }
- 
-  /* ── GUEST SECTION ── */
-  .guest-section { background: #fff; padding: 60px 0; }
- 
-  .section-header { margin-bottom: 28px; }
-  .section-title  { font-size: 22px; font-weight: 800; color: var(--text); }
-  .section-sub    { font-size: 14px; color: var(--muted); margin-top: 4px; }
- 
-  .guest-grid {
+  .profile-meta-item svg { color: var(--muted); }
+
+  .btn-edit {
+    position: absolute; top: 28px; right: 32px;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 20px;
+    border: 1.5px solid var(--line);
+    background: #fff; color: var(--text);
+    border-radius: 9px; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: border-color .15s, background .15s;
+  }
+  .btn-edit:hover { border-color: var(--blue); color: var(--blue); background: #eef3ff; }
+
+  /* ── Stats Row ── */
+  .stats-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-  }
-  .guest-card {
-    background: #f8fafc;
+    gap: 1px;
+    background: var(--line);
     border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 28px 22px;
-    transition: box-shadow .2s, transform .2s;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
   }
-  .guest-card:hover {
-    box-shadow: 0 8px 28px rgba(37,99,235,.10);
-    transform: translateY(-2px);
+  .stat-cell {
+    background: #fff;
+    padding: 22px 24px;
+    display: flex; align-items: center; gap: 14px;
   }
-  .gc-icon {
-    width: 48px; height: 48px; border-radius: 12px;
+  .stat-icon {
+    width: 40px; height: 40px; border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .stat-icon.red    { background: #fef2f2; color: #ef4444; }
+  .stat-icon.blue   { background: #eef3ff; color: var(--blue); }
+  .stat-icon.green  { background: #f0fdf4; color: #16a34a; }
+  .stat-icon.amber  { background: #fffbeb; color: #d97706; }
+
+  .stat-number { font-size: 26px; font-weight: 800; color: var(--text); line-height: 1; }
+  .stat-label  { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+
+  /* ── Section Header ── */
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 16px;
   }
-  .gc-icon.blue   { background: #eaf1ff; color: var(--blue); }
-  .gc-icon.green  { background: #e6f7ec; color: #16a34a; }
-  .gc-icon.purple { background: #f2ecff; color: #7c3aed; }
-  .gc-icon.orange { background: #fdf0e0; color: #d97706; }
- 
-  .guest-card h4  { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-  .guest-card p   { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 16px; }
- 
-  .arrow-link {
-    display: inline-flex; align-items: center; gap: 5px;
-    color: var(--blue); font-size: 13px; font-weight: 600;
-    text-decoration: none;
+  .section-title { font-size: 16px; font-weight: 700; color: var(--text); }
+  .view-all-link {
+    font-size: 13px; font-weight: 600; color: var(--blue);
+    text-decoration: none; display: flex; align-items: center; gap: 4px;
   }
-  .arrow-link:hover { text-decoration: underline; }
- 
-  /* ── CTA SECTION ── same dark navy gradient as dashboard newsletter ── */
-  .cta-section {
-    background: linear-gradient(90deg, var(--navy), var(--navy-2));
-    padding: 60px 0;
-  }
-  .cta-banner {
-    display: flex;
-    align-items: center;
-    gap: 52px;
-  }
- 
-  /* Mockup visual */
-  .cta-mockup {
-    flex: 0 0 220px;
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 18px;
-    padding: 20px;
-  }
-  .cta-mockup-inner { display: flex; flex-direction: column; gap: 14px; }
- 
-  .mockup-search {
-    display: flex; align-items: center; gap: 6px;
-    background: rgba(255,255,255,.08);
-    border-radius: 8px; padding: 8px 10px;
-    font-size: 10px; color: #94a3b8;
-  }
-  .mockup-prop-row {
-    display: flex; align-items: center; gap: 10px;
-    background: rgba(255,255,255,.06);
-    border-radius: 10px; padding: 10px;
-  }
-  .mockup-prop-img {
-    width: 40px; height: 40px; border-radius: 8px;
-    background: linear-gradient(135deg, #2563eb44, #7c3aed44);
-    flex-shrink: 0;
-  }
-  .mpi-tag   { font-size: 9px;  color: #60a5fa; font-weight: 600; }
-  .mpi-name  { font-size: 11px; color: #f1f5f9; font-weight: 700; }
-  .mpi-price { font-size: 10px; color: #94a3b8; }
- 
-  .mockup-score-row {
-    display: flex; align-items: center; gap: 10px;
-    background: rgba(255,255,255,.06);
-    border-radius: 10px; padding: 10px;
-  }
-  .score-ring {
-    width: 44px; height: 44px; border-radius: 50%;
-    border: 3px solid #4f8cff;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .score-pct  { font-size: 10px; font-weight: 800; color: #4f8cff; }
-  .score-lbl strong { display: block; font-size: 10.5px; color: #f1f5f9; font-weight: 700; }
-  .score-lbl  { font-size: 10px; color: #94a3b8; }
- 
-  /* CTA text block */
-  .cta-text { flex: 1; }
-  .cta-text h3 {
-    font-size: 28px; font-weight: 800; color: #fff;
-    margin-bottom: 10px;
-  }
-  .cta-sub {
-    font-size: 14.5px; color: #b6c0e0; line-height: 1.6;
-    margin-bottom: 22px; max-width: 440px;
-  }
-  .cta-checks { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
-  .cta-check  {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 13.5px; color: #cbd5e1; font-weight: 500;
-  }
-  .check-dot {
-    width: 22px; height: 22px; border-radius: 50%;
-    background: rgba(37,99,235,.35);
-    display: flex; align-items: center; justify-content: center;
-    color: #60a5fa; flex-shrink: 0;
-  }
- 
-  /* CTA action */
-  .cta-action { display: flex; align-items: center; gap: 18px; }
-  .btn-signup {
-    background: var(--blue);
-    color: #fff; border: none; border-radius: 9px;
-    padding: 13px 28px;
-    font-size: 15px; font-weight: 700; cursor: pointer;
-    transition: background .2s;
-  }
-  .btn-signup:hover { background: #1d4ed8; }
-  .cta-note { font-size: 12.5px; color: #94a3b8; }
- 
-  /* ── FOOTER ── */
-  footer {
+  .view-all-link:hover { text-decoration: underline; }
+
+  /* ── Section Card wrapper ── */
+  .section-card {
     background: #fff;
-    padding: 50px 0 20px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    scroll-margin-top: 88px;
   }
-  .footer-grid {
-    display: grid;
-    grid-template-columns: 1.8fr 1fr 1fr 1fr 1.2fr;
-    gap: 30px;
-    margin-bottom: 36px;
+  #section-profile {
+    scroll-margin-top: 88px;
   }
-  .footer-logo-row {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 12px;
+
+  /* ── Saved Properties ── */
+  .properties-scroll {
+    display: flex; gap: 16px;
+    overflow-x: auto; padding-bottom: 4px;
   }
-  .footer-logo-mark {
-    width: 32px; height: 32px;
-    background: var(--blue); border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .footer-brand-name { font-size: 15px; font-weight: 800; }
-  .footer-brand-tag  { font-size: 10.5px; color: var(--muted); }
-  .footer-desc { font-size: 13px; color: var(--muted); line-height: 1.6; max-width: 260px; margin-bottom: 16px; }
-  .footer-socials { display: flex; gap: 14px; }
-  .footer-socials a { color: #475569; }
- 
-  .footer-col h5 { font-size: 14px; font-weight: 700; margin-bottom: 14px; }
-  .footer-link {
-    display: block; font-size: 13px; color: var(--muted);
-    text-decoration: none; margin-bottom: 8px;
-  }
-  .footer-link:hover { color: var(--blue); }
- 
-  .app-badge {
-    display: flex; align-items: center; gap: 8px;
-    background: #111827; color: #fff;
-    border-radius: 8px; padding: 8px 14px;
-    font-size: 12px; margin-bottom: 10px;
+  .properties-scroll::-webkit-scrollbar { height: 4px; }
+  .properties-scroll::-webkit-scrollbar-track { background: var(--bg); border-radius: 4px; }
+  .properties-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+  .prop-card {
+    flex-shrink: 0;
+    width: 176px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: #fff;
+    transition: box-shadow .2s, transform .2s;
     cursor: pointer;
   }
- 
-  .footer-bottom {
-    text-align: center;
-    color: #94a3b8; font-size: 12.5px;
-    padding-top: 20px;
-    border-top: 1px solid var(--line);
+  .prop-card:hover { box-shadow: 0 6px 24px rgba(37,99,235,.12); transform: translateY(-2px); }
+
+  .prop-img-wrap {
+    position: relative; height: 120px; overflow: hidden;
+  }
+  .prop-img-wrap img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform .3s;
+  }
+  .prop-card:hover .prop-img-wrap img { transform: scale(1.05); }
+
+  .prop-heart {
+    position: absolute; top: 8px; right: 8px;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(255,255,255,.92); border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,.15);
+  }
+  .prop-heart svg { color: #ef4444; }
+
+  .prop-info { padding: 10px 12px 12px; }
+  .prop-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .prop-loc  { font-size: 11.5px; color: var(--muted); margin-bottom: 6px; }
+  .prop-price { font-size: 13.5px; font-weight: 800; color: var(--text); }
+
+  /* ── Buying Activity ── */
+  .buying-row {
+    display: flex; gap: 20px; align-items: center;
+  }
+  .buying-img {
+    width: 100px; height: 72px; border-radius: 10px;
+    object-fit: cover; flex-shrink: 0;
+  }
+  .buying-info { flex: 1; }
+  .buying-address {
+    font-size: 14.5px; font-weight: 700; color: var(--text);
+    margin-bottom: 4px;
+  }
+  .buying-address span { font-weight: 400; color: var(--muted); }
+  .badge-accepted {
+    display: inline-flex; align-items: center;
+    background: #dcfce7; color: #16a34a;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px;
+    margin-left: 10px; vertical-align: middle;
+  }
+  .buying-next {
+    font-size: 13px; color: var(--muted); margin-bottom: 12px;
+  }
+  .buying-next strong { color: var(--text); }
+  .buying-next .date-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; color: var(--muted); margin-left: 8px;
+  }
+
+  /* Progress steps */
+  .progress-steps {
+    display: flex; align-items: center; gap: 0;
+    margin-bottom: 6px;
+  }
+  .step {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 6px; flex: 1;
+  }
+  .step-circle {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--line); background: #fff;
+    font-size: 12px; color: var(--muted); position: relative; z-index: 1;
+  }
+  .step-circle.done   { background: #16a34a; border-color: #16a34a; color: #fff; }
+  .step-circle.active { background: #fff; border-color: var(--blue); color: var(--blue); }
+  .step-circle.active svg { stroke: var(--blue); }
+  .step-label { font-size: 11px; color: var(--muted); font-weight: 500; }
+  .step-label.active { color: var(--blue); font-weight: 600; }
+
+  .step-line {
+    flex: 1; height: 2px;
+    background: var(--line);
+    margin-top: -16px; /* align with circle centre */
+    position: relative; z-index: 0;
+  }
+  .step-line.done { background: #16a34a; }
+
+  .btn-progress {
+    flex-shrink: 0;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 20px;
+    border: 1.5px solid var(--line);
+    background: #fff; color: var(--text);
+    border-radius: 9px; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: border-color .15s, color .15s;
+  }
+  .btn-progress:hover { border-color: var(--blue); color: var(--blue); }
+
+  /* ── Recently Viewed ── */
+  .recent-list { display: flex; flex-direction: column; gap: 0; }
+  .recent-item {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer; transition: background .1s;
+    border-radius: 0;
+  }
+  .recent-item:last-child { border-bottom: none; }
+  .recent-item:hover .recent-name { color: var(--blue); }
+
+  .recent-img {
+    width: 64px; height: 48px; border-radius: 8px;
+    object-fit: cover; flex-shrink: 0;
+  }
+  .recent-info { flex: 1; }
+  .recent-name { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .recent-loc  { font-size: 12px; color: var(--muted); }
+  .recent-time { font-size: 11.5px; color: var(--muted); }
+  .recent-arrow { color: #cbd5e1; }
+
+  /* Three-column recently viewed */
+  .recent-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .recent-grid-item {
+    background: #fff;
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 18px;
+    cursor: pointer; transition: background .15s;
+  }
+  .recent-grid-item:hover { background: #f8fafc; }
+  .recent-grid-img {
+    width: 60px; height: 48px; border-radius: 8px;
+    object-fit: cover; flex-shrink: 0;
+  }
+  .rgi-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .rgi-loc  { font-size: 11.5px; color: var(--muted); margin-bottom: 2px; }
+  .rgi-time { font-size: 11px; color: #94a3b8; }
+  .rgi-arrow { margin-left: auto; color: #cbd5e1; }
+
+  /* ── Documents ── */
+  .docs-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .doc-item {
+    display: flex; flex-direction: column; align-items: flex-start;
+    gap: 8px; padding: 16px;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: #fff; cursor: pointer;
+    transition: box-shadow .15s, border-color .15s;
+  }
+  .doc-item:hover { box-shadow: 0 4px 16px rgba(37,99,235,.1); border-color: #c7d7f5; }
+  .doc-icon-wrap {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .doc-icon-wrap.red    { background: #fef2f2; color: #ef4444; }
+  .doc-icon-wrap.blue   { background: #eef3ff; color: var(--blue); }
+  .doc-icon-wrap.green  { background: #f0fdf4; color: #16a34a; }
+  .doc-icon-wrap.purple { background: #faf5ff; color: #7c3aed; }
+
+  .doc-name { font-size: 13px; font-weight: 700; color: var(--text); }
+  .doc-date { font-size: 11.5px; color: var(--muted); }
+
+  /* ══════════════ FOOTER ══════════════ */
+  footer { background: var(--white); border-top: 1px solid var(--line); padding: 48px 32px 20px; }
+.footer-grid { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr 1.2fr; gap: 30px; margin-bottom: 36px; }
+.f-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.f-logo-box { width: 30px; height: 30px; background: var(--blue); border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+.f-tagline   { font-size: 13px; color: var(--muted); line-height: 1.6; max-width: 250px; margin-bottom: 14px; }
+.f-socials   { display: flex; gap: 14px; }
+.f-socials a { color: var(--text-700); }
+.f-col-title { font-weight: 700; font-size: 13.5px; margin-bottom: 12px; }
+.f-link      { display: block; font-size: 13px; color: var(--muted); margin-bottom: 9px; transition: color .15s; }
+.f-link:hover{ color: var(--blue); }
+.f-bottom    { text-align: center; color: var(--text-400); font-size: 12px; padding-top: 18px; border-top: 1px solid var(--line); }
+
+  /* ══════════════ RESPONSIVE ══════════════ */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main-content { max-width: 100%; padding: 20px 16px; }
+    .docs-grid { grid-template-columns: repeat(2,1fr); }
+    .stats-row { grid-template-columns: repeat(2,1fr); }
+    .recent-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
- 
+
 <!-- ══════════════════════════════════════════
      HEADER
 ══════════════════════════════════════════ -->
 <header>
   <div class="nav-wrap">
-    <a href="index.html" class="logo">
+    <div class="logo">
       <div class="logo-box">
         <i data-feather="home" style="width:20px;height:20px;color:#fff;"></i>
       </div>
@@ -396,17 +470,17 @@
         <div class="logo-name">HomeHaven</div>
         <div class="logo-sub">AI Native Real Estate Platform</div>
       </div>
-    </a>
- 
+    </div>
+
     <nav class="top-nav">
-      <a href="index.html">Home</a>
+      <a href="dashboard.html">Home</a>
       <a href="buy.html">Buy</a>
       <a href="sell.html">Sell</a>
       <a href="#">AI Search</a>
       <a href="#">Mortgage</a>
       <a href="#">Market Trends</a>
     </nav>
- 
+
     <div class="nav-right">
       <div class="nav-saved">
         <i data-feather="heart" style="width:17px;height:17px;"></i> Saved
@@ -418,282 +492,465 @@
       <button class="nav-icon-btn">
         <i data-feather="message-square" style="width:19px;height:19px;"></i>
       </button>
-      <a class="avatar-btn" href="profile.html">
-        <i data-feather="user" style="width:17px;height:17px;color:#2563eb;"></i>
-      </a>
-      <a href="#" onclick="localStorage.removeItem('accessToken'); sessionStorage.removeItem('loginIntent'); window.location.href='login.html';" style="margin-left: 15px; color: #dc2626; text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 5px;" title="Sign Out">
-          <i data-feather="log-out" style="width:17px;height:17px;"></i>
-      </a>
+      <button class="avatar-btn">LG</button>
     </div>
   </div>
 </header>
- 
+
 <!-- ══════════════════════════════════════════
-     HERO
+     PAGE BODY
 ══════════════════════════════════════════ -->
-<section class="hero-section">
-  <div class="container">
-    <div class="hero-card">
- 
-      <!-- Left -->
-      <div class="hero-left">
-        <h2>Welcome to <span class="accent">HomeHaven</span></h2>
-        <p class="sub">Sign in or create an account to unlock personalized real estate experiences, save properties and more.</p>
-        <button class="btn-primary">
-          <i data-feather="user" style="width:16px;height:16px;"></i>
-          Sign In
-        </button>
- 
-        <div class="perks-grid">
-          <div class="perk">
-            <div class="perk-icon c-red">
-              <i data-feather="heart" style="width:17px;height:17px;"></i>
-            </div>
-            <div>
-              <strong>Save Your Favorites</strong>
-              <span>Save properties you love and view them anytime.</span>
-            </div>
+<div class="page-body">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li>
+        <a class="sidebar-link active" href="#section-profile" data-section="section-profile">
+          <i data-feather="user" style="width:16px;height:16px;"></i> Profile
+        </a>
+      </li>
+      <li>
+        <a class="sidebar-link" href="#section-saved" data-section="section-saved">
+          <i data-feather="heart" style="width:16px;height:16px;"></i> Saved Properties
+        </a>
+      </li>
+      <li>
+        <a class="sidebar-link" href="#section-recent" data-section="section-recent">
+          <i data-feather="clock" style="width:16px;height:16px;"></i> Recently Viewed
+        </a>
+      </li>
+      <li>
+        <a class="sidebar-link" href="#section-buying" data-section="section-buying">
+          <i data-feather="shopping-bag" style="width:16px;height:16px;"></i> Buying Activity
+        </a>
+      </li>
+      <li>
+        <a class="sidebar-link" href="#section-docs" data-section="section-docs">
+          <i data-feather="file-text" style="width:16px;height:16px;"></i> Documents
+        </a>
+      </li>
+      <li>
+        <a class="sidebar-link" href="#section-settings" data-section="section-settings">
+          <i data-feather="settings" style="width:16px;height:16px;"></i> Settings
+        </a>
+      </li>
+      <hr class="sidebar-divider"/>
+      <li>
+        <a class="sidebar-link logout" href="login.html">
+          <i data-feather="log-out" style="width:16px;height:16px;"></i> Logout
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="main-content">
+
+    <!-- ── PROFILE SECTION ── -->
+    <div id="section-profile">
+      <h1 class="page-title">My Profile</h1>
+      <p class="page-sub">Manage your account and preferences</p>
+    </div>
+
+    <!-- Profile Card -->
+    <div class="profile-card" id="section-profile-card">
+      <div class="profile-avatar">LG</div>
+      <div class="profile-info">
+        <div class="profile-name">Lohith G</div>
+        <div class="profile-meta">
+          <div class="profile-meta-item">
+            <i data-feather="mail" style="width:13px;height:13px;"></i>
+            lohit.g@email.com
           </div>
-          <div class="perk">
-            <div class="perk-icon c-green">
-              <i data-feather="bell" style="width:17px;height:17px;"></i>
-            </div>
-            <div>
-              <strong>Get Smart Alerts</strong>
-              <span>Receive AI-powered alerts for new properties.</span>
-            </div>
+          <div class="profile-meta-item">
+            <i data-feather="phone" style="width:13px;height:13px;"></i>
+            +1 (416) 123-4567
           </div>
-          <div class="perk">
-            <div class="perk-icon c-purple">
-              <i data-feather="cpu" style="width:17px;height:17px;"></i>
-            </div>
-            <div>
-              <strong>Personalized Experience</strong>
-              <span>Get recommendations that match your needs.</span>
-            </div>
+        </div>
+        <div class="profile-meta">
+          <div class="profile-meta-item">
+            <i data-feather="map-pin" style="width:13px;height:13px;"></i>
+            Toronto, ON, Canada
           </div>
-          <div class="perk">
-            <div class="perk-icon c-blue">
-              <i data-feather="shield" style="width:17px;height:17px;"></i>
-            </div>
-            <div>
-              <strong>Secure &amp; Private</strong>
-              <span>Your data is safe with enterprise-grade security.</span>
-            </div>
+          <div class="profile-meta-item">
+            <i data-feather="calendar" style="width:13px;height:13px;"></i>
+            Member since April 2026
           </div>
         </div>
       </div>
- 
-      <!-- Right -->
-      <div class="hero-right">
-        <div class="house-img-wrap">
-          <img alt="Modern home" src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=900&auto=format&fit=crop"/>
+      <button class="btn-edit">
+        <i data-feather="edit-2" style="width:13px;height:13px;"></i>
+        Edit Profile
+      </button>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-cell">
+        <div class="stat-icon red">
+          <i data-feather="heart" style="width:18px;height:18px;"></i>
         </div>
-        <div class="ai-float-card">
-          <div class="ai-float-icon">
-            <i data-feather="home" style="width:20px;height:20px;color:#fff;"></i>
+        <div>
+          <div class="stat-number">24</div>
+          <div class="stat-label">Saved Properties</div>
+        </div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-icon blue">
+          <i data-feather="eye" style="width:18px;height:18px;"></i>
+        </div>
+        <div>
+          <div class="stat-number">68</div>
+          <div class="stat-label">Recently Viewed</div>
+        </div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-icon green">
+          <i data-feather="shopping-bag" style="width:18px;height:18px;"></i>
+        </div>
+        <div>
+          <div class="stat-number">1</div>
+          <div class="stat-label">Active Purchase</div>
+        </div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-icon amber">
+          <i data-feather="bell" style="width:18px;height:18px;"></i>
+        </div>
+        <div>
+          <div class="stat-number">5</div>
+          <div class="stat-label">Alerts</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Saved Properties -->
+    <div class="section-card" id="section-saved">
+      <div class="section-header">
+        <div class="section-title">Saved Properties</div>
+        <a class="view-all-link" href="#">View all <i data-feather="arrow-right" style="width:13px;height:13px;"></i></a>
+      </div>
+      <div class="properties-scroll">
+
+        <!-- Card 1 -->
+        <div class="prop-card">
+          <div class="prop-img-wrap">
+            <img src="images/townhouse_img.png" alt="Modern Townhouse" onerror="this.src='https://images.unsplash.com/photo-1605146769289-440113cc3d00?w=400&auto=format&fit=crop'"/>
+            <button class="prop-heart"><i data-feather="heart" style="width:14px;height:14px;fill:#ef4444;stroke:#ef4444;"></i></button>
           </div>
+          <div class="prop-info">
+            <div class="prop-name">Modern Townhouse</div>
+            <div class="prop-loc">Toronto, ON</div>
+            <div class="prop-price">$1,250,000</div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="prop-card">
+          <div class="prop-img-wrap">
+            <img src="images/condo_img.png" alt="Luxury Condo" onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&auto=format&fit=crop'"/>
+            <button class="prop-heart"><i data-feather="heart" style="width:14px;height:14px;fill:#ef4444;stroke:#ef4444;"></i></button>
+          </div>
+          <div class="prop-info">
+            <div class="prop-name">Luxury Condo</div>
+            <div class="prop-loc">Downtown, Toronto</div>
+            <div class="prop-price">$845,000</div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="prop-card">
+          <div class="prop-img-wrap">
+            <img src="images/detached_img.png" alt="Detached House" onerror="this.src='https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&auto=format&fit=crop'"/>
+            <button class="prop-heart"><i data-feather="heart" style="width:14px;height:14px;fill:#ef4444;stroke:#ef4444;"></i></button>
+          </div>
+          <div class="prop-info">
+            <div class="prop-name">Detached House</div>
+            <div class="prop-loc">North York, ON</div>
+            <div class="prop-price">$1,980,000</div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="prop-card">
+          <div class="prop-img-wrap">
+            <img src="images/villa_img.png" alt="Spacious Condo" onerror="this.src='https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&auto=format&fit=crop'"/>
+            <button class="prop-heart"><i data-feather="heart" style="width:14px;height:14px;fill:#ef4444;stroke:#ef4444;"></i></button>
+          </div>
+          <div class="prop-info">
+            <div class="prop-name">Spacious Condo</div>
+            <div class="prop-loc">Vaughan, ON</div>
+            <div class="prop-price">$720,000</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Buying Activity -->
+    <div class="section-card" id="section-buying">
+      <div class="section-header">
+        <div class="section-title">Buying Activity</div>
+        <a class="view-all-link" href="#">View all <i data-feather="arrow-right" style="width:13px;height:13px;"></i></a>
+      </div>
+      <div class="buying-row">
+        <img class="buying-img"
+          src="images/detached_img.png"
+          alt="45 Maple Street"
+          onerror="this.src='https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=300&auto=format&fit=crop'"/>
+        <div class="buying-info">
+          <div class="buying-address">
+            <strong>45 Maple Street</strong>
+            <span>, Toronto, ON</span>
+            <span class="badge-accepted">Offer Accepted</span>
+          </div>
+          <div class="buying-next">
+            Next Step: <strong>Home Inspection</strong>
+            <span class="date-chip">
+              <i data-feather="calendar" style="width:12px;height:12px;"></i>
+              Aug 05, 2026
+            </span>
+          </div>
+          <!-- Progress -->
+          <div class="progress-steps">
+            <div class="step">
+              <div class="step-circle done">
+                <i data-feather="check" style="width:14px;height:14px;stroke:#fff;"></i>
+              </div>
+              <span class="step-label">Viewed</span>
+            </div>
+            <div class="step-line done"></div>
+            <div class="step">
+              <div class="step-circle done">
+                <i data-feather="check" style="width:14px;height:14px;stroke:#fff;"></i>
+              </div>
+              <span class="step-label">Offer</span>
+            </div>
+            <div class="step-line done"></div>
+            <div class="step">
+              <div class="step-circle active">
+                <i data-feather="file-text" style="width:14px;height:14px;"></i>
+              </div>
+              <span class="step-label active">Documents</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step">
+              <div class="step-circle">
+                <i data-feather="credit-card" style="width:14px;height:14px;"></i>
+              </div>
+              <span class="step-label">Mortgage</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step">
+              <div class="step-circle">
+                <i data-feather="key" style="width:14px;height:14px;"></i>
+              </div>
+              <span class="step-label">Closing</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn-progress">View Progress</button>
+      </div>
+    </div>
+
+    <!-- Recently Viewed -->
+    <div class="section-card" id="section-recent">
+      <div class="section-header">
+        <div class="section-title">Recently Viewed</div>
+        <a class="view-all-link" href="#">View all <i data-feather="arrow-right" style="width:13px;height:13px;"></i></a>
+      </div>
+      <div class="recent-grid">
+        <div class="recent-grid-item">
+          <img class="recent-grid-img"
+            src="images/condo_img.png"
+            alt="Luxury Condo"
+            onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=200&auto=format&fit=crop'"/>
           <div>
-            <strong>Find Your Perfect Home with AI</strong>
-            <span>Discover properties that match your lifestyle and budget.</span>
+            <div class="rgi-name">Luxury Condo</div>
+            <div class="rgi-loc">Toronto, ON</div>
+            <div class="rgi-time">Viewed today</div>
           </div>
+          <i data-feather="chevron-right" class="rgi-arrow" style="width:15px;height:15px;"></i>
         </div>
-      </div>
- 
-    </div>
-  </div>
-</section>
- 
-<!-- ══════════════════════════════════════════
-     EXPLORE AS GUEST
-══════════════════════════════════════════ -->
-<section class="guest-section">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-title">Explore as a Guest</div>
-      <p class="section-sub">You can explore properties, view market trends and more without an account.</p>
-    </div>
-    <div class="guest-grid">
-      <div class="guest-card">
-        <div class="gc-icon blue">
-          <i data-feather="home" style="width:22px;height:22px;"></i>
+        <div class="recent-grid-item">
+          <img class="recent-grid-img"
+            src="images/detached_img.png"
+            alt="Detached House"
+            onerror="this.src='https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=200&auto=format&fit=crop'"/>
+          <div>
+            <div class="rgi-name">Detached House</div>
+            <div class="rgi-loc">North York, ON</div>
+            <div class="rgi-time">Viewed yesterday</div>
+          </div>
+          <i data-feather="chevron-right" class="rgi-arrow" style="width:15px;height:15px;"></i>
         </div>
-        <h4>Browse Properties</h4>
-        <p>Explore thousands of listings across Canada.</p>
-        <a class="arrow-link" href="#">Browse Now <i data-feather="arrow-right" style="width:14px;height:14px;"></i></a>
-      </div>
-      <div class="guest-card">
-        <div class="gc-icon green">
-          <i data-feather="trending-up" style="width:22px;height:22px;"></i>
+        <div class="recent-grid-item">
+          <img class="recent-grid-img"
+            src="images/townhouse_img.png"
+            alt="Townhouse"
+            onerror="this.src='https://images.unsplash.com/photo-1605146769289-440113cc3d00?w=200&auto=format&fit=crop'"/>
+          <div>
+            <div class="rgi-name">Townhouse</div>
+            <div class="rgi-loc">Vaughan, ON</div>
+            <div class="rgi-time">2 days ago</div>
+          </div>
+          <i data-feather="chevron-right" class="rgi-arrow" style="width:15px;height:15px;"></i>
         </div>
-        <h4>Market Trends</h4>
-        <p>View real-time market insights and reports.</p>
-        <a class="arrow-link" href="#">View Trends <i data-feather="arrow-right" style="width:14px;height:14px;"></i></a>
-      </div>
-      <div class="guest-card">
-        <div class="gc-icon purple">
-          <i data-feather="pocket" style="width:22px;height:22px;"></i>
-        </div>
-        <h4>Mortgage Calculator</h4>
-        <p>Calculate your mortgage and affordability.</p>
-        <a class="arrow-link" href="#">Try Calculator <i data-feather="arrow-right" style="width:14px;height:14px;"></i></a>
-      </div>
-      <div class="guest-card">
-        <div class="gc-icon orange">
-          <i data-feather="map-pin" style="width:22px;height:22px;"></i>
-        </div>
-        <h4>Popular Locations</h4>
-        <p>Discover top neighbourhoods and communities.</p>
-        <a class="arrow-link" href="#">Explore Locations <i data-feather="arrow-right" style="width:14px;height:14px;"></i></a>
       </div>
     </div>
-  </div>
-</section>
- 
-<!-- ══════════════════════════════════════════
-     CTA BANNER
-══════════════════════════════════════════ -->
-<section class="cta-section">
-  <div class="container">
-    <div class="cta-banner">
- 
-      <!-- Mockup -->
-      <div class="cta-mockup">
-        <div class="cta-mockup-inner">
-          <div class="mockup-search">
-            <i data-feather="search" style="width:9px;height:9px;color:#94A3B8;"></i>
-            <span>Search your dream home...</span>
+
+    <!-- My Documents -->
+    <div class="section-card" id="section-docs">
+      <div class="section-header">
+        <div class="section-title">My Documents</div>
+        <a class="view-all-link" href="#">View all <i data-feather="arrow-right" style="width:13px;height:13px;"></i></a>
+      </div>
+      <div class="docs-grid">
+        <div class="doc-item">
+          <div class="doc-icon-wrap red">
+            <i data-feather="file" style="width:18px;height:18px;"></i>
           </div>
-          <div class="mockup-prop-row">
-            <div class="mockup-prop-img"></div>
-            <div>
-              <div class="mpi-tag">Toronto, ON</div>
-              <div class="mpi-name">Modern Villa</div>
-              <div class="mpi-price">$1.2M</div>
-            </div>
+          <div class="doc-name">Identity Proof</div>
+          <div class="doc-date">Uploaded on Jul 15, 2026</div>
+        </div>
+        <div class="doc-item">
+          <div class="doc-icon-wrap blue">
+            <i data-feather="file-text" style="width:18px;height:18px;"></i>
           </div>
-          <div class="mockup-score-row">
-            <div class="score-ring">
-              <span class="score-pct">95%</span>
-            </div>
-            <div class="score-lbl">
-              <strong>AI Match Score</strong>
-              Perfect for you!
-            </div>
+          <div class="doc-name">Purchase Agreement</div>
+          <div class="doc-date">Uploaded on Jul 20, 2026</div>
+        </div>
+        <div class="doc-item">
+          <div class="doc-icon-wrap green">
+            <i data-feather="file-minus" style="width:18px;height:18px;"></i>
           </div>
+          <div class="doc-name">Bank Statement</div>
+          <div class="doc-date">Uploaded on Jul 22, 2026</div>
+        </div>
+        <div class="doc-item">
+          <div class="doc-icon-wrap purple">
+            <i data-feather="map-pin" style="width:18px;height:18px;"></i>
+          </div>
+          <div class="doc-name">Proof of Address</div>
+          <div class="doc-date">Uploaded on Jul 25, 2026</div>
         </div>
       </div>
- 
-      <!-- Text -->
-      <div class="cta-text">
-        <h3>Create an Account Today</h3>
-        <p class="cta-sub">Join thousands of smart buyers and sellers using AI to make better real estate decisions.</p>
-        <div class="cta-checks">
-          <div class="cta-check">
-            <div class="check-dot"><i data-feather="check" style="width:10px;height:10px;"></i></div>
-            Save unlimited properties
-          </div>
-          <div class="cta-check">
-            <div class="check-dot"><i data-feather="check" style="width:10px;height:10px;"></i></div>
-            Track property value changes
-          </div>
-          <div class="cta-check">
-            <div class="check-dot"><i data-feather="check" style="width:10px;height:10px;"></i></div>
-            Get AI recommendations
-          </div>
-          <div class="cta-check">
-            <div class="check-dot"><i data-feather="check" style="width:10px;height:10px;"></i></div>
-            Manage alerts and settings
-          </div>
-        </div>
-        <div class="cta-action">
-          <button class="btn-signup">Sign Up Now</button>
-          <span class="cta-note">Free and easy to get started</span>
-        </div>
-      </div>
- 
     </div>
-  </div>
-</section>
- 
+
+  </main>
+</div>
+
 <!-- ══════════════════════════════════════════
      FOOTER
 ══════════════════════════════════════════ -->
 <footer>
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-logo-row">
-          <div class="footer-logo-mark">
-            <i data-feather="home" style="width:16px;height:16px;color:#fff;"></i>
-          </div>
-          <div>
-            <div class="footer-brand-name">HomeHaven</div>
-            <div class="footer-brand-tag">AI Native Real Estate Platform</div>
-          </div>
-        </div>
-        <p class="footer-desc">Using AI and data to help you find, buy, and sell properties with confidence.</p>
-        <div class="footer-socials">
-          <a href="#"><i data-feather="facebook" style="width:17px;height:17px;"></i></a>
-          <a href="#"><i data-feather="instagram" style="width:17px;height:17px;"></i></a>
-          <a href="#"><i data-feather="linkedin" style="width:17px;height:17px;"></i></a>
-          <a href="#"><i data-feather="twitter" style="width:17px;height:17px;"></i></a>
+  <div class="footer-grid">
+    <div>
+      <div class="f-logo">
+        <div class="f-logo-box"><i data-feather="home" style="width:15px;height:15px;color:#fff;"></i></div>
+        <div>
+          <div style="font-weight:800;font-size:15px;">HomeHaven</div>
+          <div style="font-size:10.5px;color:var(--muted);">AI Native Real Estate Platform</div>
         </div>
       </div>
- 
-      <div class="footer-col">
-        <h5>Company</h5>
-        <a class="footer-link" href="#">About Us</a>
-        <a class="footer-link" href="#">Careers</a>
-        <a class="footer-link" href="#">Blog</a>
-        <a class="footer-link" href="#">Press</a>
-        <a class="footer-link" href="#">Contact</a>
-      </div>
-      <div class="footer-col">
-        <h5>Resources</h5>
-        <a class="footer-link" href="#">Market Trends</a>
-        <a class="footer-link" href="#">Buying Guide</a>
-        <a class="footer-link" href="#">Selling Guide</a>
-        <a class="footer-link" href="#">Mortgage Calculator</a>
-        <a class="footer-link" href="#">Help Center</a>
-      </div>
-      <div class="footer-col">
-        <h5>Support</h5>
-        <a class="footer-link" href="#">FAQs</a>
-        <a class="footer-link" href="#">Privacy Policy</a>
-        <a class="footer-link" href="#">Terms &amp; Conditions</a>
-        <a class="footer-link" href="#">Accessibility</a>
-      </div>
-      <div class="footer-col">
-        <h5>Download Our App</h5>
-        <div class="app-badge">
-          <i data-feather="smartphone" style="width:15px;height:15px;"></i>
-          <div>
-            <div style="font-size:9px;opacity:.7;">Download on the</div>
-            <div style="font-size:12px;font-weight:700;">App Store</div>
-          </div>
-        </div>
-        <div class="app-badge">
-          <i data-feather="play" style="width:15px;height:15px;"></i>
-          <div>
-            <div style="font-size:9px;opacity:.7;">Get it on</div>
-            <div style="font-size:12px;font-weight:700;">Google Play</div>
-          </div>
-        </div>
+      <p class="f-tagline">Using AI and data to help you find, buy, and sell properties with confidence.</p>
+      <div class="f-socials">
+        <a href="#"><i data-feather="facebook" style="width:16px;height:16px;"></i></a>
+        <a href="#"><i data-feather="instagram" style="width:16px;height:16px;"></i></a>
+        <a href="#"><i data-feather="linkedin" style="width:16px;height:16px;"></i></a>
+        <a href="#"><i data-feather="twitter" style="width:16px;height:16px;"></i></a>
       </div>
     </div>
- 
-    <div class="footer-bottom">
-      © 2026 HomeHaven. All Rights Reserved.
+    <div>
+      <div class="f-col-title">Support</div>
+      <a class="f-link" href="#">Contact</a>
+      <a class="f-link" href="#">FAQs</a>
+      <a class="f-link" href="#">Privacy Policy</a>
+      <a class="f-link" href="#">Terms &amp; Conditions</a>
+    </div>
+    <div>
+      <div class="f-col-title">Company</div>
+      <a class="f-link" href="#">About Us</a>
+      <a class="f-link" href="#">Careers</a>
+      <a class="f-link" href="#">Blog</a>
+      <a class="f-link" href="#">Press</a>
+    </div>
+    <div>
+      <div class="f-col-title">Resources</div>
+      <a class="f-link" href="#">Market Trends</a>
+      <a class="f-link" href="#">Buying Guide</a>
+      <a class="f-link" href="#">Selling Guide</a>
+      <a class="f-link" href="#">Mortgage Calculator</a>
+    </div>
+    <div>
+      <div class="f-col-title">Download Our App</div>
+      <div style="background:#111827;color:#fff;border-radius:8px;padding:8px 14px;font-size:12px;display:flex;align-items:center;gap:8px;margin-bottom:10px;cursor:pointer;">
+        <i data-feather="smartphone" style="width:15px;height:15px;"></i>
+        <div><div style="font-size:9px;opacity:.7;">Download on the</div><div style="font-size:12px;font-weight:700;">App Store</div></div>
+      </div>
+      <div style="background:#111827;color:#fff;border-radius:8px;padding:8px 14px;font-size:12px;display:flex;align-items:center;gap:8px;cursor:pointer;">
+        <i data-feather="play" style="width:15px;height:15px;"></i>
+        <div><div style="font-size:9px;opacity:.7;">Get it on</div><div style="font-size:12px;font-weight:700;">Google Play</div></div>
+      </div>
     </div>
   </div>
+  <div class="f-bottom">© 2026 HomeHaven. All Rights Reserved.</div>
 </footer>
  
-<script>feather.replace();</script>
-<script src="js/auth-guard.js"></script>
+
+<script>
+  feather.replace();
+
+  /* ── Smooth-scroll sidebar navigation ── */
+  const sidebarLinks = document.querySelectorAll('.sidebar-link[data-section]');
+
+  sidebarLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('data-section');
+      const target = document.getElementById(targetId);
+      if (!target) return;
+
+      // Active state
+      sidebarLinks.forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+
+      // Smooth scroll
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  /* ── Highlight active link on scroll using IntersectionObserver ── */
+  const sections = [
+    'section-profile',
+    'section-saved',
+    'section-buying',
+    'section-recent',
+    'section-docs'
+  ];
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '-80px 0px -60% 0px',
+    threshold: 0
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        sidebarLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('data-section') === id);
+        });
+      }
+    });
+  }, observerOptions);
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+</script>
 </body>
 </html>
- 
-
-
-
