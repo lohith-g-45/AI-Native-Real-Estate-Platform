@@ -109,8 +109,8 @@ function renderListings(groupedListings) {
             
             <div style="font-size:12.5px; color:#94a3b8; font-weight:500;">Listed on ${dateFormatted}</div>
           </div>
-          <div style="position:relative;">
-             <i data-feather="more-vertical" style="width:20px;height:20px;color:#94a3b8;cursor:pointer;" onclick="toggleDropdown('${listing.property_id}')"></i>
+          <div style="position:relative;" class="listing-dropdown-container">
+             <i data-feather="more-vertical" style="width:20px;height:20px;color:#94a3b8;cursor:pointer;" onclick="toggleDropdown('${listing.property_id}', event)"></i>
              <div id="dropdown-${listing.property_id}" style="display:none; position:absolute; right:0; top:24px; background:#fff; border:1px solid #e2e8f0; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); width:120px; z-index:10; overflow:hidden;">
                <div style="padding:10px 16px; font-size:13px; color:#ef4444; cursor:pointer; font-weight:600; transition: background 0.15s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='#fff'" onclick="deleteListing('${listing.property_id}')">Delete</div>
              </div>
@@ -148,14 +148,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Helper Functions for Listing Actions
-window.toggleDropdown = function(id) {
+window.toggleDropdown = function(id, event) {
+  if (event) event.stopPropagation();
   const el = document.getElementById(`dropdown-${id}`);
-  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  if (el) {
+    const isHidden = el.style.display === 'none';
+    // Close all other dropdowns
+    document.querySelectorAll('[id^="dropdown-"]').forEach(d => d.style.display = 'none');
+    if (isHidden) el.style.display = 'block';
+  }
 };
 
 // Close dropdown if clicked outside
 document.addEventListener('click', function(e) {
-  if (!e.target.matches('[data-feather="more-vertical"]')) {
+  // If we didn't click inside a dropdown-container, close them all
+  if (!e.target.closest('.listing-dropdown-container')) {
     document.querySelectorAll('[id^="dropdown-"]').forEach(el => {
       el.style.display = 'none';
     });

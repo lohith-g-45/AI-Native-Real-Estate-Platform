@@ -785,7 +785,6 @@ export class PropertyListingService {
       .leftJoinAndSelect('listing.location', 'location')
       .leftJoinAndSelect('listing.details', 'details')
       .leftJoinAndSelect('listing.media', 'media')
-      .leftJoinAndSelect('listing.availability', 'availability')
       .leftJoinAndSelect('listing.ai_review', 'ai_review')
       .leftJoinAndSelect('listing.analytics', 'analytics')
       .where('listing.property_id = :id', { id: propertyId })
@@ -794,11 +793,6 @@ export class PropertyListingService {
 
     if (!listing) {
       this.throwError('Property not found', HttpStatus.NOT_FOUND);
-    }
-
-    if (listing.availability) {
-      if (listing.availability.hide_phone) listing.availability.contact_phone = null as any;
-      if (listing.availability.hide_email) listing.availability.contact_email = null as any;
     }
 
     setImmediate(async () => {
