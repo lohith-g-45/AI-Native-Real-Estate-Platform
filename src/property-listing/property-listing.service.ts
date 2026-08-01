@@ -578,13 +578,19 @@ export class PropertyListingService {
       this.throwError("Listing is not ready for submission", HttpStatus.BAD_REQUEST, errors);
     }
 
-    listing.status = PropertyStatus.SUBMITTED;
+    listing.status = PropertyStatus.PUBLISHED;
     await this.listingRepo.save(listing);
+
+    let analytics = await this.analyticsRepo.findOne({ where: { property_id: propertyId } });
+    if (!analytics) {
+      analytics = this.analyticsRepo.create({ property_id: propertyId });
+      await this.analyticsRepo.save(analytics);
+    }
 
     return {
       success: true,
       data: { property_id: propertyId, status: listing.status },
-      message: "Listing submitted for admin review successfully",
+      message: "Listing published and approved successfully",
     };
   }
 
