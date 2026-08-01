@@ -1308,8 +1308,4 @@ export class PropertyListingService {
     return {
       success: true,
       message: 'Listing deleted successfully'
-    };
-  }
-
-}  
- 
+    }
