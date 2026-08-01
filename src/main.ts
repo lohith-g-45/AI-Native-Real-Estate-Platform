@@ -14,6 +14,11 @@ async function bootstrap() {
   
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     prefix: '/uploads/',
+    setHeaders: (res, path) => {
+      if (!path.includes('.')) {
+        res.set('Content-Type', 'image/jpeg');
+      }
+    }
   });
 
   app.enableCors({

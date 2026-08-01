@@ -81,20 +81,24 @@ async function loadPropertyDetails() {
     const img1 = others[0] || {};
     const img2 = others[1] || {};
     
-    const price = p.asking_price ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(p.asking_price) : 'Price TBD';
+    const basic = p.basic_details || {};
+    const loc = p.location || {};
+    const det = p.details || {};
+
+    const price = basic.asking_price ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(basic.asking_price) : 'Price TBD';
     
     document.getElementById('main-content').innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 24px;">
         <div>
-          <h1 style="font-size:32px; font-weight:800; color:#0f172a; margin-bottom:8px;">${p.title || 'Untitled Property'}</h1>
+          <h1 style="font-size:32px; font-weight:800; color:#0f172a; margin-bottom:8px;">${basic.title || 'Untitled Property'}</h1>
           <div style="font-size:16px; color:#64748b; display:flex; align-items:center; gap:8px;">
             <i data-feather="map-pin" style="width:16px;height:16px;"></i>
-            ${p.address || ''} ${p.city || ''}, ${p.state || ''} ${p.postal_code || ''}
+            ${loc.address || ''} ${loc.city || ''}, ${loc.state || ''} ${loc.postal_code || ''}
           </div>
         </div>
         <div style="text-align:right;">
           <div style="font-size:36px; font-weight:800; color:var(--blue);">${price}</div>
-          <div style="font-size:14px; color:#64748b; margin-top:4px;">${p.listing_type === 'for_rent' ? 'For Rent' : 'For Sale'}</div>
+          <div style="font-size:14px; color:#64748b; margin-top:4px;">${basic.listing_type === 'for_rent' ? 'For Rent' : 'For Sale'}</div>
         </div>
       </div>
       
@@ -110,7 +114,7 @@ async function loadPropertyDetails() {
         <div>
           <div style="background:#fff; border-radius:16px; border:1px solid #e2e8f0; padding:32px; margin-bottom:32px;">
             <h2 style="font-size:20px; font-weight:800; margin-bottom:16px;">Description</h2>
-            <p style="color:#475569; font-size:15px; line-height:1.7;">${p.description || 'No description provided.'}</p>
+            <p style="color:#475569; font-size:15px; line-height:1.7;">${basic.description || 'No description provided.'}</p>
           </div>
           
           <div style="background:#fff; border-radius:16px; border:1px solid #e2e8f0; padding:32px;">
@@ -118,19 +122,19 @@ async function loadPropertyDetails() {
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
               <div style="display:flex; align-items:center; gap:12px; font-size:15px; color:#334155;">
                 <div style="width:40px;height:40px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;"><i data-feather="home" style="color:#2563eb;width:20px;"></i></div>
-                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Type</div><div style="font-weight:700;">${p.property_type || 'Unknown'}</div></div>
+                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Type</div><div style="font-weight:700;">${basic.property_type || 'Unknown'}</div></div>
               </div>
               <div style="display:flex; align-items:center; gap:12px; font-size:15px; color:#334155;">
                 <div style="width:40px;height:40px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;"><i data-feather="square" style="color:#2563eb;width:20px;"></i></div>
-                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Size</div><div style="font-weight:700;">${p.square_feet ? p.square_feet + ' sqft' : 'Unknown'}</div></div>
+                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Size</div><div style="font-weight:700;">${det.square_feet ? det.square_feet + ' sqft' : 'Unknown'}</div></div>
               </div>
               <div style="display:flex; align-items:center; gap:12px; font-size:15px; color:#334155;">
                 <div style="width:40px;height:40px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;"><i data-feather="users" style="color:#2563eb;width:20px;"></i></div>
-                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Bedrooms</div><div style="font-weight:700;">${p.bedrooms || 0}</div></div>
+                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Bedrooms</div><div style="font-weight:700;">${det.bedrooms || 0}</div></div>
               </div>
               <div style="display:flex; align-items:center; gap:12px; font-size:15px; color:#334155;">
                 <div style="width:40px;height:40px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;"><i data-feather="droplet" style="color:#2563eb;width:20px;"></i></div>
-                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Bathrooms</div><div style="font-weight:700;">${p.bathrooms || 0}</div></div>
+                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Bathrooms</div><div style="font-weight:700;">${det.bathrooms || 0}</div></div>
               </div>
             </div>
           </div>
