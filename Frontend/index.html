@@ -260,7 +260,7 @@
           <div style="position:relative; height:170px;">
             <img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop'" />
             <span class="badge-featured">FEATURED</span>
-            <span class="heart-btn" onclick="window.location.href='property_details.html?id=${p.property_id}'"><i data-feather="heart" style="width:15px;height:15px;color:#334155;"></i></span>
+            <span class="heart-btn" onclick="event.stopPropagation(); toggleSaveProperty(this, '${p.property_id}')" title="Save Property"><i data-feather="heart" style="width:15px;height:15px;color:#334155; transition: fill 0.2s, color 0.2s;"></i></span>
           </div>
           <div style="padding:16px;">
             <div style="font-weight:700; font-size:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${p.title}">${p.title || 'Untitled Property'}</div>
@@ -343,7 +343,7 @@
         <div class="card" onclick="window.location.href='property_details.html?id=${p.property_id}'" style="cursor:pointer;">
           <div style="position:relative; height:100px;">
             <img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop'" />
-            <span class="heart-btn" style="width:26px;height:26px;top:8px;right:8px;"><i data-feather="heart" style="width:12px;height:12px;color:#334155;"></i></span>
+            <span class="heart-btn" onclick="event.stopPropagation(); toggleSaveProperty(this, '${p.property_id}')" style="width:26px;height:26px;top:8px;right:8px;" title="Save Property"><i data-feather="heart" style="width:12px;height:12px;color:#334155; transition: fill 0.2s, color 0.2s;"></i></span>
           </div>
           <div style="padding:10px 12px;">
             <div style="font-weight:700; font-size:14px;">${price}</div>
@@ -364,13 +364,60 @@
   function executeHeroSearch() {
     const input = document.getElementById('hero-search-input').value.trim();
     if (!input) return;
-    
-    // Simple parsing logic: if it matches a known city, pass it as city.
-    // Real NLP parsing requires a backend endpoint, but for now we just pass it to the search page as 'city'
-    // Alternatively, if it looks like a property type or price, we could map it.
     window.location.href = `buy.html?city=${encodeURIComponent(input)}`;
   }
   
+  async function toggleSaveProperty(btn, propertyId) {
+    const token = localStorage.getItem('accessToken') || localStorage.getItem('access_token');
+    if (!token) {
+      alert("Please sign in to save properties.");
+      window.location.href = 'login.html';
+      return;
+    }
+
+    const icon = btn.querySelector('svg');
+    const isSaved = icon.style.fill === 'rgb(239, 68, 68)'; // checking if currently red
+    const method = isSaved ? 'DELETE' : 'POST';
+    
+    // Optimistically update UI
+    if (isSaved) {
+      icon.style.fill = 'none';
+      icon.style.color = '#334155';
+    } else {
+      icon.style.fill = '#ef4444';
+      icon.style.color = '#ef4444';
+    }
+
+    const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.hostname.startsWith('192.168.') || window.location.hostname.startsWith('10.');
+    const API_BASE = isLocal
+        ? `http://${window.location.hostname}:3000/api/properties` 
+        : 'https://ai-native-real-estate-platform.onrender.com/api/properties';
+
+    try {
+      const res = await fetch(`${API_BASE}/${propertyId}/save`, {
+        method,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      if (!res.ok && data.message !== 'Property already saved') {
+        throw new Error(data.message || 'Failed to save property');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Failed to update saved properties.');
+      // Revert optimistic UI
+      if (isSaved) {
+        icon.style.fill = '#ef4444';
+        icon.style.color = '#ef4444';
+      } else {
+        icon.style.fill = 'none';
+        icon.style.color = '#334155';
+      }
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     loadFeaturedProperties();
     loadRecentlyViewed();

@@ -859,8 +859,8 @@ header{
             <img src="${imgUrl}" alt="${p.title}"
               onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500&auto=format&fit=crop'"/>
             <span class="match-pill ${matchClass}">${matchText}</span>
-            <button class="fav" onclick="toggleFav(this); event.stopPropagation();">
-              <i data-feather="heart" style="width:12px;height:12px;color:#ef4444;"></i>
+            <button class="fav" onclick="event.stopPropagation(); toggleSaveProperty(this, '${p.property_id}')" title="Save Property">
+              <i data-feather="heart" style="width:12px;height:12px;color:#ef4444; transition: fill 0.2s, color 0.2s;"></i>
             </button>
           </div>
           <div class="prop-body">
@@ -896,6 +896,55 @@ header{
     } catch(e) {
       console.error(e);
       document.getElementById('dynamic-prop-list').innerHTML = '<div style="padding:40px; text-align:center; color:red;">Failed to load properties.</div>';
+    }
+  }
+
+  async function toggleSaveProperty(btn, propertyId) {
+    const token = localStorage.getItem('accessToken') || localStorage.getItem('access_token');
+    if (!token) {
+      alert("Please sign in to save properties.");
+      window.location.href = 'login.html';
+      return;
+    }
+
+    const icon = btn.querySelector('svg');
+    const isSaved = icon.style.fill === 'rgb(239, 68, 68)'; // checking if currently red
+    const method = isSaved ? 'DELETE' : 'POST';
+    
+    // Optimistically update UI
+    if (isSaved) {
+      icon.style.fill = 'none';
+      icon.style.color = '#ef4444'; // specific to buy.html style
+    } else {
+      icon.style.fill = '#ef4444';
+      icon.style.color = '#ef4444';
+    }
+
+    const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.hostname.startsWith('192.168.') || window.location.hostname.startsWith('10.');
+    const API_BASE = isLocal
+        ? `http://${window.location.hostname}:3000/api/properties` 
+        : 'https://ai-native-real-estate-platform.onrender.com/api/properties';
+
+    try {
+      const res = await fetch(`${API_BASE}/${propertyId}/save`, {
+        method,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      if (!res.ok && data.message !== 'Property already saved') {
+        throw new Error(data.message || 'Failed to save property');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Failed to update saved properties.');
+      // Revert optimistic UI
+      if (isSaved) {
+        icon.style.fill = '#ef4444';
+      } else {
+        icon.style.fill = 'none';
+      }
     }
   }
 
