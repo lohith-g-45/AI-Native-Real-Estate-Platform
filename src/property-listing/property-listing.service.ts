@@ -1,6 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Brackets } from 'typeorm';
 import { PropertyListing, PropertyStatus } from './entities/property-listing.entity';
 import { ListingBasicDetails, ListingType, PropertyCategory } from './entities/listing-basic-details.entity';
 import { ListingLocation } from './entities/listing-location.entity';
@@ -788,7 +788,12 @@ export class PropertyListingService {
       .leftJoinAndSelect('listing.ai_review', 'ai_review')
       .leftJoinAndSelect('listing.analytics', 'analytics')
       .where('listing.property_id = :id', { id: propertyId })
-      .andWhere('listing.status = :status', { status: PropertyStatus.PUBLISHED })
+      .andWhere(new Brackets(qb => {
+        qb.where('listing.status = :status', { status: PropertyStatus.PUBLISHED });
+        if (userId) {
+          qb.orWhere('listing.seller_id = :userId', { userId });
+        }
+      }))
       .getOne();
 
     if (!listing) {

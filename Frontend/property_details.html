@@ -57,7 +57,11 @@ async function loadPropertyDetails() {
       : 'https://ai-native-real-estate-platform.onrender.com/api/properties';
   
   try {
-    const res = await fetch(`${API_BASE}/${id}`);
+    const token = localStorage.getItem('accessToken');
+    const headers = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    
+    const res = await fetch(`${API_BASE}/${id}`, { headers });
     const data = await res.json();
     
     if (!data.success || !data.data) {
