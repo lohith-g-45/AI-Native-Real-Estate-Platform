@@ -34,12 +34,14 @@ export class PublicListingController {
     return (req.headers['x-session-id'] as string) || null;
   }
 
+  @Public()
   @Get('featured')
   @ApiOperation({ summary: 'Get top 4 featured properties for home page' })
   getFeaturedListings() {
     return this.propertyListingService.getFeaturedListings();
   }
 
+  @Public()
   @Get('recently-viewed/list')
   @ApiOperation({ summary: 'Get recently viewed properties' })
   getRecentlyViewed(@Req() req: Request) {
