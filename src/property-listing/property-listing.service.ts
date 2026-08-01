@@ -942,7 +942,6 @@ export class PropertyListingService {
       .leftJoinAndSelect('listing.basic_details', 'basic_details')
       .leftJoinAndSelect('listing.location', 'location')
       .leftJoinAndSelect('listing.media', 'media')
-      .leftJoinAndSelect('listing.analytics', 'analytics')
       .where('listing.seller_id = :sellerId', { sellerId })
       .orderBy('listing.updated_at', 'DESC')
       .getMany();
@@ -957,6 +956,16 @@ export class PropertyListingService {
       sold: []
     };
 
+    // Fetch analytics explicitly to bypass any OneToOne relation mapping issues
+    const propertyIds = listings.map(l => l.property_id);
+    let analyticsMap = new Map();
+    if (propertyIds.length > 0) {
+      const analyticsRaw = await this.analyticsRepo.createQueryBuilder('analytics')
+        .where('analytics.property_id IN (:...propertyIds)', { propertyIds })
+        .getMany();
+      analyticsRaw.forEach(a => analyticsMap.set(a.property_id, a));
+    }
+
     listings.forEach(l => {
       const card = {
         property_id: l.property_id,
@@ -966,7 +975,7 @@ export class PropertyListingService {
         status: l.status,
         completion_percentage: l.completion_percentage,
         cover_photo_url: l.media?.find(m => m.is_cover)?.url || l.media?.[0]?.url || null,
-        analytics: l.analytics || null,
+        analytics: analyticsMap.get(l.property_id) || null,
         created_at: l.created_at,
         updated_at: l.updated_at
       };
