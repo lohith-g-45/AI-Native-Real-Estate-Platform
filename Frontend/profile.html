@@ -631,61 +631,8 @@
         <div class="section-title">Saved Properties</div>
         <a class="view-all-link" href="#">View all <i data-feather="arrow-right" style="width:13px;height:13px;"></i></a>
       </div>
-      <div class="properties-scroll">
-
-        <!-- Card 1 -->
-        <div class="prop-card">
-          <div class="prop-img-wrap">
-            <img src="images/townhouse_img.png" alt="Modern Townhouse" onerror="this.src='https://images.unsplash.com/photo-1605146769289-440113cc3d00?w=400&auto=format&fit=crop'"/>
-            <button class="prop-heart"><i data-feather="heart" style="width:14px;height:14px;fill:#ef4444;stroke:#ef4444;"></i></button>
-          </div>
-          <div class="prop-info">
-            <div class="prop-name">Modern Townhouse</div>
-            <div class="prop-loc">Toronto, ON</div>
-            <div class="prop-price">$1,250,000</div>
-          </div>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="prop-card">
-          <div class="prop-img-wrap">
-            <img src="images/condo_img.png" alt="Luxury Condo" onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&auto=format&fit=crop'"/>
-            <button class="prop-heart"><i data-feather="heart" style="width:14px;height:14px;fill:#ef4444;stroke:#ef4444;"></i></button>
-          </div>
-          <div class="prop-info">
-            <div class="prop-name">Luxury Condo</div>
-            <div class="prop-loc">Downtown, Toronto</div>
-            <div class="prop-price">$845,000</div>
-          </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="prop-card">
-          <div class="prop-img-wrap">
-            <img src="images/detached_img.png" alt="Detached House" onerror="this.src='https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&auto=format&fit=crop'"/>
-            <button class="prop-heart"><i data-feather="heart" style="width:14px;height:14px;fill:#ef4444;stroke:#ef4444;"></i></button>
-          </div>
-          <div class="prop-info">
-            <div class="prop-name">Detached House</div>
-            <div class="prop-loc">North York, ON</div>
-            <div class="prop-price">$1,980,000</div>
-          </div>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="prop-card">
-          <div class="prop-img-wrap">
-            <img src="images/villa_img.png" alt="Spacious Condo" onerror="this.src='https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&auto=format&fit=crop'"/>
-            <button class="prop-heart"><i data-feather="heart" style="width:14px;height:14px;fill:#ef4444;stroke:#ef4444;"></i></button>
-          </div>
-          <div class="prop-info">
-            <div class="prop-name">Spacious Condo</div>
-            <div class="prop-loc">Vaughan, ON</div>
-            <div class="prop-price">$720,000</div>
-          </div>
-        </div>
-
-      </div>
+      <div class="properties-scroll" id="saved-properties-container">
+        <div style="padding:40px; color:var(--muted); text-align:center; width: 100%;">Loading saved properties...</div>
     </div>
 
     <!-- Buying Activity -->
@@ -760,43 +707,8 @@
         <div class="section-title">Recently Viewed</div>
         <a class="view-all-link" href="#">View all <i data-feather="arrow-right" style="width:13px;height:13px;"></i></a>
       </div>
-      <div class="recent-grid">
-        <div class="recent-grid-item">
-          <img class="recent-grid-img"
-            src="images/condo_img.png"
-            alt="Luxury Condo"
-            onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=200&auto=format&fit=crop'"/>
-          <div>
-            <div class="rgi-name">Luxury Condo</div>
-            <div class="rgi-loc">Toronto, ON</div>
-            <div class="rgi-time">Viewed today</div>
-          </div>
-          <i data-feather="chevron-right" class="rgi-arrow" style="width:15px;height:15px;"></i>
-        </div>
-        <div class="recent-grid-item">
-          <img class="recent-grid-img"
-            src="images/detached_img.png"
-            alt="Detached House"
-            onerror="this.src='https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=200&auto=format&fit=crop'"/>
-          <div>
-            <div class="rgi-name">Detached House</div>
-            <div class="rgi-loc">North York, ON</div>
-            <div class="rgi-time">Viewed yesterday</div>
-          </div>
-          <i data-feather="chevron-right" class="rgi-arrow" style="width:15px;height:15px;"></i>
-        </div>
-        <div class="recent-grid-item">
-          <img class="recent-grid-img"
-            src="images/townhouse_img.png"
-            alt="Townhouse"
-            onerror="this.src='https://images.unsplash.com/photo-1605146769289-440113cc3d00?w=200&auto=format&fit=crop'"/>
-          <div>
-            <div class="rgi-name">Townhouse</div>
-            <div class="rgi-loc">Vaughan, ON</div>
-            <div class="rgi-time">2 days ago</div>
-          </div>
-          <i data-feather="chevron-right" class="rgi-arrow" style="width:15px;height:15px;"></i>
-        </div>
+      <div class="recent-grid" id="recently-viewed-container">
+        <div style="padding:40px; color:var(--muted); text-align:center; grid-column:span 3;">Loading recently viewed...</div>
       </div>
     </div>
 
@@ -985,7 +897,124 @@
       console.error('Failed to load profile data', err);
     }
   }
+
+  function getSessionId() {
+    let sid = localStorage.getItem('guest_session_id');
+    if (!sid) {
+      sid = 'sess_' + Math.random().toString(36).substr(2, 9) + Date.now();
+      localStorage.setItem('guest_session_id', sid);
+    }
+    return sid;
+  }
+
+  async function toggleSaveProperty(btn, propertyId) {
+    const token = localStorage.getItem('accessToken') || localStorage.getItem('access_token');
+    if (!token) return;
+    const method = 'DELETE'; // from profile, we assume we want to unsave
+    try {
+      const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.hostname.startsWith('192.168.') || window.location.hostname.startsWith('10.');
+      const API_BASE = isLocal ? `http://${window.location.hostname}:3000/api/properties` : 'https://ai-native-real-estate-platform.onrender.com/api/properties';
+      const res = await fetch(`${API_BASE}/${propertyId}/save`, { method, headers: { 'Authorization': `Bearer ${token}` }});
+      if (res.ok) {
+        btn.closest('.prop-card').remove();
+        loadDynamicData(); // refresh counts
+      }
+    } catch(e) { console.error(e); }
+  }
+
+  async function loadDynamicData() {
+    const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+    if (!token) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.hostname.startsWith('192.168.') || window.location.hostname.startsWith('10.');
+    const API_BASE = isLocal ? `http://${window.location.hostname}:3000/api/properties` : 'https://ai-native-real-estate-platform.onrender.com/api/properties';
+
+    // 1. Fetch Saved Properties
+    try {
+      const savedRes = await fetch(`${API_BASE}/user/saved`, { headers: { 'Authorization': `Bearer ${token}` } });
+      const savedData = await savedRes.json();
+      const savedProps = (savedData.data && Array.isArray(savedData.data.properties)) ? savedData.data.properties : [];
+      
+      // Update Stat
+      const savedStatEl = document.querySelector('.stats-row .stat-cell:nth-child(1) .stat-number');
+      if (savedStatEl) savedStatEl.textContent = savedProps.length;
+
+      const savedContainer = document.getElementById('saved-properties-container');
+      savedContainer.innerHTML = '';
+
+      if (savedProps.length === 0) {
+        savedContainer.innerHTML = '<div style="padding:20px; color:var(--muted); font-size:13px; text-align:center; width:100%;">No saved properties yet. <a href="buy.html" style="color:var(--blue); font-weight:600;">Explore Properties</a></div>';
+      } else {
+        savedProps.forEach(p => {
+          let imgUrl = p.cover_photo_url || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop';
+          if (imgUrl && !/^https?:\/\//.test(imgUrl)) imgUrl = `${API_BASE.replace('/api/properties', '')}${imgUrl}`;
+          const priceVal = p.price || p.asking_price;
+          const price = priceVal ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(priceVal)) : 'Price TBD';
+          
+          const html = `
+          <div class="prop-card" onclick="window.location.href='property_details.html?id=${p.property_id}'">
+            <div class="prop-img-wrap">
+              <img src="${imgUrl}" alt="${p.title || 'Property'}" onerror="this.src='https://images.unsplash.com/photo-1605146769289-440113cc3d00?w=400&auto=format&fit=crop'"/>
+              <button class="prop-heart" onclick="event.stopPropagation(); toggleSaveProperty(this, '${p.property_id}')" title="Unsave Property"><i data-feather="heart" style="width:14px;height:14px;fill:#ef4444;stroke:#ef4444;"></i></button>
+            </div>
+            <div class="prop-info">
+              <div class="prop-name" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.title || 'Property'}</div>
+              <div class="prop-loc">${p.city || ''} ${p.province ? ', ' + p.province : ''}</div>
+              <div class="prop-price">${price}</div>
+            </div>
+          </div>
+          `;
+          savedContainer.insertAdjacentHTML('beforeend', html);
+        });
+      }
+    } catch(e) { console.error('Failed to load saved properties', e); }
+
+    // 2. Fetch Recently Viewed
+    try {
+      const rvRes = await fetch(`${API_BASE}/recently-viewed/list`, {
+        headers: { 'Authorization': `Bearer ${token}`, 'x-session-id': getSessionId() }
+      });
+      const rvData = await rvRes.json();
+      const rvProps = (rvData.data && Array.isArray(rvData.data.properties)) ? rvData.data.properties : [];
+      
+      // Update Stat
+      const rvStatEl = document.querySelector('.stats-row .stat-cell:nth-child(2) .stat-number');
+      if (rvStatEl) rvStatEl.textContent = rvProps.length;
+
+      const rvContainer = document.getElementById('recently-viewed-container');
+      rvContainer.innerHTML = '';
+
+      if (rvProps.length === 0) {
+        rvContainer.innerHTML = '<div style="padding:20px; color:var(--muted); font-size:13px; text-align:center; grid-column:span 3;">No recently viewed properties yet. <a href="buy.html" style="color:var(--blue); font-weight:600;">Start exploring!</a></div>';
+      } else {
+        rvProps.slice(0, 6).forEach(p => {
+          let imgUrl = p.cover_photo_url || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop';
+          if (imgUrl && !/^https?:\/\//.test(imgUrl)) imgUrl = `${API_BASE.replace('/api/properties', '')}${imgUrl}`;
+          
+          const html = `
+          <div class="recent-grid-item" onclick="window.location.href='property_details.html?id=${p.property_id}'">
+            <img class="recent-grid-img" src="${imgUrl}" alt="${p.title || 'Property'}" onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=200&auto=format&fit=crop'"/>
+            <div style="flex:1; min-width:0;">
+              <div class="rgi-name" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.title || 'Property'}</div>
+              <div class="rgi-loc">${p.city || ''}</div>
+              <div class="rgi-time">Recently</div>
+            </div>
+            <i data-feather="chevron-right" class="rgi-arrow" style="width:15px;height:15px;"></i>
+          </div>
+          `;
+          rvContainer.insertAdjacentHTML('beforeend', html);
+        });
+      }
+    } catch(e) { console.error('Failed to load recently viewed properties', e); }
+
+    if (window.feather) feather.replace();
+  }
+
   loadProfileData();
+  loadDynamicData();
 </script>
 </body>
 </html>
