@@ -315,8 +315,18 @@
                          (Array.isArray(data) ? data : [])));
                          
       if (properties.length === 0) {
-        container.innerHTML = '<div style="text-align:center; padding:20px; grid-column: span 4; color: var(--muted); font-size:13px;">No recently viewed properties yet. Start exploring!</div>';
-        return;
+        // Fallback to top properties to avoid an empty UI
+        const fallbackRes = await fetch(`${API_BASE}/featured`);
+        const fallbackData = await fallbackRes.json();
+        const fallbackProps = (fallbackData.data && Array.isArray(fallbackData.data.properties)) ? fallbackData.data.properties : 
+                              (Array.isArray(fallbackData.data) ? fallbackData.data : []);
+                              
+        if (fallbackProps.length > 0) {
+          properties.push(...fallbackProps.slice(0, 4));
+        } else {
+          container.innerHTML = '<div style="text-align:center; padding:20px; grid-column: span 4; color: var(--muted); font-size:13px;">No recently viewed properties yet. Start exploring!</div>';
+          return;
+        }
       }
       
       properties.forEach(p => {
