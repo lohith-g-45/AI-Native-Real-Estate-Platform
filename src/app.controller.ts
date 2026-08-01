@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Res, NotFoundException } from '@nestjs/common';
-import { Response } from 'express';
+import type { Response } from 'express';
 import { join } from 'path';
 import { existsSync } from 'fs';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
