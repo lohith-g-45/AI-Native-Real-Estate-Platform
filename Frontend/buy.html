@@ -695,7 +695,7 @@ header{
   <!-- ── LISTINGS ── -->
   <div class="listings-col">
     <div class="results-bar">
-      <div class="results-count"><em>352</em> Properties Found</div>
+      <div class="results-count" id="results-count"><em>0</em> Properties Found</div>
       <div class="results-right">
         <select class="sort-sel">
           <option>Sort by: AI Recommended</option>
@@ -715,160 +715,8 @@ header{
       </div>
     </div>
 
-    <div class="prop-list">
-
-      <!-- ── Card 1 ── -->
-      <div class="prop-card" style="animation-delay:.05s">
-        <div class="prop-img">
-          <img src="images/condo_img.png" alt="55 Bremner Blvd"
-            onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500&auto=format&fit=crop'"/>
-          <span class="match-pill a">94% Match</span>
-          <span class="photo-pill"><i data-feather="camera" style="width:9px;height:9px;"></i> 18</span>
-          <button class="fav" onclick="toggleFav(this)">
-            <i data-feather="heart" style="width:12px;height:12px;color:#ef4444;"></i>
-          </button>
-        </div>
-        <div class="prop-body">
-          <div>
-            <div class="price-row">
-              <div class="prop-price">$845,000</div>
-              <div class="price-badges">
-                <span class="badge new">New Listing</span>
-                <button class="more-btn"><i data-feather="more-vertical" style="width:14px;height:14px;"></i></button>
-              </div>
-            </div>
-            <div class="prop-addr">55 Bremner Blvd, Unit 3502</div>
-            <div class="prop-city">Toronto, ON M5J 0A6</div>
-            <div class="specs-row">
-              <span class="spec"><i data-feather="home" style="width:12px;height:12px;"></i> 2 Beds</span>
-              <span class="spec"><i data-feather="droplet" style="width:12px;height:12px;"></i> 2 Baths</span>
-              <span class="spec"><i data-feather="maximize-2" style="width:12px;height:12px;"></i> 875 ft²</span>
-            </div>
-            <div class="meta-row">
-              Condo Apartment <span class="dot-sep"></span> MLS® C1234567
-            </div>
-          </div>
-          <div class="card-footer">
-            <span class="listed-by">RE/MAX Hallmark Realty Ltd.</span>
-            <button class="btn-details">View Details</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── Card 2 ── -->
-      <div class="prop-card" style="animation-delay:.1s">
-        <div class="prop-img">
-          <img src="images/detached_img.png" alt="128 Maple Leaf Dr"
-            onerror="this.src='https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=500&auto=format&fit=crop'"/>
-          <span class="match-pill a">92% Match</span>
-          <span class="photo-pill"><i data-feather="camera" style="width:9px;height:9px;"></i> 24</span>
-          <button class="fav" onclick="toggleFav(this)">
-            <i data-feather="heart" style="width:12px;height:12px;color:#ef4444;"></i>
-          </button>
-        </div>
-        <div class="prop-body">
-          <div>
-            <div class="price-row">
-              <div class="prop-price">$1,250,000</div>
-              <div class="price-badges">
-                <span class="badge new">New Listing</span>
-                <button class="more-btn"><i data-feather="more-vertical" style="width:14px;height:14px;"></i></button>
-              </div>
-            </div>
-            <div class="prop-addr">128 Maple Leaf Dr</div>
-            <div class="prop-city">Vaughan, ON L6A 1G8</div>
-            <div class="specs-row">
-              <span class="spec"><i data-feather="home" style="width:12px;height:12px;"></i> 4 Beds</span>
-              <span class="spec"><i data-feather="droplet" style="width:12px;height:12px;"></i> 3 Baths</span>
-              <span class="spec"><i data-feather="maximize-2" style="width:12px;height:12px;"></i> 2,350 ft²</span>
-            </div>
-            <div class="meta-row">
-              Detached <span class="dot-sep"></span> MLS® N1234567
-            </div>
-          </div>
-          <div class="card-footer">
-            <span class="listed-by">Right At Home Realty Inc.</span>
-            <button class="btn-details">View Details</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── Card 3 ── -->
-      <div class="prop-card" style="animation-delay:.15s">
-        <div class="prop-img">
-          <img src="images/townhouse_img.png" alt="68 William Duncan Rd"
-            onerror="this.src='https://images.unsplash.com/photo-1605146769289-440113cc3d00?w=500&auto=format&fit=crop'"/>
-          <span class="match-pill b">90% Match</span>
-          <span class="photo-pill"><i data-feather="camera" style="width:9px;height:9px;"></i> 16</span>
-          <button class="fav" onclick="toggleFav(this)">
-            <i data-feather="heart" style="width:12px;height:12px;color:#ef4444;"></i>
-          </button>
-        </div>
-        <div class="prop-body">
-          <div>
-            <div class="price-row">
-              <div class="prop-price">$789,900</div>
-              <div class="price-badges">
-                <span class="badge reduced">Price Reduced</span>
-                <button class="more-btn"><i data-feather="more-vertical" style="width:14px;height:14px;"></i></button>
-              </div>
-            </div>
-            <div class="prop-addr">68 William Duncan Rd, Unit 12</div>
-            <div class="prop-city">Toronto, ON M3K 0C8</div>
-            <div class="specs-row">
-              <span class="spec"><i data-feather="home" style="width:12px;height:12px;"></i> 3 Beds</span>
-              <span class="spec"><i data-feather="droplet" style="width:12px;height:12px;"></i> 2 Baths</span>
-              <span class="spec"><i data-feather="maximize-2" style="width:12px;height:12px;"></i> 1,350 ft²</span>
-            </div>
-            <div class="meta-row">
-              Townhouse <span class="dot-sep"></span> MLS® W1234567
-            </div>
-          </div>
-          <div class="card-footer">
-            <span class="listed-by">Royal LePage Signature Realty</span>
-            <button class="btn-details">View Details</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── Card 4 ── -->
-      <div class="prop-card" style="animation-delay:.2s">
-        <div class="prop-img">
-          <img src="images/villa_img.png" alt="15 Lower Jarvis St"
-            onerror="this.src='https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500&auto=format&fit=crop'"/>
-          <span class="match-pill b">80% Match</span>
-          <span class="photo-pill"><i data-feather="camera" style="width:9px;height:9px;"></i> 20</span>
-          <button class="fav" onclick="toggleFav(this)">
-            <i data-feather="heart" style="width:12px;height:12px;color:#ef4444;"></i>
-          </button>
-        </div>
-        <div class="prop-body">
-          <div>
-            <div class="price-row">
-              <div class="prop-price">$620,000</div>
-              <div class="price-badges">
-                <span class="badge open">Open House</span>
-                <button class="more-btn"><i data-feather="more-vertical" style="width:14px;height:14px;"></i></button>
-              </div>
-            </div>
-            <div class="prop-addr">15 Lower Jarvis St, Unit 1806</div>
-            <div class="prop-city">Toronto, ON M5E 0C4</div>
-            <div class="specs-row">
-              <span class="spec"><i data-feather="home" style="width:12px;height:12px;"></i> 1 Bed</span>
-              <span class="spec"><i data-feather="droplet" style="width:12px;height:12px;"></i> 1 Bath</span>
-              <span class="spec"><i data-feather="maximize-2" style="width:12px;height:12px;"></i> 650 ft²</span>
-            </div>
-            <div class="meta-row">
-              Condo Apartment <span class="dot-sep"></span> MLS® C1231234
-            </div>
-          </div>
-          <div class="card-footer">
-            <span class="listed-by">Keller Williams Advantage</span>
-            <button class="btn-details">View Details</button>
-          </div>
-        </div>
-      </div>
-
+    <div class="prop-list" id="dynamic-prop-list">
+      <div style="padding: 40px; text-align: center; color: var(--muted);">Loading properties... <i class="spin"></i></div>
     </div><!-- /prop-list -->
 
     <!-- Pagination -->
@@ -959,8 +807,101 @@ header{
     document.getElementById('range-val').textContent='$1.2M';
   }
 </script>
+</script>
 <script>
+  async function loadDynamicProperties() {
+    try {
+      const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.hostname.startsWith('192.168.') || window.location.hostname.startsWith('10.');
+      const API_BASE = isLocal
+          ? `http://${window.location.hostname}:3000/api/properties` 
+          : 'https://ai-native-real-estate-platform.onrender.com/api/properties';
+      
+      const params = new URLSearchParams(window.location.search);
+      let queryStr = window.location.search;
+      
+      // Update UI filters based on params (optional UX enhancement)
+      if (params.get('city')) {
+        const locInput = document.querySelector('.f-input[placeholder*="City"]');
+        if (locInput) locInput.value = params.get('city');
+      }
+      
+      const res = await fetch(`${API_BASE}${queryStr}`);
+      const data = await res.json();
+      
+      const properties = (data.data && Array.isArray(data.data.properties)) ? data.data.properties : [];
+      const totalCount = data.data?.total || properties.length;
+      
+      document.getElementById('results-count').innerHTML = `<em>${totalCount}</em> Properties Found`;
+      const container = document.getElementById('dynamic-prop-list');
+      container.innerHTML = '';
+      
+      if (properties.length === 0) {
+        container.innerHTML = '<div style="padding:40px; text-align:center; color:var(--muted);">No properties match your search criteria.</div>';
+        return;
+      }
+      
+      properties.forEach((p, idx) => {
+        let imgUrl = p.cover_photo_url || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop';
+        if (imgUrl && !/^https?:\/\//.test(imgUrl)) {
+          imgUrl = `${API_BASE.replace('/api/properties', '')}${imgUrl}`;
+        }
+        const priceVal = p.price || p.asking_price;
+        const price = priceVal ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(priceVal)) : 'Price TBD';
+        
+        let matchClass = 'c';
+        let matchText = '80% Match';
+        if (idx === 0) { matchClass = 'a'; matchText = '98% Match'; }
+        else if (idx === 1) { matchClass = 'b'; matchText = '92% Match'; }
+
+        const html = `
+        <div class="prop-card" style="animation-delay:.${idx*5}s" onclick="window.location.href='property_details.html?id=${p.property_id}'">
+          <div class="prop-img">
+            <img src="${imgUrl}" alt="${p.title}"
+              onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500&auto=format&fit=crop'"/>
+            <span class="match-pill ${matchClass}">${matchText}</span>
+            <button class="fav" onclick="toggleFav(this); event.stopPropagation();">
+              <i data-feather="heart" style="width:12px;height:12px;color:#ef4444;"></i>
+            </button>
+          </div>
+          <div class="prop-body">
+            <div>
+              <div class="price-row">
+                <div class="prop-price">${price}</div>
+                <div class="price-badges">
+                  ${idx === 0 ? '<span class="badge new">New Listing</span>' : ''}
+                  <button class="more-btn" onclick="event.stopPropagation();"><i data-feather="more-vertical" style="width:14px;height:14px;"></i></button>
+                </div>
+              </div>
+              <div class="prop-addr">${p.title || 'Property'}</div>
+              <div class="prop-city">${p.city || ''} ${p.province ? ', ' + p.province : ''}</div>
+              <div class="specs-row">
+                <span class="spec"><i data-feather="home" style="width:12px;height:12px;"></i> ${p.bedrooms || 0} Beds</span>
+                <span class="spec"><i data-feather="droplet" style="width:12px;height:12px;"></i> ${p.bathrooms || 0} Baths</span>
+                <span class="spec"><i data-feather="maximize-2" style="width:12px;height:12px;"></i> ${p.area_sqft || p.square_feet || 0} ft²</span>
+              </div>
+              <div class="meta-row">
+                ${p.property_type || 'Property'} <span class="dot-sep"></span> MLS® ${p.property_id.substring(0,8).toUpperCase()}
+              </div>
+            </div>
+            <div class="card-footer">
+              <span class="listed-by">HomeHaven Verified</span>
+              <button class="btn-details">View Details</button>
+            </div>
+          </div>
+        </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+      });
+      if (window.feather) feather.replace();
+    } catch(e) {
+      console.error(e);
+      document.getElementById('dynamic-prop-list').innerHTML = '<div style="padding:40px; text-align:center; color:red;">Failed to load properties.</div>';
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
+    loadDynamicProperties();
+
     var map = L.map('map').setView([43.6532, -79.3832], 13);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap contributors &copy; CARTO',

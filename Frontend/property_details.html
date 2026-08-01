@@ -71,6 +71,15 @@
 <script>
 feather.replace();
 
+function getSessionId() {
+  let sid = localStorage.getItem('guest_session_id');
+  if (!sid) {
+    sid = 'sess_' + Math.random().toString(36).substr(2, 9) + Date.now();
+    localStorage.setItem('guest_session_id', sid);
+  }
+  return sid;
+}
+
 async function loadPropertyDetails() {
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
@@ -86,7 +95,7 @@ async function loadPropertyDetails() {
   
   try {
     const token = localStorage.getItem('accessToken');
-    const headers = {};
+    const headers = { 'x-session-id': getSessionId() };
     if (token) headers['Authorization'] = `Bearer ${token}`;
     
     const res = await fetch(`${API_BASE}/${id}`, { headers });

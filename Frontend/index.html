@@ -281,7 +281,79 @@
     }
   }
   
-  document.addEventListener('DOMContentLoaded', loadFeaturedProperties);
+  function getSessionId() {
+    let sid = localStorage.getItem('guest_session_id');
+    if (!sid) {
+      sid = 'sess_' + Math.random().toString(36).substr(2, 9) + Date.now();
+      localStorage.setItem('guest_session_id', sid);
+    }
+    return sid;
+  }
+
+  async function loadRecentlyViewed() {
+    try {
+      const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.hostname.startsWith('192.168.') || window.location.hostname.startsWith('10.');
+      const API_BASE = isLocal
+          ? `http://${window.location.hostname}:3000/api/properties` 
+          : 'https://ai-native-real-estate-platform.onrender.com/api/properties';
+          
+      const headers = { 'x-session-id': getSessionId() };
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const res = await fetch(`${API_BASE}/recently-viewed/list`, { headers });
+      const data = await res.json();
+      
+      const container = document.getElementById('recently-viewed-container');
+      container.innerHTML = '';
+      
+      const properties = (data.data && Array.isArray(data.data.properties)) ? data.data.properties : 
+                         (Array.isArray(data.data) ? data.data : 
+                         (Array.isArray(data.properties) ? data.properties : 
+                         (Array.isArray(data) ? data : [])));
+                         
+      if (properties.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:20px; grid-column: span 4; color: var(--muted); font-size:13px;">No recently viewed properties yet. Start exploring!</div>';
+        return;
+      }
+      
+      properties.forEach(p => {
+        let imgUrl = p.cover_photo_url || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop';
+        if (imgUrl && !/^https?:\/\//.test(imgUrl)) {
+          imgUrl = `${API_BASE.replace('/api/properties', '')}${imgUrl}`;
+        }
+        
+        const priceVal = p.price || p.asking_price;
+        const price = priceVal ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(priceVal)) : 'Price TBD';
+        
+        const html = `
+        <div class="card" onclick="window.location.href='property_details.html?id=${p.property_id}'" style="cursor:pointer;">
+          <div style="position:relative; height:100px;">
+            <img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop'" />
+            <span class="heart-btn" style="width:26px;height:26px;top:8px;right:8px;"><i data-feather="heart" style="width:12px;height:12px;color:#334155;"></i></span>
+          </div>
+          <div style="padding:10px 12px;">
+            <div style="font-weight:700; font-size:14px;">${price}</div>
+            <div style="font-size:12px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.property_type || 'Property'}</div>
+            <div style="font-size:12px; color:var(--muted);">${p.city || ''}</div>
+          </div>
+        </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+      });
+      if (window.feather) feather.replace();
+    } catch (e) {
+      console.error(e);
+      document.getElementById('recently-viewed-container').innerHTML = '<div style="text-align:center; padding:20px; grid-column: span 4; color: red; font-size:13px;">Failed to load recently viewed properties.</div>';
+    }
+  }
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    loadFeaturedProperties();
+    loadRecentlyViewed();
+  });
 </script>
 
 <!-- ============ WHY CHOOSE ============ -->
@@ -316,31 +388,26 @@
     <a href="#" style="color:var(--blue); font-weight:600; font-size:14.5px; display:flex; align-items:center; gap:6px;">Explore All <i data-feather="arrow-right" style="width:15px;height:15px;"></i></a>
   </div>
   <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:18px;">
-    <div class="card" style="text-align:center; padding:26px 10px;">
+    <a href="buy.html?property_type=Detached" class="card" style="text-align:center; padding:26px 10px; text-decoration:none; color:inherit; display:block;">
       <div class="icon-circle" style="background:#eaf1ff; margin:0 auto 12px;"><i data-feather="home" style="color:#2563eb;width:20px;height:20px;"></i></div>
       <div style="font-weight:700; font-size:14.5px;">Detached Homes</div>
-      <div style="font-size:12.5px; color:var(--muted);">2.4K Properties</div>
-    </div>
-    <div class="card" style="text-align:center; padding:26px 10px;">
+    </a>
+    <a href="buy.html?property_type=Condo" class="card" style="text-align:center; padding:26px 10px; text-decoration:none; color:inherit; display:block;">
       <div class="icon-circle" style="background:#f2ecff; margin:0 auto 12px;"><i data-feather="grid" style="color:#7c3aed;width:20px;height:20px;"></i></div>
       <div style="font-weight:700; font-size:14.5px;">Condos</div>
-      <div style="font-size:12.5px; color:var(--muted);">5.9K Properties</div>
-    </div>
-    <div class="card" style="text-align:center; padding:26px 10px;">
+    </a>
+    <a href="buy.html?property_type=Townhouse" class="card" style="text-align:center; padding:26px 10px; text-decoration:none; color:inherit; display:block;">
       <div class="icon-circle" style="background:#fdf0e0; margin:0 auto 12px;"><i data-feather="home" style="color:#d97706;width:20px;height:20px;"></i></div>
       <div style="font-weight:700; font-size:14.5px;">Townhouses</div>
-      <div style="font-size:12.5px; color:var(--muted);">2.1K Properties</div>
-    </div>
-    <div class="card" style="text-align:center; padding:26px 10px;">
+    </a>
+    <a href="buy.html?property_type=Apartment" class="card" style="text-align:center; padding:26px 10px; text-decoration:none; color:inherit; display:block;">
       <div class="icon-circle" style="background:#dbf5ee; margin:0 auto 12px;"><i data-feather="layers" style="color:#0d9488;width:20px;height:20px;"></i></div>
       <div style="font-weight:700; font-size:14.5px;">Apartments</div>
-      <div style="font-size:12.5px; color:var(--muted);">3.8K Properties</div>
-    </div>
-    <div class="card" style="text-align:center; padding:26px 10px;">
+    </a>
+    <a href="buy.html?property_type=Land" class="card" style="text-align:center; padding:26px 10px; text-decoration:none; color:inherit; display:block;">
       <div class="icon-circle" style="background:#e6f7ec; margin:0 auto 12px;"><i data-feather="map" style="color:#16a34a;width:20px;height:20px;"></i></div>
       <div style="font-weight:700; font-size:14.5px;">Land</div>
-      <div style="font-size:12.5px; color:var(--muted);">824 Properties</div>
-    </div>
+    </a>
   </div>
 </section>
 
@@ -356,50 +423,9 @@
         </div>
         <a href="#" style="color:var(--blue); font-weight:600; font-size:13.5px; display:flex; align-items:center; gap:5px;">View All <i data-feather="arrow-right" style="width:14px;height:14px;"></i></a>
       </div>
-      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
-        <div class="card">
-          <div style="position:relative; height:100px;">
-            <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=500&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
-            <span class="heart-btn" style="width:26px;height:26px;top:8px;right:8px;"><i data-feather="heart" style="width:12px;height:12px;color:#334155;"></i></span>
-          </div>
-          <div style="padding:10px 12px;">
-            <div style="font-weight:700; font-size:14px;">$1,420,000</div>
-            <div style="font-size:12px; color:var(--muted);">Luxury Detached Home</div>
-            <div style="font-size:12px; color:var(--muted);">North York</div>
-          </div>
-        </div>
-        <div class="card">
-          <div style="position:relative; height:100px;">
-            <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=500&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
-            <span class="heart-btn" style="width:26px;height:26px;top:8px;right:8px;"><i data-feather="heart" style="width:12px;height:12px;color:#334155;"></i></span>
-          </div>
-          <div style="padding:10px 12px;">
-            <div style="font-weight:700; font-size:14px;">$940,000</div>
-            <div style="font-size:12px; color:var(--muted);">Family Townhouse</div>
-            <div style="font-size:12px; color:var(--muted);">Scarborough</div>
-          </div>
-        </div>
-        <div class="card">
-          <div style="position:relative; height:100px;">
-            <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=500&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
-            <span class="heart-btn" style="width:26px;height:26px;top:8px;right:8px;"><i data-feather="heart" style="width:12px;height:12px;color:#334155;"></i></span>
-          </div>
-          <div style="padding:10px 12px;">
-            <div style="font-weight:700; font-size:14px;">$785,000</div>
-            <div style="font-size:12px; color:var(--muted);">Luxury Apartment</div>
-            <div style="font-size:12px; color:var(--muted);">Etobicoke</div>
-          </div>
-        </div>
-        <div class="card">
-          <div style="position:relative; height:100px;">
-            <img src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?q=80&w=500&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;" />
-            <span class="heart-btn" style="width:26px;height:26px;top:8px;right:8px;"><i data-feather="heart" style="width:12px;height:12px;color:#334155;"></i></span>
-          </div>
-          <div style="padding:10px 12px;">
-            <div style="font-weight:700; font-size:14px;">$620,000</div>
-            <div style="font-size:12px; color:var(--muted);">Modern Condo</div>
-            <div style="font-size:12px; color:var(--muted);">Downtown Toronto</div>
-          </div>
+      <div id="recently-viewed-container" style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+        <div style="text-align:center; padding: 20px; grid-column: span 4; color: var(--muted);">
+          Loading recently viewed... <i class="spin"></i>
         </div>
       </div>
     </div>
@@ -410,12 +436,12 @@
         <a href="#" style="color:var(--blue); font-weight:600; font-size:13.5px; display:flex; align-items:center; gap:5px;">View All <i data-feather="arrow-right" style="width:14px;height:14px;"></i></a>
       </div>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-        <div class="location-chip"><i data-feather="map-pin" style="width:15px;height:15px;color:#16a34a;"></i> Downtown Toronto</div>
-        <div class="location-chip"><i data-feather="map-pin" style="width:15px;height:15px;color:#7c3aed;"></i> North York</div>
-        <div class="location-chip"><i data-feather="map-pin" style="width:15px;height:15px;color:#16a34a;"></i> Scarborough</div>
-        <div class="location-chip"><i data-feather="map-pin" style="width:15px;height:15px;color:#7c3aed;"></i> Etobicoke</div>
-        <div class="location-chip"><i data-feather="map-pin" style="width:15px;height:15px;color:#16a34a;"></i> Mississauga</div>
-        <div class="location-chip"><i data-feather="map-pin" style="width:15px;height:15px;color:#7c3aed;"></i> Vaughan</div>
+        <a href="buy.html?city=Toronto" class="location-chip" style="text-decoration:none; color:inherit; display:flex;"><i data-feather="map-pin" style="width:15px;height:15px;color:#16a34a;"></i> Downtown Toronto</a>
+        <a href="buy.html?city=North York" class="location-chip" style="text-decoration:none; color:inherit; display:flex;"><i data-feather="map-pin" style="width:15px;height:15px;color:#7c3aed;"></i> North York</a>
+        <a href="buy.html?city=Scarborough" class="location-chip" style="text-decoration:none; color:inherit; display:flex;"><i data-feather="map-pin" style="width:15px;height:15px;color:#16a34a;"></i> Scarborough</a>
+        <a href="buy.html?city=Etobicoke" class="location-chip" style="text-decoration:none; color:inherit; display:flex;"><i data-feather="map-pin" style="width:15px;height:15px;color:#7c3aed;"></i> Etobicoke</a>
+        <a href="buy.html?city=Mississauga" class="location-chip" style="text-decoration:none; color:inherit; display:flex;"><i data-feather="map-pin" style="width:15px;height:15px;color:#16a34a;"></i> Mississauga</a>
+        <a href="buy.html?city=Vaughan" class="location-chip" style="text-decoration:none; color:inherit; display:flex;"><i data-feather="map-pin" style="width:15px;height:15px;color:#7c3aed;"></i> Vaughan</a>
       </div>
     </div>
 
