@@ -450,6 +450,19 @@ function initStep4() {
   const feat = state.features || {};
   let photos = state.photos || [];
 
+  if (!state.photosFetched) {
+    apiRequest(`/${propertyId}/media`, 'GET').then(res => {
+      photos = (res.data || []).map(m => ({
+        media_id: m.media_id,
+        url: m.url,
+        label: m.label,
+        is_cover: m.is_cover
+      }));
+      setWizardState({ photos, photosFetched: true });
+      renderPhotos();
+    }).catch(err => console.error('Failed to load existing media:', err));
+  }
+
   function setSaveNote(text) {
     const el = document.getElementById('saveNote');
     if (el) el.textContent = text;
