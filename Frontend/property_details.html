@@ -16,10 +16,16 @@
   .logo-box { width: 36px; height: 36px; background: #2563eb; border-radius: 9px; display: flex; align-items: center; justify-content: center; }
   .logo-name { font-size: 17px; font-weight: 800; color: #0f172a; }
   .logo-sub  { font-size: 11px; color: #64748b; }
-  .gallery-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; height: 480px; border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
-  .gallery-main { width: 100%; height: 100%; object-fit: cover; }
+  .gallery-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; height: 500px; border-radius: 20px; overflow: hidden; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); position: relative;}
+  .gallery-main { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+  .gallery-main:hover { transform: scale(1.02); }
   .gallery-side { display: flex; flex-direction: column; gap: 16px; height: 100%; }
-  .gallery-side img { width: 100%; height: calc(50% - 8px); object-fit: cover; }
+  .gallery-side img { width: 100%; height: calc(50% - 8px); object-fit: cover; border-radius: 12px; transition: transform 0.3s ease;}
+  .gallery-side img:hover { transform: scale(1.03); }
+  .card-premium { background:#fff; border-radius:20px; border:1px solid #f1f5f9; padding:32px; box-shadow:0 4px 20px rgba(0,0,0,0.03); }
+  .badge { padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; display: inline-block; }
+  .badge-warning { background: #fffbeb; color: #b45309; }
+  .badge-success { background: #ecfdf5; color: #047857; }
 </style>
 </head>
 <body>
@@ -87,62 +93,70 @@ async function loadPropertyDetails() {
 
     const price = basic.asking_price ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(basic.asking_price) : 'Price TBD';
     
+    let statusHtml = '';
+    if (p.status !== 'published') {
+      statusHtml = `<div class="badge badge-warning" style="margin-bottom:12px;">Under Review</div>`;
+    } else {
+      statusHtml = `<div class="badge badge-success" style="margin-bottom:12px;">Active Listing</div>`;
+    }
+
     document.getElementById('main-content').innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 24px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 32px;">
         <div>
-          <h1 style="font-size:32px; font-weight:800; color:#0f172a; margin-bottom:8px;">${basic.title || 'Untitled Property'}</h1>
+          ${statusHtml}
+          <h1 style="font-size:36px; font-weight:800; color:#0f172a; margin-bottom:8px; letter-spacing:-0.5px;">${basic.title || 'Untitled Property'}</h1>
           <div style="font-size:16px; color:#64748b; display:flex; align-items:center; gap:8px;">
             <i data-feather="map-pin" style="width:16px;height:16px;"></i>
             ${loc.address || ''} ${loc.city || ''}, ${loc.state || ''} ${loc.postal_code || ''}
           </div>
         </div>
         <div style="text-align:right;">
-          <div style="font-size:36px; font-weight:800; color:var(--blue);">${price}</div>
-          <div style="font-size:14px; color:#64748b; margin-top:4px;">${basic.listing_type === 'for_rent' ? 'For Rent' : 'For Sale'}</div>
+          <div style="font-size:40px; font-weight:800; color:#2563eb; letter-spacing:-0.5px;">${price}</div>
+          <div style="font-size:15px; color:#64748b; font-weight:600; margin-top:4px;">${basic.listing_type === 'for_rent' ? 'For Rent' : 'For Sale'}</div>
         </div>
       </div>
       
       <div class="gallery-grid">
-        <img src="${getMediaUrl(cover)}" class="gallery-main" onerror="this.src='https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop'">
+        <div style="overflow:hidden; border-radius:20px 0 0 20px;"><img src="${getMediaUrl(cover)}" class="gallery-main" onerror="this.src='https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop'"></div>
         <div class="gallery-side">
-          <img src="${getMediaUrl(img1)}" onerror="this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800&auto=format&fit=crop'">
-          <img src="${getMediaUrl(img2)}" onerror="this.src='https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop'">
+          <div style="overflow:hidden; border-radius:0 20px 0 0; height:calc(50% - 8px);"><img src="${getMediaUrl(img1)}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800&auto=format&fit=crop'"></div>
+          <div style="overflow:hidden; border-radius:0 0 20px 0; height:calc(50% - 8px);"><img src="${getMediaUrl(img2)}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop'"></div>
         </div>
       </div>
       
       <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 40px;">
         <div>
-          <div style="background:#fff; border-radius:16px; border:1px solid #e2e8f0; padding:32px; margin-bottom:32px;">
-            <h2 style="font-size:20px; font-weight:800; margin-bottom:16px;">Description</h2>
-            <p style="color:#475569; font-size:15px; line-height:1.7;">${basic.description || 'No description provided.'}</p>
+          <div class="card-premium" style="margin-bottom:32px;">
+            <h2 style="font-size:22px; font-weight:800; margin-bottom:16px; color:#0f172a;">Description</h2>
+            <p style="color:#475569; font-size:16px; line-height:1.8;">${basic.description || 'No description provided.'}</p>
           </div>
           
-          <div style="background:#fff; border-radius:16px; border:1px solid #e2e8f0; padding:32px;">
-            <h2 style="font-size:20px; font-weight:800; margin-bottom:24px;">Key Features</h2>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-              <div style="display:flex; align-items:center; gap:12px; font-size:15px; color:#334155;">
-                <div style="width:40px;height:40px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;"><i data-feather="home" style="color:#2563eb;width:20px;"></i></div>
-                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Type</div><div style="font-weight:700;">${basic.property_type || 'Unknown'}</div></div>
+          <div class="card-premium">
+            <h2 style="font-size:22px; font-weight:800; margin-bottom:24px; color:#0f172a;">Key Features</h2>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+              <div style="display:flex; align-items:center; gap:16px; font-size:16px; color:#334155;">
+                <div style="width:48px;height:48px;border-radius:12px;background:#eff6ff;display:flex;align-items:center;justify-content:center;"><i data-feather="home" style="color:#2563eb;width:24px;"></i></div>
+                <div><div style="font-size:13px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Type</div><div style="font-weight:700;color:#0f172a;">${basic.property_type || 'Unknown'}</div></div>
               </div>
-              <div style="display:flex; align-items:center; gap:12px; font-size:15px; color:#334155;">
-                <div style="width:40px;height:40px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;"><i data-feather="square" style="color:#2563eb;width:20px;"></i></div>
-                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Size</div><div style="font-weight:700;">${det.square_feet ? det.square_feet + ' sqft' : 'Unknown'}</div></div>
+              <div style="display:flex; align-items:center; gap:16px; font-size:16px; color:#334155;">
+                <div style="width:48px;height:48px;border-radius:12px;background:#eff6ff;display:flex;align-items:center;justify-content:center;"><i data-feather="square" style="color:#2563eb;width:24px;"></i></div>
+                <div><div style="font-size:13px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Size</div><div style="font-weight:700;color:#0f172a;">${det.square_feet ? det.square_feet + ' sqft' : 'Unknown'}</div></div>
               </div>
-              <div style="display:flex; align-items:center; gap:12px; font-size:15px; color:#334155;">
-                <div style="width:40px;height:40px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;"><i data-feather="users" style="color:#2563eb;width:20px;"></i></div>
-                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Bedrooms</div><div style="font-weight:700;">${det.bedrooms || 0}</div></div>
+              <div style="display:flex; align-items:center; gap:16px; font-size:16px; color:#334155;">
+                <div style="width:48px;height:48px;border-radius:12px;background:#eff6ff;display:flex;align-items:center;justify-content:center;"><i data-feather="users" style="color:#2563eb;width:24px;"></i></div>
+                <div><div style="font-size:13px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Bedrooms</div><div style="font-weight:700;color:#0f172a;">${det.bedrooms || 0}</div></div>
               </div>
-              <div style="display:flex; align-items:center; gap:12px; font-size:15px; color:#334155;">
-                <div style="width:40px;height:40px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;"><i data-feather="droplet" style="color:#2563eb;width:20px;"></i></div>
-                <div><div style="font-size:12px;color:#64748b;font-weight:600;">Bathrooms</div><div style="font-weight:700;">${det.bathrooms || 0}</div></div>
+              <div style="display:flex; align-items:center; gap:16px; font-size:16px; color:#334155;">
+                <div style="width:48px;height:48px;border-radius:12px;background:#eff6ff;display:flex;align-items:center;justify-content:center;"><i data-feather="droplet" style="color:#2563eb;width:24px;"></i></div>
+                <div><div style="font-size:13px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Bathrooms</div><div style="font-weight:700;color:#0f172a;">${det.bathrooms || 0}</div></div>
               </div>
             </div>
           </div>
         </div>
         
         <div>
-          <div style="background:#fff; border-radius:16px; border:1px solid #e2e8f0; padding:32px; position:sticky; top:100px;">
-            <div style="font-size:18px; font-weight:800; margin-bottom:16px;">Interested in this property?</div>
+          <div class="card-premium" style="position:sticky; top:100px;">
+            <div style="font-size:20px; font-weight:800; margin-bottom:16px; color:#0f172a;">Interested in this property?</div>
             <p style="font-size:14px; color:#64748b; margin-bottom:24px;">Contact the seller directly to schedule a viewing or ask any questions.</p>
             <button class="btn-primary" style="width:100%; justify-content:center; padding:14px; font-size:15px;" onclick="alert('Inquiry feature coming soon!')">Contact Seller</button>
             <button style="width:100%; margin-top:12px; padding:14px; border-radius:8px; background:#fff; border:1px solid var(--blue); color:var(--blue); font-weight:700; font-size:15px; cursor:pointer;" onclick="alert('Offer feature coming soon!')">Make an Offer</button>
