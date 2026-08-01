@@ -771,7 +771,7 @@ export class PropertyListingService {
       .leftJoinAndSelect('listing.location', 'location')
       .leftJoinAndSelect('listing.details', 'details')
       .leftJoinAndSelect('listing.ai_review', 'ai_review')
-      .leftJoinAndSelect('listing.media', 'media', 'media.is_cover = true')
+      .leftJoinAndSelect('listing.media', 'media')
       .leftJoinAndSelect('listing.analytics', 'analytics')
       .where('listing.status = :status', { status: PropertyStatus.PUBLISHED })
       .orderBy('ai_review.listing_quality_score', 'DESC', 'NULLS LAST')
@@ -1309,5 +1309,5 @@ export class PropertyListingService {
     };
   }
 
-}
-
+}  
+ 
