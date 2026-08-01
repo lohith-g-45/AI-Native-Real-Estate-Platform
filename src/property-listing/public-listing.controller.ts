@@ -5,6 +5,7 @@ import type { Request } from 'express';
 import { JwtAuthGuard } from '../auth-identity/guards/jwt-auth.guard';
 import { CreateInquiryDto } from './dto/create-inquiry.dto';
 import { CreateOfferDto } from './dto/create-offer.dto';
+import { Public } from '../auth-identity/decorators/public.decorator';
 
 
 @ApiTags('Public Properties')
@@ -56,6 +57,7 @@ export class PublicListingController {
     return this.propertyListingService.getSavedProperties(user.sub || user.userId);
   }
 
+  @Public()
   @Get()
   @ApiOperation({ summary: 'Browse and search published properties' })
   @ApiQuery({ name: 'city', required: false })
@@ -70,6 +72,7 @@ export class PublicListingController {
     return this.propertyListingService.getPublicListings(filters);
   }
 
+  @Public()
   @Get(':property_id')
   @ApiOperation({ summary: 'Get full property detail' })
   getPublicListingDetail(

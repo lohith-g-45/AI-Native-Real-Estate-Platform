@@ -930,7 +930,7 @@ export class PropertyListingService {
     const listings = await this.listingRepo.createQueryBuilder('listing')
       .leftJoinAndSelect('listing.basic_details', 'basic_details')
       .leftJoinAndSelect('listing.location', 'location')
-      .leftJoinAndSelect('listing.media', 'media', 'media.is_cover = true')
+      .leftJoinAndSelect('listing.media', 'media')
       .where('listing.seller_id = :sellerId', { sellerId })
       .orderBy('listing.updated_at', 'DESC')
       .getMany();
