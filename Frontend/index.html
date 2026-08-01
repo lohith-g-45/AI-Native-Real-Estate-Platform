@@ -251,7 +251,8 @@
           imgUrl = `${API_BASE.replace('/api/properties', '')}${imgUrl}`;
         }
         
-        const price = p.asking_price ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(p.asking_price) : 'Price TBD';
+        const priceVal = p.price || p.asking_price;
+        const price = priceVal ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(priceVal)) : 'Price TBD';
         
         const html = `
         <div class="card">
