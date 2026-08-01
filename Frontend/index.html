@@ -235,12 +235,13 @@
       const container = document.getElementById('featured-properties-container');
       container.innerHTML = '';
       
-      if (!data.data || data.data.length === 0) {
+      const properties = data.data.properties || [];
+      if (properties.length === 0) {
         container.innerHTML = '<div style="text-align:center; padding:40px; grid-column: span 4; color: var(--muted);">No featured properties available at the moment.</div>';
         return;
       }
       
-      data.data.forEach(p => {
+      properties.forEach(p => {
         let imgUrl = p.cover_photo_url || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=800&auto=format&fit=crop';
         if (imgUrl && !/^https?:\/\//.test(imgUrl)) {
           imgUrl = `${API_BASE.replace('/api/properties', '')}${imgUrl}`;
