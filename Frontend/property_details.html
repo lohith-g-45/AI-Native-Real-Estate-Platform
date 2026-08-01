@@ -88,18 +88,6 @@ async function loadPropertyDetails() {
     const img1 = others[0] || {};
     const img2 = others[1] || {};
     
-    const basic = p.basic_details || {};
-    const loc = p.location || {};
-    const det = p.details || {};
-
-    const price = basic.asking_price ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(basic.asking_price) : 'Price TBD';
-    
-    let statusHtml = '';
-    if (p.status !== 'published') {
-      statusHtml = `<div class="badge badge-warning" style="margin-bottom:12px;">Under Review</div>`;
-    } else {
-      statusHtml = `<div class="badge badge-success" style="margin-bottom:12px;">Active Listing</div>`;
-    }
 
     const img3 = others[2] || {};
     const img4 = others[3] || {};
