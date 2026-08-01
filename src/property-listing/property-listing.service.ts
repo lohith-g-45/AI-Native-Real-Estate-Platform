@@ -942,6 +942,7 @@ export class PropertyListingService {
       .leftJoinAndSelect('listing.basic_details', 'basic_details')
       .leftJoinAndSelect('listing.location', 'location')
       .leftJoinAndSelect('listing.media', 'media')
+      .leftJoinAndSelect('listing.analytics', 'analytics')
       .where('listing.seller_id = :sellerId', { sellerId })
       .orderBy('listing.updated_at', 'DESC')
       .getMany();
@@ -965,6 +966,7 @@ export class PropertyListingService {
         status: l.status,
         completion_percentage: l.completion_percentage,
         cover_photo_url: l.media?.find(m => m.is_cover)?.url || l.media?.[0]?.url || null,
+        analytics: l.analytics || null,
         created_at: l.created_at,
         updated_at: l.updated_at
       };
