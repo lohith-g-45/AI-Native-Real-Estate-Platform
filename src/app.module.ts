@@ -44,7 +44,7 @@ import { JwtAuthGuard } from './auth-identity/guards/jwt-auth.guard';
                 config.get<string>('DB_DATABASE', 'real_estate'),
               entities,
               autoLoadEntities: true,
-              synchronize: config.get<string>('NODE_ENV') !== 'production',
+              synchronize: false,
               ssl:
                 config.get<string>('DB_SSL') === 'true'
                   ? {
