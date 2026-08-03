@@ -202,7 +202,7 @@ footer { background: var(--white); border-top: 1px solid var(--line); padding: 4
 .wiz-row > * { flex: 1; min-width: 0; }
 .wiz-price-input { position: relative; }
 .wiz-price-input .cur { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-weight: 700; font-size: 13px; pointer-events: none; }
-.wiz-price-input input { padding-left: 44px; }
+.wiz-group .wiz-price-input input { padding-left: 48px !important; }
 .wiz-error { color: var(--red); font-size: 13px; font-weight: 600; margin: -8px 0 16px; min-height: 0; }
 .wiz-error:empty { display: none; }
 

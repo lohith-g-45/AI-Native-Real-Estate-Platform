@@ -227,6 +227,19 @@ export class PropertyListingService {
     };
   }
 
+  async generateDescription(dto: { title: string, property_type: string, price: string }) {
+    try {
+      const data = await this.aiReviewService.generateQuickDescription(dto.title, dto.property_type, dto.price);
+      return {
+        success: true,
+        data,
+        message: 'Description generated successfully'
+      };
+    } catch (e) {
+      this.throwError('Failed to generate description', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   async getDetails(propertyId: string, user: any) {
     const listing = await this.listingRepo.findOne({ where: { property_id: propertyId } });
     if (!listing) {
@@ -733,7 +746,15 @@ export class PropertyListingService {
       query.andWhere('LOWER(location.city) = LOWER(:city)', { city: filters.city });
     }
     if (filters.property_type) {
-      query.andWhere('basic_details.property_type = :propertyType', { propertyType: filters.property_type });
+      const pType = filters.property_type.toLowerCase().trim();
+      if (pType === 'house' || pType === 'single_family' || pType === 'detached') {
+        query.andWhere(
+          '(LOWER(basic_details.property_type) LIKE :p1 OR LOWER(basic_details.property_type) LIKE :p2 OR LOWER(basic_details.property_type) LIKE :p3)',
+          { p1: '%house%', p2: '%single_family%', p3: '%detached%' }
+        );
+      } else {
+        query.andWhere('LOWER(basic_details.property_type) LIKE :pType', { pType: `%${pType}%` });
+      }
     }
     if (filters.listing_type) {
       query.andWhere('basic_details.listing_type = :listingType', { listingType: filters.listing_type });
@@ -745,10 +766,40 @@ export class PropertyListingService {
       query.andWhere('basic_details.asking_price <= :maxPrice', { maxPrice: filters.max_price });
     }
     if (filters.bedrooms) {
-      query.andWhere('details.bedrooms >= :bedrooms', { bedrooms: filters.bedrooms });
+      const beds = parseInt(filters.bedrooms, 10);
+      if (!isNaN(beds)) {
+        query.andWhere('details.bedrooms >= :bedrooms', { bedrooms: beds });
+      }
+    }
+    if (filters.bathrooms) {
+      const baths = parseInt(filters.bathrooms, 10);
+      if (!isNaN(baths)) {
+        query.andWhere('details.bathrooms >= :bathrooms', { bathrooms: baths });
+      }
+    }
+    if (filters.features) {
+      const feats = filters.features.split(',');
+      feats.forEach((f: string, idx: number) => {
+        // ILIKE cast on jsonb searches text representation of the json payload
+        const paramName = `feat_${idx}`;
+        query.andWhere(
+          `(details.interior_features::text ILIKE :${paramName} OR details.exterior_features::text ILIKE :${paramName})`,
+          { [paramName]: `%${f.trim()}%` }
+        );
+      });
     }
 
-    query.orderBy('ai_review.listing_quality_score', 'DESC', 'NULLS LAST');
+    if (filters.sort === 'price_asc') {
+      query.orderBy('basic_details.asking_price', 'ASC');
+    } else if (filters.sort === 'price_desc') {
+      query.orderBy('basic_details.asking_price', 'DESC');
+    } else if (filters.sort === 'newest') {
+      query.orderBy('listing.created_at', 'DESC');
+    } else if (filters.sort === 'views') {
+      query.orderBy('analytics.total_views', 'DESC', 'NULLS LAST');
+    } else {
+      query.orderBy('ai_review.listing_quality_score', 'DESC', 'NULLS LAST');
+    }
     query.skip(skip).take(limit);
 
     const [listings, total] = await query.getManyAndCount();
@@ -1317,4 +1368,6 @@ export class PropertyListingService {
     return {
       success: true,
       message: 'Listing deleted successfully'
-    }
+    };
+  }
+}

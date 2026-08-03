@@ -1,7 +1,7 @@
 const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.hostname.startsWith('192.168.') || window.location.hostname.startsWith('10.');
 const API_BASE_URL = isLocal
     ? `http://${window.location.hostname}:3000` 
-    : 'https://ai-native-real-estate-platform.onrender.com';
+    : '';
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const welcome = document.querySelector('.welcome');

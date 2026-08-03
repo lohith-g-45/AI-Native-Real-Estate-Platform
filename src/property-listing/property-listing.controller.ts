@@ -93,6 +93,14 @@ export class PropertyListingController {
     return this.propertyListingService.getProgress(propertyId, user);
   }
 
+  @Post('generate-description')
+  @UseGuards(RolesGuard)
+  @Roles('seller', 'buyer')
+  @ApiOperation({ summary: 'Generate property description via AI' })
+  generateDescription(@Body() dto: { title: string, property_type: string, price: string }) {
+    return this.propertyListingService.generateDescription(dto);
+  }
+
   @Post(':property_id/details')
   @UseGuards(RolesGuard)
   @Roles('seller', 'buyer')

@@ -213,7 +213,7 @@ header{
 .f-range{
   width:100%;height:4px;
   -webkit-appearance:none;appearance:none;
-  background:linear-gradient(to right,var(--blue) 58%,var(--line) 58%);
+  background:linear-gradient(to right,var(--blue) var(--pct, 100%),var(--line) var(--pct, 100%));
   border-radius:4px;outline:none;cursor:pointer;
 }
 .f-range::-webkit-slider-thumb{
@@ -362,6 +362,16 @@ header{
 .fav:hover{background:#fff;transform:scale(1.1);}
 .fav.liked svg{fill:#ef4444;stroke:#ef4444;}
 
+.prop-num-badge{
+  position:absolute;top:8px;left:8px;
+  width:24px;height:24px;border-radius:50%;
+  background:rgba(15,23,42,.85);color:#fff;
+  font-size:11px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);box-shadow:0 2px 6px rgba(0,0,0,.25);
+  border:1.5px solid rgba(255,255,255,.5);
+}
+
 .prop-body{
   flex:1;padding:14px 16px;min-width:0;
   display:flex;flex-direction:column;justify-content:space-between;
@@ -472,16 +482,16 @@ header{
   filter:saturate(0.7) brightness(1.05);
 }
 .bubble{
-  position:absolute;
-  background:var(--navy);color:#fff;
-  font-size:11px;font-weight:700;
-  padding:5px 10px;border-radius:20px;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--blue);color:#fff;
+  font-size:13px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
   cursor:pointer;white-space:nowrap;
-  box-shadow:0 2px 8px rgba(0,0,0,.2);
-  transition:background .15s,transform .15s,box-shadow .15s;
+  box-shadow:0 4px 12px rgba(37,99,235,.4), 0 0 0 3px #fff;
+  transition:all .2s cubic-bezier(0.34,1.56,0.64,1);
   z-index:2;
 }
-.bubble:hover,.bubble.hi{background:var(--blue);transform:scale(1.07);box-shadow:0 4px 14px rgba(37,99,235,.4);}
+.bubble:hover,.bubble.hi{background:#1d4ed8;transform:scale(1.18);box-shadow:0 6px 18px rgba(29,78,216,.5), 0 0 0 4px #fff;}
 .bubble.cluster{
   width:36px;height:36px;padding:0;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
@@ -582,21 +592,21 @@ header{
     <div class="search-row">
       <div class="search-box">
         <i data-feather="search" style="width:16px;height:16px;"></i>
-        <input class="search-input" type="text" placeholder="Search by City, Neighborhood, Address or MLS®"/>
+        <input id="hero-search-input" class="search-input" type="text" placeholder="Search by City, Neighborhood, or Address" onkeypress="if(event.key==='Enter') applyFilters()"/>
       </div>
-      <button class="btn-search">
+      <button class="btn-search" onclick="applyFilters()">
         <i data-feather="search" style="width:14px;height:14px;"></i>
         Search
       </button>
     </div>
-    <div class="type-tabs">
-      <button class="ttab active" onclick="setTab(this)">Buy</button>
-      <button class="ttab" onclick="setTab(this)">Condo</button>
-      <button class="ttab" onclick="setTab(this)">House</button>
-      <button class="ttab" onclick="setTab(this)">Townhouse</button>
-      <button class="ttab" onclick="setTab(this)">Detached</button>
-      <button class="ttab" onclick="setTab(this)">New Listings</button>
-      <button class="ttab" onclick="setTab(this)">Open House</button>
+    <div class="type-tabs" id="hero-type-tabs">
+      <button class="ttab active" data-val="" onclick="setTab(this)">Buy</button>
+      <button class="ttab" data-val="condo" onclick="setTab(this)">Condo</button>
+      <button class="ttab" data-val="house" onclick="setTab(this)">House</button>
+      <button class="ttab" data-val="townhouse" onclick="setTab(this)">Townhouse</button>
+      <button class="ttab" data-val="detached" onclick="setTab(this)">Detached</button>
+      <button class="ttab" data-val="new" onclick="setTab(this)">New Listings</button>
+      <button class="ttab" data-val="open_house" onclick="setTab(this)">Open House</button>
     </div>
   </div>
 </div>
@@ -613,48 +623,47 @@ header{
 
     <div class="f-group">
       <div class="f-lbl">Location</div>
-      <input class="f-input" type="text" placeholder="City, Neighborhood or Postal Code"/>
+      <input id="filter-location" class="f-input" type="text" placeholder="City, Neighborhood or Postal Code" onchange="applyFilters()"/>
     </div>
 
     <div class="f-group">
       <div class="f-lbl">Price Range</div>
       <div class="range-labels"><span>$100K</span><span id="range-val">$1.2M</span><span>$2M+</span></div>
-      <input class="f-range" type="range" min="100000" max="2000000" value="1200000"
-        oninput="updateRange(this.value)"/>
+      <input id="filter-price" class="f-range" type="range" min="100000" max="2000000" value="2000000"
+        oninput="updateRange(this.value)" onchange="applyFilters()"/>
     </div>
 
     <div class="f-group">
       <div class="f-lbl">Property Type</div>
-      <select class="f-select">
-        <option>All Types</option>
-        <option>Condo</option>
-        <option>Detached</option>
-        <option>Townhouse</option>
-        <option>Semi-Detached</option>
-        <option>Duplex</option>
+      <select id="filter-type" class="f-select" onchange="applyFilters()">
+        <option value="">All Types</option>
+        <option value="condo">Condo</option>
+        <option value="single_family">Detached</option>
+        <option value="townhouse">Townhouse</option>
+        <option value="multi_family">Multi-Family</option>
       </select>
     </div>
 
     <div class="f-group">
       <div class="f-lbl">Bedrooms</div>
-      <div class="pill-row">
-        <button class="f-pill on" onclick="solo(this)">Any</button>
-        <button class="f-pill" onclick="solo(this)">1+</button>
-        <button class="f-pill" onclick="solo(this)">2+</button>
-        <button class="f-pill" onclick="solo(this)">3+</button>
-        <button class="f-pill" onclick="solo(this)">4+</button>
-        <button class="f-pill" onclick="solo(this)">5+</button>
+      <div id="filter-beds" class="pill-row">
+        <button class="f-pill on" data-val="" onclick="solo(this); applyFilters()">Any</button>
+        <button class="f-pill" data-val="1" onclick="solo(this); applyFilters()">1+</button>
+        <button class="f-pill" data-val="2" onclick="solo(this); applyFilters()">2+</button>
+        <button class="f-pill" data-val="3" onclick="solo(this); applyFilters()">3+</button>
+        <button class="f-pill" data-val="4" onclick="solo(this); applyFilters()">4+</button>
+        <button class="f-pill" data-val="5" onclick="solo(this); applyFilters()">5+</button>
       </div>
     </div>
 
     <div class="f-group">
       <div class="f-lbl">Bathrooms</div>
-      <div class="pill-row">
-        <button class="f-pill on" onclick="solo(this)">Any</button>
-        <button class="f-pill" onclick="solo(this)">1+</button>
-        <button class="f-pill" onclick="solo(this)">2+</button>
-        <button class="f-pill" onclick="solo(this)">3+</button>
-        <button class="f-pill" onclick="solo(this)">4+</button>
+      <div id="filter-baths" class="pill-row">
+        <button class="f-pill on" data-val="" onclick="solo(this); applyFilters()">Any</button>
+        <button class="f-pill" data-val="1" onclick="solo(this); applyFilters()">1+</button>
+        <button class="f-pill" data-val="2" onclick="solo(this); applyFilters()">2+</button>
+        <button class="f-pill" data-val="3" onclick="solo(this); applyFilters()">3+</button>
+        <button class="f-pill" data-val="4" onclick="solo(this); applyFilters()">4+</button>
       </div>
     </div>
 
@@ -662,12 +671,12 @@ header{
 
     <div class="f-group">
       <div class="f-lbl">Features</div>
-      <div class="f-checks">
-        <label class="f-check"><input type="checkbox"/> Parking / Garage</label>
-        <label class="f-check"><input type="checkbox"/> Backyard</label>
-        <label class="f-check"><input type="checkbox"/> Fireplace</label>
-        <label class="f-check"><input type="checkbox"/> Pool</label>
-        <label class="f-check"><input type="checkbox"/> EV Charger</label>
+      <div id="filter-features" class="f-checks">
+        <label class="f-check"><input type="checkbox" value="parking" onchange="applyFilters()"/> Parking / Garage</label>
+        <label class="f-check"><input type="checkbox" value="backyard" onchange="applyFilters()"/> Backyard</label>
+        <label class="f-check"><input type="checkbox" value="fireplace" onchange="applyFilters()"/> Fireplace</label>
+        <label class="f-check"><input type="checkbox" value="pool" onchange="applyFilters()"/> Pool</label>
+        <label class="f-check"><input type="checkbox" value="ev_charger" onchange="applyFilters()"/> EV Charger</label>
       </div>
     </div>
 
@@ -697,12 +706,12 @@ header{
     <div class="results-bar">
       <div class="results-count" id="results-count"><em>0</em> Properties Found</div>
       <div class="results-right">
-        <select class="sort-sel">
-          <option>Sort by: AI Recommended</option>
-          <option>Price: Low to High</option>
-          <option>Price: High to Low</option>
-          <option>Newest First</option>
-          <option>Most Views</option>
+        <select id="filter-sort" class="sort-sel" onchange="applyFilters()">
+          <option value="">Sort by: AI Recommended</option>
+          <option value="price_asc">Price: Low to High</option>
+          <option value="price_desc">Price: High to Low</option>
+          <option value="newest">Newest First</option>
+          <option value="views">Most Views</option>
         </select>
         <div class="vt-group">
           <button class="vt-btn" onclick="setView(this)" title="List">
@@ -720,17 +729,7 @@ header{
     </div><!-- /prop-list -->
 
     <!-- Pagination -->
-    <div class="pagination">
-      <button class="pg" disabled><i data-feather="chevron-left" style="width:13px;height:13px;"></i></button>
-      <button class="pg on">1</button>
-      <button class="pg" onclick="goPage(this)">2</button>
-      <button class="pg" onclick="goPage(this)">3</button>
-      <button class="pg" onclick="goPage(this)">4</button>
-      <button class="pg" onclick="goPage(this)">5</button>
-      <span class="pg-dots">…</span>
-      <button class="pg" onclick="goPage(this)">18</button>
-      <button class="pg" onclick="goPage(this)"><i data-feather="chevron-right" style="width:13px;height:13px;"></i></button>
-    </div>
+    <div class="pagination" id="dynamic-pagination"></div>
   </div>
 
   <!-- ── MAP COL ── -->
@@ -768,6 +767,24 @@ header{
   function setTab(el){
     document.querySelectorAll('.ttab').forEach(t=>t.classList.remove('active'));
     el.classList.add('active');
+    
+    // Sync with sidebar select if it's a property type
+    const val = el.getAttribute('data-val');
+    const select = document.getElementById('filter-type');
+    if (select) {
+      if (['condo', 'single_family', 'townhouse'].includes(val)) {
+        select.value = val;
+      } else {
+        select.value = '';
+      }
+    }
+    
+    // Reset page on new search
+    const url = new URL(window.location.href);
+    url.searchParams.delete('page');
+    window.history.replaceState({}, '', url);
+    
+    applyFilters();
   }
   function setView(el){
     document.querySelectorAll('.vt-btn').forEach(b=>b.classList.remove('on'));
@@ -791,11 +808,13 @@ header{
   }
   function updateRange(v){
     const m=Math.round(v/1000);
-    document.getElementById('range-val').textContent=
-      m>=1000?'$'+(m/1000).toFixed(1)+'M':'$'+m+'K';
+    let text = m>=1000?'$'+(m/1000).toFixed(1)+'M':'$'+m+'K';
+    if (v >= 2000000) text = '$2M+';
+    document.getElementById('range-val').textContent=text;
     // update gradient
     const pct=((v-100000)/(2000000-100000))*100;
-    this.event?.target?.style?.setProperty?.('--pct',pct+'%');
+    const slider = document.getElementById('filter-price');
+    if (slider) slider.style.setProperty('--pct', pct + '%');
   }
   function resetAll(){
     document.querySelectorAll('.f-input').forEach(i=>i.value='');
@@ -804,9 +823,61 @@ header{
       g.querySelectorAll('.f-pill').forEach((p,i)=>p.classList.toggle('on',i===0));
     });
     document.querySelectorAll('.f-checks input').forEach(c=>c.checked=false);
-    document.getElementById('range-val').textContent='$1.2M';
+    document.getElementById('range-val').textContent='$2M+';
+    const priceSlider = document.getElementById('filter-price');
+    if (priceSlider) {
+      priceSlider.value = 2000000;
+      priceSlider.style.setProperty('--pct', '100%');
+    }
+    applyFilters();
   }
-</script>
+
+  function applyFilters() {
+    const url = new URL(window.location.origin + window.location.pathname);
+    
+    // Top hero search
+    const topSearch = document.getElementById('hero-search-input')?.value.trim();
+    if (topSearch) url.searchParams.set('city', topSearch);
+    
+    // Sidebar Location
+    const loc = document.getElementById('filter-location')?.value.trim();
+    if (loc && !topSearch) url.searchParams.set('city', loc);
+    
+    // Price
+    const maxPrice = document.getElementById('filter-price')?.value;
+    if (maxPrice && maxPrice < 2000000) url.searchParams.set('max_price', maxPrice);
+    
+    // Type
+    const pType = document.getElementById('filter-type')?.value;
+    const activeHeroTab = document.querySelector('#hero-type-tabs .ttab.active');
+    
+    if (activeHeroTab && activeHeroTab.dataset.val) {
+      url.searchParams.set('property_type', activeHeroTab.dataset.val);
+    } else if (pType) {
+      url.searchParams.set('property_type', pType);
+    }
+    
+    // Beds
+    const activeBed = document.querySelector('#filter-beds .f-pill.on');
+    if (activeBed && activeBed.dataset.val) url.searchParams.set('bedrooms', activeBed.dataset.val);
+    
+    // Baths
+    const activeBath = document.querySelector('#filter-baths .f-pill.on');
+    if (activeBath && activeBath.dataset.val) url.searchParams.set('bathrooms', activeBath.dataset.val);
+    
+    // Features
+    const features = [];
+    document.querySelectorAll('#filter-features input:checked').forEach(c => features.push(c.value));
+    if (features.length > 0) url.searchParams.set('features', features.join(','));
+    
+    // Sort
+    const sort = document.getElementById('filter-sort')?.value;
+    if (sort) url.searchParams.set('sort', sort);
+    
+    // Push state and load
+    window.history.pushState({}, '', url);
+    loadDynamicProperties();
+  }
 </script>
 <script>
   async function loadDynamicProperties() {
@@ -858,6 +929,7 @@ header{
           <div class="prop-img">
             <img src="${imgUrl}" alt="${p.title}"
               onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500&auto=format&fit=crop'"/>
+            <span class="prop-num-badge">${idx + 1}</span>
             <span class="match-pill ${matchClass}">${matchText}</span>
             <button class="fav" onclick="event.stopPropagation(); toggleSaveProperty(this, '${p.property_id}')" title="Save Property">
               <i data-feather="heart" style="width:12px;height:12px;color:#ef4444; transition: fill 0.2s, color 0.2s;"></i>
@@ -880,7 +952,7 @@ header{
                 <span class="spec"><i data-feather="maximize-2" style="width:12px;height:12px;"></i> ${p.area_sqft || p.square_feet || 0} ft²</span>
               </div>
               <div class="meta-row">
-                ${p.property_type || 'Property'} <span class="dot-sep"></span> MLS® ${p.property_id.substring(0,8).toUpperCase()}
+                ${p.property_type || 'Property'}
               </div>
             </div>
             <div class="card-footer">
@@ -893,10 +965,52 @@ header{
         container.insertAdjacentHTML('beforeend', html);
       });
       if (window.feather) feather.replace();
+
+      // Update Map Markers
+      updateMapMarkers(properties);
+
+      // Render Dynamic Pagination
+      const currentPage = Number(data.data?.page || params.get('page') || 1);
+      const totalPages = Number(data.data?.total_pages || Math.ceil(totalCount / 6) || 1);
+      renderPagination(currentPage, totalPages);
+
     } catch(e) {
       console.error(e);
       document.getElementById('dynamic-prop-list').innerHTML = '<div style="padding:40px; text-align:center; color:red;">Failed to load properties.</div>';
     }
+  }
+
+  function goToPage(page) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('page', page);
+    window.history.pushState({}, '', url);
+    loadDynamicProperties();
+  }
+
+  function renderPagination(currentPage, totalPages) {
+    const nav = document.getElementById('dynamic-pagination');
+    if (!nav) return;
+    if (totalPages <= 1) {
+      nav.innerHTML = '';
+      return;
+    }
+
+    let html = '';
+    // Previous Button
+    const prevDisabled = currentPage <= 1 ? 'disabled' : '';
+    html += `<button class="pg" ${prevDisabled} onclick="goToPage(${currentPage - 1})"><i data-feather="chevron-left" style="width:13px;height:13px;"></i></button>`;
+
+    for (let p = 1; p <= totalPages; p++) {
+      const activeClass = p === currentPage ? 'on' : '';
+      html += `<button class="pg ${activeClass}" onclick="goToPage(${p})">${p}</button>`;
+    }
+
+    // Next Button
+    const nextDisabled = currentPage >= totalPages ? 'disabled' : '';
+    html += `<button class="pg" ${nextDisabled} onclick="goToPage(${currentPage + 1})"><i data-feather="chevron-right" style="width:13px;height:13px;"></i></button>`;
+
+    nav.innerHTML = html;
+    if (window.feather) feather.replace();
   }
 
   async function toggleSaveProperty(btn, propertyId) {
@@ -948,31 +1062,49 @@ header{
     }
   }
 
-  document.addEventListener('DOMContentLoaded', function() {
-    loadDynamicProperties();
+  var map;
+  var markersGroup;
 
-    var map = L.map('map').setView([43.6532, -79.3832], 13);
+  function updateMapMarkers(properties) {
+    if (!map) return;
+    if (markersGroup) {
+      markersGroup.clearLayers();
+    } else {
+      markersGroup = L.layerGroup().addTo(map);
+    }
+
+    if (!properties || properties.length === 0) return;
+
+    const baseLat = 43.6532;
+    const baseLng = -79.3832;
+
+    properties.forEach((p, idx) => {
+      const markerNum = idx + 1;
+      const priceVal = p.price || p.asking_price;
+      const priceStr = priceVal ? `$${Number(priceVal).toLocaleString()}` : '';
+
+      // Use property lat/lng if available, else derive from index for visualization
+      const lat = p.latitude ? Number(p.latitude) : (baseLat + (idx * 0.012 - 0.02));
+      const lng = p.longitude ? Number(p.longitude) : (baseLng + (idx * 0.015 - 0.025));
+
+      const icon = L.divIcon({
+        className: 'custom-div-icon',
+        html: `<div class='bubble' title='${p.title || 'Property'} — ${priceStr}' style='position:relative; transform:translate(-50%, -50%);' onclick="window.location.href='property_details.html?id=${p.property_id}'">${markerNum}</div>`,
+        iconSize: [0, 0]
+      });
+
+      L.marker([lat, lng], {icon: icon}).addTo(markersGroup);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    map = L.map('map').setView([43.6532, -79.3832], 12);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
       maxZoom: 19
     }).addTo(map);
 
-    var markers = [
-      {pos: [43.65, -79.38], price: '$1.25M'},
-      {pos: [43.66, -79.39], price: '$845K'},
-      {pos: [43.64, -79.37], price: '$780K'},
-      {pos: [43.63, -79.40], price: '$620K'},
-      {pos: [43.655, -79.36], price: '$1.10M'}
-    ];
-
-    markers.forEach(function(m) {
-      var icon = L.divIcon({
-        className: 'custom-div-icon',
-        html: "<div class='bubble' style='position:relative; transform:translate(-50%, -100%);'>" + m.price + "</div>",
-        iconSize: [0, 0]
-      });
-      L.marker(m.pos, {icon: icon}).addTo(map);
-    });
+    loadDynamicProperties();
   });
 </script>
 </body>

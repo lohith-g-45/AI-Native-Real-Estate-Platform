@@ -15,7 +15,7 @@ const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname) ||
 const API_BASE = isLocal
     ? `http://${window.location.hostname}:3000/api/listings` 
     : 'https://ai-native-real-estate-platform.onrender.com/api/listings';
-const MEDIA_ORIGIN = isLocal ? `http://${window.location.hostname}:3000` : 'https://ai-native-real-estate-platform.onrender.com';
+const MEDIA_ORIGIN = isLocal ? `http://${window.location.hostname}:3000` : '';
 const WIZ_KEY = 'hh_add_listing_state';
 
 const WIZ_STEPS = [
@@ -291,6 +291,39 @@ function initStep2() {
   }
   Object.values(els).forEach((el) => el.addEventListener('input', updateSummary));
   updateSummary();
+
+  const aiBtn = document.querySelector('.wiz-ai-btn');
+  if (aiBtn) {
+    aiBtn.addEventListener('click', async () => {
+      if (!els.title.value.trim()) {
+        alert("Please enter a Property Title to generate a description.");
+        return;
+      }
+      const originalText = aiBtn.innerHTML;
+      aiBtn.innerHTML = '<i data-feather="loader" class="spin" style="width:14px;height:14px;"></i> Generating...';
+      aiBtn.disabled = true;
+      if (window.feather) feather.replace();
+
+      try {
+        const payload = {
+          title: els.title.value.trim(),
+          property_type: els.property_type.value,
+          price: els.asking_price.value.trim()
+        };
+        const result = await apiRequest('/generate-description', 'POST', payload);
+        if (result && result.data && result.data.description) {
+          els.description.value = result.data.description;
+          updateSummary();
+        }
+      } catch (err) {
+        alert('Failed to generate description: ' + err.message);
+      } finally {
+        aiBtn.innerHTML = originalText;
+        aiBtn.disabled = false;
+        if (window.feather) feather.replace();
+      }
+    });
+  }
 
   const backBtn = document.getElementById('backBtn');
   if (backBtn) backBtn.addEventListener('click', () => { window.location.href = 'add_listing_init.html'; });

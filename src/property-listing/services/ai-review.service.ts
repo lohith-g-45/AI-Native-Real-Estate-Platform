@@ -237,4 +237,28 @@ No extra keys. No missing keys. No markdown. No explanation.
 
     return attempt(0);
   }
+
+  async generateQuickDescription(title: string, propertyType: string, price: string): Promise<{ description: string }> {
+    const prompt = `
+Write a professional, attractive 3-4 sentence real estate property description for the following listing:
+Title: ${title}
+Property Type: ${propertyType}
+Price: ${price || 'Not specified'}
+
+Focus on making it appealing to potential buyers. Do not use any markdown. Return ONLY the description text, nothing else. No intro, no outro.`;
+
+    try {
+      const response = await this.groqClient.chat.completions.create({
+        model: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
+        temperature: 0.7,
+        max_tokens: 300,
+        messages: [{ role: 'user', content: prompt }],
+      });
+      const text = response.choices[0]?.message?.content?.trim();
+      return { description: text || '' };
+    } catch (e) {
+      console.error('Failed to generate quick description:', e);
+      throw e;
+    }
+  }
 }
