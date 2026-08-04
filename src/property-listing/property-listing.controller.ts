@@ -131,7 +131,7 @@ export class PropertyListingController {
   @ApiParam({ name: 'property_id', description: 'The ID of the property' })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file', {
-    dest: './uploads/media',
+    dest: '/tmp/uploads/media',
   }))
   uploadMedia(
     @Param('property_id') propertyId: string,
@@ -173,7 +173,7 @@ export class PropertyListingController {
   @ApiParam({ name: 'property_id', description: 'The ID of the property' })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file', {
-    dest: './uploads/documents',
+    dest: '/tmp/uploads/documents',
   }))
   uploadDocument(
     @Param('property_id') propertyId: string,
