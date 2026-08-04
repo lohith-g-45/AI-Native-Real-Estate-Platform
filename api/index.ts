@@ -15,7 +15,7 @@ async function bootstrapServer(): Promise<express.Express> {
     const app = await NestFactory.create(
       AppModule,
       new ExpressAdapter(expressApp),
-      { logger: new JsonLogger() }
+      { logger: new JsonLogger(), abortOnError: false }
     );
 
     app.enableCors({
