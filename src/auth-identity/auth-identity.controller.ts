@@ -234,7 +234,7 @@ export class AuthIdentityController {
       throw new BadRequestException('Google OAuth is not configured.');
     }
     const result = await this.authService.loginWithGoogle(req.user);
-    res.redirect(`http://${req.hostname}:8080/index.html#token=${result.accessToken}`);
+    res.redirect(`/index.html#token=${result.accessToken}`);
   }
 
   // ─── Facebook OAuth ────────────────────────────────────────────────────
@@ -264,7 +264,7 @@ export class AuthIdentityController {
       throw new BadRequestException('Facebook OAuth is not configured.');
     }
     const result = await this.authService.loginWithFacebook(req.user);
-    res.redirect(`http://${req.hostname}:8080/index.html#token=${result.accessToken}`);
+    res.redirect(`/index.html#token=${result.accessToken}`);
   }
 
   // ─── Twitter OAuth ────────────────────────────────────────────────────
@@ -294,7 +294,7 @@ export class AuthIdentityController {
       throw new BadRequestException('Twitter OAuth is not configured.');
     }
     const result = await this.authService.loginWithTwitter(req.user);
-    res.redirect(`http://${req.hostname}:8080/index.html#token=${result.accessToken}`);
+    res.redirect(`/index.html#token=${result.accessToken}`);
   }
 }
 
