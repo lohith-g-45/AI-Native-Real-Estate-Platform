@@ -50,6 +50,15 @@ async function bootstrapServer(): Promise<express.Express> {
 }
 
 export default async (req: any, res: any) => {
-  const server = await bootstrapServer();
-  return server(req, res);
+  try {
+    const server = await bootstrapServer();
+    return server(req, res);
+  } catch (error: any) {
+    console.error('Bootstrap Error:', error);
+    res.status(500).json({
+      message: 'Server failed to start',
+      error: error.message,
+      stack: error.stack,
+    });
+  }
 };
