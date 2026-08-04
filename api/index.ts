@@ -2,8 +2,8 @@ import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from '../src/app.module';
-import { JsonLogger } from '../src/common/json-logger.service';
+import { AppModule } from '../dist/src/app.module';
+import { JsonLogger } from '../dist/src/common/json-logger.service';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import express from 'express';
 
