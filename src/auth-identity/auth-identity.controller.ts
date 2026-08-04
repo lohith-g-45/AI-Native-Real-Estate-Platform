@@ -63,9 +63,14 @@ export class AuthIdentityController {
   @ApiOperation({ summary: 'Login with email and password' })
   @ApiResponse({ status: 200, description: 'Returns JWT access token' })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
-  login(@Body() dto: LoginUserDto, @Request() req: any) {
+  async login(@Body() dto: LoginUserDto, @Request() req: any) {
     const { ipAddress, userAgent } = this.getRequestMeta(req);
-    return this.authService.login(dto, ipAddress, userAgent);
+    try {
+      return await this.authService.login(dto, ipAddress, userAgent);
+    } catch (error: any) {
+      // Expose the raw error message to the frontend so the user can debug the Vercel DB connection issue
+      throw new BadRequestException(`DB/Server Error: ${error.message || 'Unknown error'}`);
+    }
   }
 
   @Post('login-otp/request')
