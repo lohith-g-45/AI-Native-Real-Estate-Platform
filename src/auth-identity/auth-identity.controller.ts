@@ -238,8 +238,12 @@ export class AuthIdentityController {
     if (!clientID || clientID.startsWith('your-')) {
       throw new BadRequestException('Google OAuth is not configured.');
     }
-    const result = await this.authService.loginWithGoogle(req.user);
-    res.redirect(`/index.html#token=${result.accessToken}`);
+    try {
+      const result = await this.authService.loginWithGoogle(req.user);
+      res.redirect(`/index.html#token=${result.accessToken}`);
+    } catch (error: any) {
+      res.redirect(`/index.html#error=${encodeURIComponent(error.message || 'Google Auth Failed')}`);
+    }
   }
 
   // ─── Facebook OAuth ────────────────────────────────────────────────────
