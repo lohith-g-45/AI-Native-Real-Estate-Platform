@@ -272,8 +272,12 @@ export class AuthIdentityController {
     if (!clientID || clientID.startsWith('your-')) {
       throw new BadRequestException('Facebook OAuth is not configured.');
     }
-    const result = await this.authService.loginWithFacebook(req.user);
-    res.redirect(`/index.html#token=${result.accessToken}`);
+    try {
+      const result = await this.authService.loginWithFacebook(req.user);
+      res.redirect(`/index.html#token=${result.accessToken}`);
+    } catch (error: any) {
+      res.redirect(`/index.html#error=${encodeURIComponent('FB Auth Failed: ' + (error.message || 'Unknown'))}`);
+    }
   }
 
   // ─── Twitter OAuth ────────────────────────────────────────────────────
